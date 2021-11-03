@@ -1,0 +1,21 @@
+.w-checkbox {
+  display: inline-flex;
+  cursor: default;
+  align-items: center;
+  & .w-checkbox-icon {
+    color: var(--w-color-font-3);
+    &:hover {
+      &:not(.w-checkbox-icon-disabled) {
+        color: var(--w-color-primary);
+      }
+    }
+    &.w-checkbox-icon-checked {
+      color: var(--w-color-primary);
+    }
+    &.w-checkbox-icon-disabled {
+      cursor: not-allowed;
+      color: var(--w-color-font-4);
+      opacity: 0.6;
+    }
+  }
+}

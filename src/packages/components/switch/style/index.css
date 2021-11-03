@@ -1,0 +1,52 @@
+.w-switch {
+  --__width: var(--__switch-width, var(--w-switch-width));
+  --__height: var(--__switch-height, var(--w-switch-height));
+  --__on-color: var(--w-color-primary);
+  --__off-color: var(--w-switch-bg-color);
+  --__on-valve-color: var(--w-switch-valve-color);
+  --__off-valve-color: var(--w-switch-valve-color);
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 10px;
+  position: relative;
+  width: var(--__width);
+  height: var(--__height);
+  background-color: var(--__off-color);
+  border-radius: calc(var(--__height) / 2);
+  user-select: none;
+  transition: background-color var(--w-transition-time);
+  cursor: default;
+  color: white;
+  &:after {
+    /* 圆点尺寸 */
+    --__valve-size: calc(
+      (var(--__switch-height, var(--w-switch-valve-size)) - 2px)
+    );
+    content: '';
+    position: absolute;
+    width: var(--__valve-size);
+    height: var(--__valve-size);
+    border-radius: 100%;
+    left: calc(var(--__width) - var(--__valve-size));
+    top: calc((var(--__height) - var(--__valve-size)) / 2);
+    background-color: var(--__off-valve-color);
+    box-shadow: var(--w-switch-valve-box-shadow);
+    transition: left var(--w-transition-time);
+  }
+  &.w-switch--on {
+    background-color: var(--__on-color);
+    justify-content: flex-end;
+    &:after {
+      border-color: var(--__on-color);
+      /* box-shadow: var(--w-box-shadow), 0 0 1px 1px white; */
+      left: 0;
+      background-color: var(--__on-valve-color);
+    }
+  }
+  &.w-switch--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

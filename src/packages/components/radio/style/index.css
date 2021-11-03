@@ -1,0 +1,21 @@
+.w-radio {
+  display: inline-flex;
+  cursor: default;
+  align-items: center;
+  & .w-radio-icon {
+    color: var(--w-color-font-3);
+    &:hover {
+      &:not(.w-radio-icon-disabled) {
+        color: var(--w-color-primary);
+      }
+    }
+    &.w-radio-icon-checked {
+      color: var(--w-color-primary);
+    }
+    &.w-radio-icon-disabled {
+      cursor: not-allowed;
+      color: var(--w-color-font-4);
+      opacity: 0.6;
+    }
+  }
+}

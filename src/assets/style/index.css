@@ -1,0 +1,55 @@
+p {
+  line-height: 1.5;
+  word-spacing: 5px;
+  letter-spacing: 0.2em;
+  &:not(:last-child) {
+    margin-bottom: 1em;
+  }
+}
+.quote {
+  background-color: #f6f6f6;
+  padding: 15px;
+  border-left: 5px solid #3eaf7c;
+  position: relative;
+  &:after {
+    content: '说明';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3eaf7c;
+    left: 0;
+    margin-left: -1em;
+    border-radius: 2px;
+    border: 1px solid #3eaf7c;
+    background-color: white;
+    font-size: 12px;
+    padding: 2px;
+    width: 1.5em;
+  }
+}
+
+.example {
+  margin-top: 15px;
+  color: var(--w-color-font-3);
+}
+
+.sumup {
+  margin-top: 15px;
+  background-color: #f6f6f6;
+  padding: 15px;
+  padding-bottom: 25px;
+  position: relative;
+  &:after {
+    content: '小结';
+    position: absolute;
+    bottom: 0;
+    color: white;
+    background-color: var(--w-color-font-3);
+    right: 0;
+    margin-left: -1em;
+    border-radius: 12px 0 2px 6px;
+    border: 1px solid var(--w-color-font-3);
+    font-size: 12px;
+    padding: 2px;
+  }
+}

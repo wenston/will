@@ -1,0 +1,29 @@
+.w-fade-enter-active,
+.w-fade-leave-active {
+  transition: var(--w-transition-time) var(--w-cubic-bezier-quick);
+  perspective: 1000px;
+}
+.w-fade-leave-active {
+  transition: var(--w-transition-time);
+  perspective: 1000px;
+}
+
+.w-fade-enter-from,
+.w-fade-leave-to {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+.w-scale-enter-active,
+.w-scale-leave-active {
+  transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
+  perspective: 1000px;
+}
+.w-scale-leave-active {
+  transition: var(--w-transition-time) var(--w-cubic-bezier);
+  perspective: 1000px;
+}
+
+.w-scale-enter-from,
+.w-scale-leave-to {
+  transform: scale(0, 0);
+}
