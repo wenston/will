@@ -7,8 +7,8 @@
       type="default"
       mode="line">change {{count}}</Btn>
   </p>
-  <div style="height:400px;overflow:auto;">
-    <p style="height:290px;background-color:#f1f1f1;"></p>
+  <div style="height:500px;overflow:auto;">
+    <p style="height:490px;background-color:#f1f1f1;"></p>
     <!-- <Layer>
       <template #trigger>
         <b v-if="count%2===0"

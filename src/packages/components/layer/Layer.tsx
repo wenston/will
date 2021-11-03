@@ -71,7 +71,7 @@ export default defineComponent({
   },
   emits: ['update:show'],
   setup(props, { slots, emit }) {
-    const Win = ref(window)
+    const Win = window
     let scrollElements: HTMLElement[] = []
     const { zIndex, add } = useGlobalZIndex()
     const triggerRoot = ref(null)
@@ -127,6 +127,9 @@ export default defineComponent({
     })
     useEvent(triggerRoot, 'click', toggleAndCalc)
 
+    useEvent(Win, 'scroll', calc)
+    useEvent(Win, 'resize', calc)
+
     function hide() {
       set({ item: false })
     }
@@ -135,29 +138,30 @@ export default defineComponent({
     }
 
     function toggleAndCalc() {
-      if (!visible.value) {
-        calc()
-      }
       toggle()
+      calc()
     }
     //计算trigger元素的位置大小等信息
     function calc() {
-      let rect = getElementPositionInPage(triggerRoot.value!)
-      for (const k in rect) {
-        triggerRect[k] = rect[k]
+      if (visible.value) {
+        let rect = getElementPositionInPage(triggerRoot.value!)
+        for (const k in rect) {
+          triggerRect[k] = rect[k]
+        }
       }
-      return rect
     }
     //获取default元素尺寸
     function getDefaultRootSize(maybeEl: any) {
-      const { width, height } = getInvisibleElementSize(
-        maybeEl,
-        props.nearby,
-        triggerRoot.value,
-        props.transitionName
-      )
-      defaultSize.width = width
-      defaultSize.height = height
+      if (visible.value) {
+        const { width, height } = getInvisibleElementSize(
+          maybeEl,
+          props.nearby,
+          triggerRoot.value,
+          props.transitionName
+        )
+        defaultSize.width = width
+        defaultSize.height = height
+      }
     }
     //选出有滚动条的父级，绑定滚动事件，在滚动时计算trigger的位置信息
     function getScrollElementAndCalc() {
@@ -173,17 +177,13 @@ export default defineComponent({
       scrollElements = []
     })
     onMounted(() => {
-      if (visible.value) {
-        calc()
-        getDefaultRootSize(defaultRoot.value)
-      }
+      calc()
+      getDefaultRootSize(defaultRoot.value)
       getScrollElementAndCalc()
     })
     onUpdated(() => {
-      if (visible.value) {
-        calc()
-        getDefaultRootSize(defaultRoot.value)
-      }
+      calc()
+      getDefaultRootSize(defaultRoot.value)
       getScrollElementAndCalc()
     })
 

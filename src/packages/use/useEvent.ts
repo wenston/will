@@ -2,7 +2,7 @@ import type { Ref, ComputedRef } from 'vue'
 import { onMounted, onUnmounted, onUpdated, getCurrentInstance } from 'vue'
 import useElement from './useElement'
 export default function useEvent(
-  elem: Ref | ComputedRef, //elem.value可能是HTMLElement，也可能个组件！
+  elem: typeof window | HTMLElement | Ref | ComputedRef, //elem.value可能是HTMLElement，也可能个组件！
   type: string,
   listener: EventListener | Function
 ) {
