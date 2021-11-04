@@ -1,5 +1,5 @@
-import { isRef, isProxy, isReactive } from 'vue'
-import type { RectType } from '../config/types'
+import { isRef, unref, isReactive } from 'vue'
+import type { EmptyObject, RectType } from '../config/types'
 const doc = document
 const objectToString: (v: unknown) => string = Object.prototype.toString
 export const transitionState: string[] = [
@@ -106,49 +106,69 @@ export function getScrollbarWidth() {
 }
 
 // 获取元素
-export function getElement(el: any) {
-  const v = el
-  let _v = undefined
-  let _el = undefined
-  if (isRef(v)) {
-    _v = v.value
-  } else if (isElement(v)) {
-    _v = v
-  }
-  // console.log(_v.getData)
-  if (_v === window) {
-    _el = _v
-  } else if (isElement(_v)) {
-    _el = _v
-  } else if (isDocumentBody(_v)) {
-    _el = document.body
-  } else if (isString(_v)) {
-    if (isId(_v) || isClass(_v)) {
-      _el = $(_v)
+export function getElement(elem: any): HTMLElement {
+  const el = isRef(elem) ? elem.value : elem
+  let _: any
+  if (el === window) {
+    _ = window
+  } else if (isElement(el)) {
+    _ = el
+  } else if (isDocumentBody(el)) {
+    _ = document.body
+  } else if (isString(el)) {
+    if (isId(el) || isClass(el)) {
+      _ = $(el)
     }
-  } else if (isObject(_v)) {
-    if (_v.$el && isElement(_v.$el)) {
-      _el = _v.$el
-    }
-  } else {
-    console.log(_v)
-    try {
-      if (_v) {
-        const _ = _v.$el
-        if (_ && isElement(_)) {
-          _el = _
-        }
-      }
-    } catch (err) {
-      console.error(err)
+  } else if (typeof el === 'object') {
+    //控制台打印的是Proxy{...}
+    const _el = el.$el
+    if (isElement(_el)) {
+      _ = _el
     }
   }
-  return _el
+  return _
 }
+// export function getElement(el: any) {
+//   const v = el
+//   let _v: any = undefined
+//   let _el = undefined
+//   if (isRef(v)) {
+//     _v = v.value
+//   } else if (isElement(v)) {
+//     _v = v
+//   }
+//   if (_v === window) {
+//     _el = _v
+//   } else if (isElement(_v)) {
+//     _el = _v
+//   } else if (isDocumentBody(_v)) {
+//     _el = document.body
+//   } else if (isString(_v)) {
+//     if (isId(_v) || isClass(_v)) {
+//       _el = $(_v)
+//     }
+//   } else if (typeof _v === 'object') {
+//     if (_v.$el && isElement(_v.$el)) {
+//       _el = _v.$el
+//     }
+//   } else {
+//     try {
+//       if (_v) {
+//         const _ = _v.$el
+//         if (_ && isElement(_)) {
+//           _el = _
+//         }
+//       }
+//     } catch (err) {
+//       console.error(err)
+//     }
+//   }
+//   return _el
+// }
 
 export function getElementPositionInPage(elem: any): RectType {
-  const _el = getElement(elem)
-  console.log(_el)
+  let _el = getElement(elem)
+
   const { left, top } = getPageScroll()
   const rect = getBoundingClientRect(_el)
   // const marginLeft = getStyle(elem,'margin-left')
@@ -211,7 +231,11 @@ export function hasScrollbar(el: HTMLElement) {
 
 //不包括document.body
 export function getParentScrollElement(el: any) {
-  const _el = getElement(el)
+  let _el = getElement(el)
+  // console.log(_el, typeof el === 'object')
+  // if (!_el && typeof el === 'object') {
+  //   _el = el.$el
+  // }
   const scrolls: HTMLElement[] = []
   const collectParent = (node: HTMLElement) => {
     const parent = node.parentNode
@@ -223,7 +247,9 @@ export function getParentScrollElement(el: any) {
       collectParent(_p)
     }
   }
-  collectParent(_el)
+  if (_el) {
+    collectParent(_el)
+  }
   return scrolls
 }
 

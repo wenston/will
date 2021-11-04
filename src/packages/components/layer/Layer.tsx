@@ -71,7 +71,7 @@ export default defineComponent({
   },
   emits: ['update:show'],
   setup(props, { slots, emit }) {
-    const Win = window
+    const Win = ref(window)
     let scrollElements: HTMLElement[] = []
     const { zIndex, add } = useGlobalZIndex()
     const triggerRoot = ref(null)
@@ -129,8 +129,8 @@ export default defineComponent({
     })
     useEvent(triggerRoot, 'click', toggleAndCalc)
 
-    // useEvent(Win, 'scroll', calc)
-    // useEvent(Win, 'resize', calc)
+    useEvent(Win, 'scroll', calc)
+    useEvent(Win, 'resize', calc)
 
     function hide() {
       set({ item: false })
@@ -147,7 +147,7 @@ export default defineComponent({
     //计算trigger元素的位置大小等信息
     function calc() {
       if (visible.value && triggerRoot.value) {
-        let rect = getElementPositionInPage(triggerRoot.value)
+        let rect = getElementPositionInPage(triggerRoot)
         for (const k in rect) {
           triggerRect[k] = rect[k]
         }

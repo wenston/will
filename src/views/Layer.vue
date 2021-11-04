@@ -7,7 +7,7 @@
       type="default"
       mode="line">change {{count}}</Btn>
   </p>
-  <div style="height:300px;overflow:auto;">
+  <div style="height:400px;overflow:auto;">
     <p style="height:290px;background-color:#f1f1f1;"></p>
     <!-- <Layer>
       <template #trigger>
@@ -20,7 +20,7 @@
         这是【弹出层】里要展示的一些东西
       </div>
     </Layer> -->
-    <Layer placement="bottom"
+    <!-- <Layer placement="bottom"
       v-model:show="showLayer">
       <template #trigger>
         <b v-if="count%2===0"
@@ -38,7 +38,7 @@
         <a href="javascript:;"
           @click="hide">关闭</a>
       </template>
-    </Layer>
+    </Layer> -->
     <p style="height:200px;"></p>
   </div>
 
@@ -68,12 +68,12 @@
       </tr>
       <tr>
         <td>
-          <!-- <Layer placement="bottom-start">
+          <Layer placement="bottom-start">
             <template #trigger>
               <Btn>左下</Btn>
             </template>
             <div>这是左下展示的内容</div>
-          </Layer> -->
+          </Layer>
         </td>
         <td>
           <Btn>正下</Btn>
