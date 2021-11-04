@@ -76,6 +76,8 @@ export default defineComponent({
     const { zIndex, add } = useGlobalZIndex()
     const triggerRoot = ref(null)
     const defaultRoot = ref<HTMLElement>()
+    //创建一个开关，避免频繁触发onUpdate时频繁计算
+    const justNow = ref(false)
     const triggerRect: RectType = reactive({
       top: 0,
       left: 0,
@@ -127,8 +129,8 @@ export default defineComponent({
     })
     useEvent(triggerRoot, 'click', toggleAndCalc)
 
-    useEvent(Win, 'scroll', calc)
-    useEvent(Win, 'resize', calc)
+    // useEvent(Win, 'scroll', calc)
+    // useEvent(Win, 'resize', calc)
 
     function hide() {
       set({ item: false })
@@ -140,11 +142,12 @@ export default defineComponent({
     function toggleAndCalc() {
       toggle()
       calc()
+      justNow.value = true
     }
     //计算trigger元素的位置大小等信息
     function calc() {
-      if (visible.value) {
-        let rect = getElementPositionInPage(triggerRoot.value!)
+      if (visible.value && triggerRoot.value) {
+        let rect = getElementPositionInPage(triggerRoot.value)
         for (const k in rect) {
           triggerRect[k] = rect[k]
         }
@@ -166,7 +169,6 @@ export default defineComponent({
     //选出有滚动条的父级，绑定滚动事件，在滚动时计算trigger的位置信息
     function getScrollElementAndCalc() {
       if (visible.value && triggerRoot.value) {
-        removeEvent(scrollElements, 'scroll', calc)
         scrollElements = getParentScrollElement(triggerRoot.value)
         addEvent(scrollElements, 'scroll', calc)
       }
@@ -182,15 +184,19 @@ export default defineComponent({
       getScrollElementAndCalc()
     })
     onUpdated(() => {
-      calc()
-      getDefaultRootSize(defaultRoot.value)
-      getScrollElementAndCalc()
+      if (!justNow.value) {
+        calc()
+        getDefaultRootSize(defaultRoot.value)
+      }
     })
 
     watch(visible, (v) => {
       emit('update:show', v)
       if (v) {
         add()
+        getScrollElementAndCalc()
+      } else {
+        removeEvent(scrollElements, 'scroll', calc)
       }
     })
     watch(
@@ -211,6 +217,9 @@ export default defineComponent({
           name={props.transitionName}
           onBeforeEnter={(el) => {
             getDefaultRootSize(el)
+          }}
+          onAfterEnter={(el) => {
+            justNow.value = false
           }}>
           {visible.value ? (
             <div {...defaultProps.value}>{vnode_default.value}</div>

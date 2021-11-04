@@ -33,6 +33,7 @@ export default function useSlot(
         //renderSlot得出的内容总是Fragment类型
         if (isFragment(c)) {
           c = c.children
+          // console.log(c)
         }
         const first = getFirstValidChild(c)
 

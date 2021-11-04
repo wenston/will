@@ -7,14 +7,14 @@
       type="default"
       mode="line">change {{count}}</Btn>
   </p>
-  <div style="height:500px;overflow:auto;">
-    <p style="height:490px;background-color:#f1f1f1;"></p>
+  <div style="height:300px;overflow:auto;">
+    <p style="height:290px;background-color:#f1f1f1;"></p>
     <!-- <Layer>
       <template #trigger>
-        <b v-if="count%2===0"
-          @click="toPrint('ou')">偶数：{{count}}</b>
-        <i v-else
-          @click="toPrint('及')">奇数：{{count}}</i>
+        <Btn v-if="count%2===0"
+          @click="toPrint('ou')">偶数：{{count}}</Btn>
+        <Btn v-else
+          @click="toPrint('及')">奇数：{{count}}</Btn>
       </template>
       <div>
         这是【弹出层】里要展示的一些东西
@@ -23,8 +23,10 @@
     <Layer placement="bottom"
       v-model:show="showLayer">
       <template #trigger>
-        <b @click="toPrint('ou')">数是数数是偶数是偶数是偶数：{{count}}</b>
-
+        <b v-if="count%2===0"
+          @click="toPrint('ou')">偶数：{{count}}</b>
+        <i v-else
+          @click="toPrint('及')">奇数：{{count}}</i>
       </template>
       <template #default="{hide}">
         <p>
@@ -40,6 +42,48 @@
     <p style="height:200px;"></p>
   </div>
 
+  <table>
+    <tbody>
+      <tr>
+        <td>
+
+        </td>
+        <td>
+          <Btn>正上</Btn>
+        </td>
+        <td>
+          <Btn>右上</Btn>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <Btn>正左</Btn>
+        </td>
+        <td>
+          <Btn>中间</Btn>
+        </td>
+        <td>
+          <Btn>正右</Btn>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <!-- <Layer placement="bottom-start">
+            <template #trigger>
+              <Btn>左下</Btn>
+            </template>
+            <div>这是左下展示的内容</div>
+          </Layer> -->
+        </td>
+        <td>
+          <Btn>正下</Btn>
+        </td>
+        <td>
+          <Btn>右下</Btn>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
@@ -50,7 +94,10 @@ import Btn from '../packages/components/btn/index'
 function toPrint(str: string) {
   // console.log(str, count.value)
 }
+function onClickBottomStart(e: PointerEvent) {
+  console.log(e)
+}
 
 const { count, add } = useCount()
-const showLayer = ref(true)
+const showLayer = ref(false)
 </script>

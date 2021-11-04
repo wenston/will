@@ -1,4 +1,4 @@
-import { isRef } from 'vue'
+import { isRef, isProxy, isReactive } from 'vue'
 import type { RectType } from '../config/types'
 const doc = document
 const objectToString: (v: unknown) => string = Object.prototype.toString
@@ -10,7 +10,7 @@ export const transitionState: string[] = [
 ]
 
 function isElement(v: any) {
-  return v instanceof HTMLElement
+  return v && v instanceof HTMLElement
 }
 function isId(str: string) {
   return str.charAt(0) === '#'
@@ -115,6 +115,7 @@ export function getElement(el: any) {
   } else if (isElement(v)) {
     _v = v
   }
+  // console.log(_v.getData)
   if (_v === window) {
     _el = _v
   } else if (isElement(_v)) {
@@ -129,13 +130,27 @@ export function getElement(el: any) {
     if (_v.$el && isElement(_v.$el)) {
       _el = _v.$el
     }
+  } else {
+    console.log(_v)
+    try {
+      if (_v) {
+        const _ = _v.$el
+        if (_ && isElement(_)) {
+          _el = _
+        }
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
   return _el
 }
 
-export function getElementPositionInPage(elem: HTMLElement): RectType {
+export function getElementPositionInPage(elem: any): RectType {
+  const _el = getElement(elem)
+  console.log(_el)
   const { left, top } = getPageScroll()
-  const rect = getBoundingClientRect(elem)
+  const rect = getBoundingClientRect(_el)
   // const marginLeft = getStyle(elem,'margin-left')
   // const marginTop=getStyle(elem,'margin-top')
   // console.log(marginLeft,marginTop)
