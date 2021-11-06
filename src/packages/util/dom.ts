@@ -128,43 +128,6 @@ export function getElement(elem: any): HTMLElement {
   }
   return _
 }
-// export function getElement(el: any) {
-//   const v = el
-//   let _v: any = undefined
-//   let _el = undefined
-//   if (isRef(v)) {
-//     _v = v.value
-//   } else if (isElement(v)) {
-//     _v = v
-//   }
-//   if (_v === window) {
-//     _el = _v
-//   } else if (isElement(_v)) {
-//     _el = _v
-//   } else if (isDocumentBody(_v)) {
-//     _el = document.body
-//   } else if (isString(_v)) {
-//     if (isId(_v) || isClass(_v)) {
-//       _el = $(_v)
-//     }
-//   } else if (typeof _v === 'object') {
-//     if (_v.$el && isElement(_v.$el)) {
-//       _el = _v.$el
-//     }
-//   } else {
-//     try {
-//       if (_v) {
-//         const _ = _v.$el
-//         if (_ && isElement(_)) {
-//           _el = _
-//         }
-//       }
-//     } catch (err) {
-//       console.error(err)
-//     }
-//   }
-//   return _el
-// }
 
 export function getElementPositionInPage(elem: any): RectType {
   let _el = getElement(elem)
