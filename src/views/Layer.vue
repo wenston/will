@@ -7,9 +7,11 @@
       type="default"
       mode="line">change {{count}}</Btn>
   </p>
-  <div style="height:400px;overflow:auto;">
+  <p>监控下边盒子的滚动情况 scrollTop:{{scrollTop}}；scrollBottom:{{scrollBottom}}</p>
+  <div style="height:400px;overflow:auto;"
+    ref="scrollElement">
     <p style="height:290px;background-color:#f1f1f1;"></p>
-    <!-- <Layer>
+    <Layer trigger="click">
       <template #trigger>
         <Btn v-if="count%2===0"
           @click="toPrint('ou')">偶数：{{count}}</Btn>
@@ -19,8 +21,9 @@
       <div>
         这是【弹出层】里要展示的一些东西
       </div>
-    </Layer> -->
-    <!-- <Layer placement="bottom"
+    </Layer>
+    <Layer placement="bottom"
+      trigger="focus"
       v-model:show="showLayer">
       <template #trigger>
         <b v-if="count%2===0"
@@ -38,11 +41,11 @@
         <a href="javascript:;"
           @click="hide">关闭</a>
       </template>
-    </Layer> -->
+    </Layer>
     <p style="height:200px;"></p>
   </div>
 
-  <table>
+  <table :class="css.tb">
     <tbody>
       <tr>
         <td>
@@ -88,16 +91,24 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import useCount from '../packages/use/useCount'
+import useScroll from '../packages/use/useScroll'
 import Layer from '../packages/components/layer'
 import Btn from '../packages/components/btn/index'
-
 function toPrint(str: string) {
   // console.log(str, count.value)
 }
 function onClickBottomStart(e: PointerEvent) {
   console.log(e)
 }
-
+const scrollElement = ref(null)
+const { scrollTop, scrollBottom } = useScroll(scrollElement)
 const { count, add } = useCount()
 const showLayer = ref(false)
 </script>
+<style module="css" lang="postcss">
+.tb {
+  & td {
+    padding: 8px;
+  }
+}
+</style>

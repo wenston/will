@@ -22,6 +22,7 @@ import type {
   RectType,
   EmptyObject
 } from '../../config/types'
+import useTabIndex from '../../use/useTabIndex'
 import useSlot from '../../use/useSlot'
 import useGlobalZIndex from '../../use/useGlobalZIndex'
 import useToggleArray from '../../use/toggle/useToggleArray'
@@ -71,7 +72,7 @@ export default defineComponent({
   },
   emits: ['update:show'],
   setup(props, { slots, emit }) {
-    const Win = ref(window)
+    const Win = window
     let scrollElements: HTMLElement[] = []
     const { zIndex, add } = useGlobalZIndex()
     const triggerRoot = ref(null)
@@ -107,7 +108,7 @@ export default defineComponent({
         })
       )
     )
-    const defaultProps = computed(() => {
+    const defaultOptions = computed(() => {
       const { top, left, x, y } = getPlacement({
         triggerRect,
         layerSize: defaultSize,
@@ -127,7 +128,8 @@ export default defineComponent({
         }
       }
     })
-    useEvent(triggerRoot, 'click', toggleAndCalc)
+    useTriggerType(triggerRoot, props.trigger, toggleAndCalc)
+    // useEvent(triggerRoot, 'click', toggleAndCalc)
 
     useEvent(Win, 'scroll', calc)
     useEvent(Win, 'resize', calc)
@@ -142,7 +144,6 @@ export default defineComponent({
     function toggleAndCalc() {
       toggle()
       calc()
-      justNow.value = true
     }
     //计算trigger元素的位置大小等信息
     function calc() {
@@ -151,6 +152,7 @@ export default defineComponent({
         for (const k in rect) {
           triggerRect[k] = rect[k]
         }
+        justNow.value = true
       }
     }
     //获取default元素尺寸
@@ -222,7 +224,7 @@ export default defineComponent({
             justNow.value = false
           }}>
           {visible.value ? (
-            <div {...defaultProps.value}>{vnode_default.value}</div>
+            <div {...defaultOptions.value}>{vnode_default.value}</div>
           ) : null}
         </Transition>
       )
@@ -261,4 +263,20 @@ function removeEvent(
   arr.forEach((e) => {
     e.removeEventListener(type, fn)
   })
+}
+
+function useTriggerType(el: Ref, triggerType: TriggerType, handler: Function) {
+  switch (triggerType) {
+    case 'click':
+      useEvent(el, triggerType, handler)
+      break
+    case 'hover':
+      useEvent(el, 'mouseover', handler)
+      useEvent(el, 'mouseout', handler)
+      break
+    case 'focus':
+      useTabIndex(el)
+      useEvent(el, 'focus', handler)
+      useEvent(el, 'blur', handler)
+  }
 }

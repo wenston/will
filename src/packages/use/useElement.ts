@@ -14,8 +14,13 @@ export default function useElement(v?: any) {
     el.value = _el
     return _el
   }
-  function getInvisibleElementSize(el?: any, transitionName?: string) {
-    const s = getSize(get(el ?? v), transitionName)
+  function getInvisibleElementSize(
+    el?: any,
+    nearby?: boolean,
+    relate?: any,
+    transitionName?: string
+  ) {
+    const s = getSize(get(el ?? v), nearby, relate, transitionName)
     width.value = s.width
     height.value = s.height
     return s

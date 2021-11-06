@@ -15,6 +15,11 @@ const testChildrenRoutes: Array<RouteRecordRaw> = [
     meta: {
       title: 'shallowRef'
     }
+  },
+  {
+    path: 'vue-api-list',
+    component: () => import('../views/test/children/vueApiList.vue'),
+    meta: { title: 'vue-api-list' }
   }
 ]
 const routes: Array<RouteRecordRaw> = [

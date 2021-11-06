@@ -1,7 +1,8 @@
-import { isRef, unref, isReactive } from 'vue'
+import { isRef, unref, isReactive, StyleHTMLAttributes } from 'vue'
 import type { EmptyObject, RectType } from '../config/types'
+import { isObject, isString } from './tools'
 const doc = document
-const objectToString: (v: unknown) => string = Object.prototype.toString
+
 export const transitionState: string[] = [
   'enter-from',
   'enter-active',
@@ -23,18 +24,6 @@ function $(str: string) {
 }
 function isDocumentBody(str: any) {
   return str === 'body' || str === document.body
-}
-export const isString = (val: unknown): val is string => typeof val === 'string'
-export const isNumber = (val: unknown): val is number => typeof val === 'number'
-export const isObject = (val: unknown): val is Record<any, any> =>
-  objectToString(val) === '[object Object]'
-export const isFunction = (val: unknown): val is Function =>
-  typeof val === 'function'
-export const isArray = (val: unknown): val is any[] => Array.isArray(val)
-export const isSet = (val: unknown): val is Set<any> => val instanceof Set
-export const isMap = (val: unknown): val is Map<any, any> => val instanceof Map
-export function isInvalidValue(v: any) {
-  return v === '' || v === undefined || v === null || isNaN(v)
 }
 
 export function getUnit(value: string | number) {
@@ -72,6 +61,14 @@ export function isDisplayNone(elem: HTMLElement) {
   return getStyle(elem, 'display') === 'none'
 }
 
+export function setAttr(elem: HTMLElement, attrs: EmptyObject) {
+  if (elem) {
+    for (const prop in attrs) {
+      elem.setAttribute('tabindex', attrs[prop])
+    }
+  }
+}
+
 export function getPageScroll() {
   return {
     left: window.pageXOffset,
@@ -107,7 +104,8 @@ export function getScrollbarWidth() {
 
 // 获取元素
 export function getElement(elem: any): HTMLElement {
-  const el = isRef(elem) ? elem.value : elem
+  // const el = isRef(elem) ? elem.value : elem
+  const el = unref(elem)
   let _: any
   if (el === window) {
     _ = window
@@ -157,7 +155,7 @@ export function getInvisibleElementSize(
   let width: number = 0,
     height: number = 0
   function _clone_calc_size(_el: Element) {
-    let parentNode = doc.body
+    let parentNode: HTMLElement | ParentNode = doc.body
     if (nearby) {
       parentNode = getElement(relate)?.parentNode || parentNode
     }

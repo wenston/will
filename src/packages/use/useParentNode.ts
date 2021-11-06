@@ -6,7 +6,7 @@ export default function useParentNode(elem: any) {
   const parentNode = ref<HTMLElement>()
   const { el } = useElement(elem)
   function getPNode() {
-    let _node: any = null
+    let _node: HTMLElement
     const _el = el.value
     if (_el === undefined) {
       console.warn('获取的节点为undefined')

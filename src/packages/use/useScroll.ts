@@ -1,6 +1,8 @@
-import { onMounted, ref, Ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import useEvent from './useEvent'
-export default function useScroll(elem?: Ref) {
+import useElement from './useElement'
+export default function useScroll(elem?: any) {
+  const { el } = useElement(elem)
   const scrollTop = ref(-1)
   const scrollLeft = ref(-1)
   const scrollRight = ref(-1)
@@ -15,8 +17,8 @@ export default function useScroll(elem?: Ref) {
     }
   }
 
-  useEvent(ref(window), 'scroll', get)
-  useEvent(ref(elem), 'scroll', get)
+  useEvent(window, 'scroll', get)
+  useEvent(el, 'scroll', get)
   onMounted(get)
   return { scrollTop, scrollLeft, scrollRight, scrollBottom, getScroll: get }
 }
