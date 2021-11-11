@@ -117,7 +117,7 @@ export function getElement(elem: any): HTMLElement {
     if (isId(el) || isClass(el)) {
       _ = $(el)
     }
-  } else if (typeof el === 'object') {
+  } else if (isObject(el)) {
     //控制台打印的是Proxy{...}
     const _el = el.$el
     if (isElement(_el)) {

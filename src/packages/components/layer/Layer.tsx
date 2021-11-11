@@ -4,9 +4,10 @@
  * 根据trigger内容当前在页面中的位置计算弹出层的位置
  *
  */
-import type { Ref, VNode, PropType } from 'vue'
+import type { Ref, PropType, DirectiveArguments } from 'vue'
 import { Transition, Teleport } from 'vue'
 import { onMounted, onUpdated, onBeforeUnmount } from 'vue'
+import { withDirectives, resolveDirective } from 'vue'
 import {
   defineComponent,
   ref,
@@ -27,6 +28,8 @@ import useSlot from '../../use/useSlot'
 import useGlobalZIndex from '../../use/useGlobalZIndex'
 import useToggleArray from '../../use/toggle/useToggleArray'
 import useEvent from '../../use/useEvent'
+import useDelay from '../../use/useDealy'
+import clickOutside from '../../directives/clickOutside'
 import {
   isArray,
   getBoundingClientRect,
@@ -40,46 +43,33 @@ export default defineComponent({
   name: 'Layer',
   inheritAttrs: false,
   props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-    placement: {
-      type: String as PropType<PlacementType>,
-      default: 'bottom'
-    },
-    gap: {
-      type: Number,
-      default: 6
-    },
+    show: { type: Boolean, default: false },
+    placement: { type: String as PropType<PlacementType>, default: 'bottom' },
+    gap: { type: Number, default: 6 },
     offset: {
       type: Object as PropType<{ x: number; y: number }>,
       default: () => ({ x: 0, y: 0 })
     },
     //触发弹出层出现的动作（事件）方式
-    trigger: {
-      type: String as PropType<TriggerType>,
-      default: 'hover'
-    },
-    nearby: {
-      type: Boolean,
-      default: false
-    },
-    transitionName: {
-      type: String,
-      default: 'w-scale'
-    }
+    trigger: { type: String as PropType<TriggerType>, default: 'hover' },
+    nearby: { type: Boolean, default: false },
+    canCloseByClickOutside: { type: Boolean, default: true },
+    exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },
+    transitionName: { type: String, default: 'w-scale' }
   },
   emits: ['update:show'],
+  directives: { clickOutside },
   setup(props, { slots, emit }) {
     const Win = window
     let scrollElements: HTMLElement[] = []
-    const { zIndex, add } = useGlobalZIndex()
+    const click_outside = resolveDirective('clickOutside')
+    const { delay, stop } = useDelay()
+    const { zIndex, add: addZIndex } = useGlobalZIndex()
     const triggerRoot = ref(null)
     const defaultRoot = ref<HTMLElement>()
     //创建一个开关，避免频繁触发onUpdate时频繁计算
     const justNow = ref(false)
-    const triggerRect: RectType = reactive({
+    const triggerRect = reactive<RectType>({
       top: 0,
       left: 0,
       bottom: 0,
@@ -128,12 +118,10 @@ export default defineComponent({
         }
       }
     })
-    useTriggerType(triggerRoot, props.trigger, toggleAndCalc)
-    // useEvent(triggerRoot, 'click', toggleAndCalc)
+    useTriggerType(triggerRoot, props.trigger, handleEvent)
 
     useEvent(Win, 'scroll', calc)
     useEvent(Win, 'resize', calc)
-
     function hide() {
       set({ item: false })
     }
@@ -141,9 +129,24 @@ export default defineComponent({
       set({ item: true })
     }
 
-    function toggleAndCalc() {
-      toggle()
-      calc()
+    function handleEvent(e: MouseEvent) {
+      if (props.trigger === 'hover') {
+        if (e.type === 'mouseleave' || e.type === 'mouseout') {
+          delay(hide)
+        } else if (e.type === 'mouseenter' || e.type === 'mouseover') {
+          delay(() => {
+            show()
+          })
+        }
+      } else if (props.trigger === 'focus') {
+        if (e.type === 'focus') {
+          show()
+        } else if (e.type === 'blur') {
+          hide()
+        }
+      } else {
+        toggle()
+      }
     }
     //计算trigger元素的位置大小等信息
     function calc() {
@@ -195,7 +198,8 @@ export default defineComponent({
     watch(visible, (v) => {
       emit('update:show', v)
       if (v) {
-        add()
+        calc()
+        addZIndex()
         getScrollElementAndCalc()
       } else {
         removeEvent(scrollElements, 'scroll', calc)
@@ -209,7 +213,7 @@ export default defineComponent({
     )
 
     return () => {
-      const trigger_content =
+      let trigger_content =
         vnode_trigger.value === undefined
           ? undefined
           : cloneVNode(vnode_trigger.value, { ref: triggerRoot })
@@ -228,6 +232,21 @@ export default defineComponent({
           ) : null}
         </Transition>
       )
+
+      if (props.canCloseByClickOutside) {
+        const directive: DirectiveArguments = [
+          [
+            click_outside!,
+            {
+              handler: hide,
+              exclude: [...props.exclude, defaultRoot.value]
+            }
+          ]
+        ]
+        if (trigger_content) {
+          trigger_content = withDirectives(trigger_content, directive)
+        }
+      }
 
       if (!props.nearby) {
         default_content = <Teleport to={'body'}>{default_content}</Teleport>
@@ -271,8 +290,8 @@ function useTriggerType(el: Ref, triggerType: TriggerType, handler: Function) {
       useEvent(el, triggerType, handler)
       break
     case 'hover':
-      useEvent(el, 'mouseover', handler)
-      useEvent(el, 'mouseout', handler)
+      useEvent(el, 'mouseenter', handler)
+      useEvent(el, 'mouseleave', handler)
       break
     case 'focus':
       useTabIndex(el)

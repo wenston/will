@@ -1,7 +1,7 @@
 import type { RectType, PlacementType } from '../config/types'
 interface PlacementOptions {
-  triggerRect: RectType
-  layerSize: { width: number; height: number }
+  triggerRect: RectType //触发者的位置大小
+  layerSize: { width: number; height: number } //弹出层的宽高
   placement?: PlacementType
   gap?: number
   offset?: { x: number; y: number }
@@ -21,7 +21,7 @@ export function getPlacement({
   const l = layerSize
   const p = placement
 
-  //top和left是位置，x和y是动画起点，即：transform-origin对应的坐标
+  //top和left是弹出层位置，x和y是动画起点，即：transform-origin对应的坐标
   //x,y同时也是箭头的位置
   const place = { top: 0, left: 0, x: 0, y: 0 }
   const minWidth = Math.min(r.width, l.width)

@@ -22,9 +22,8 @@
         这是【弹出层】里要展示的一些东西
       </div>
     </Layer>
-    <Layer placement="bottom"
-      trigger="focus"
-      v-model:show="showLayer">
+    <!-- <Layer placement="bottom"
+      trigger="focus">
       <template #trigger>
         <b v-if="count%2===0"
           @click="toPrint('ou')">偶数：{{count}}</b>
@@ -41,7 +40,7 @@
         <a href="javascript:;"
           @click="hide">关闭</a>
       </template>
-    </Layer>
+    </Layer> -->
     <p style="height:200px;"></p>
   </div>
 
@@ -103,7 +102,7 @@ function onClickBottomStart(e: PointerEvent) {
 const scrollElement = ref(null)
 const { scrollTop, scrollBottom } = useScroll(scrollElement)
 const { count, add } = useCount()
-const showLayer = ref(false)
+const showLayer = ref(true)
 </script>
 <style module="css" lang="postcss">
 .tb {

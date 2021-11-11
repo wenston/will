@@ -1,6 +1,7 @@
 import { Ref, DirectiveBinding, ObjectDirective } from 'vue'
 import { getElement } from '../util'
-import { NOOP, isFunction, isObject } from '../util/'
+import { isFunction, isObject } from '../util/'
+const NOOP = () => {}
 // import useEvent from '../use/useEvent'
 
 type ClickOutsideHandler = (event: Event) => void
@@ -21,7 +22,6 @@ function createHandler(el: HTMLElement, bindingValue: ClickOutsideBinding) {
     handler = bindingValue
   } else if (isObject(bindingValue)) {
     exclude.push(...bindingValue.exclude.map((el) => getElement(el)))
-    // console.log(exclude)
     handler = bindingValue.handler
   }
   docHandlers.set(el, { exclude, handler })
@@ -48,11 +48,12 @@ const clickout = () => {
 const docListener: EventListener = (e) => {
   const tar = e.target as Node
   docHandlers.forEach(({ exclude, handler }, el) => {
-    // console.log(el)
+    console.log(exclude)
     const isSelf = tar === el
     const isContain = el.contains(tar)
     const isExclude =
-      exclude.length && exclude.some((_el) => _el === tar || _el.contains(tar))
+      exclude.length &&
+      exclude.some((_el) => _el && (_el === tar || _el.contains(tar)))
     if (isSelf || isContain || isExclude) {
       return
     }
