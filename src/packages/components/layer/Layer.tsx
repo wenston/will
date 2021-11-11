@@ -51,7 +51,7 @@ export default defineComponent({
       default: () => ({ x: 0, y: 0 })
     },
     //触发弹出层出现的动作（事件）方式
-    trigger: { type: String as PropType<TriggerType>, default: 'hover' },
+    trigger: { type: String as PropType<TriggerType>, default: 'click' },
     nearby: { type: Boolean, default: false },
     canCloseByClickOutside: { type: Boolean, default: true },
     exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },

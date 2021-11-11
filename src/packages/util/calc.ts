@@ -27,7 +27,65 @@ export function getPlacement({
   const minWidth = Math.min(r.width, l.width)
   const minHeight = Math.min(r.height, l.height)
   switch (p) {
+    case 'top':
+      place.top = r.top - l.height - gap
+      place.left = r.left + r.width / 2 - l.width / 2
+      place.x = l.width * 0.5 - arrowSize
+      place.y = l.height
+      break
+    case 'top-start':
+      place.top = r.top - l.height - gap
+      place.left = r.left
+      place.x = minWidth * per - arrowSize
+      place.y = l.height
+      break
+    case 'top-end':
+      place.top = r.top - l.height - gap
+      place.left = r.right - l.width
+      place.x = l.width - minWidth * per - arrowSize
+      place.y = l.height
+      break
     case 'left':
+      place.top = r.top + r.height / 2 - l.height / 2
+      place.left = r.left - l.width - gap
+      place.x = l.width
+      place.y = l.height / 2 - arrowSize
+      break
+    case 'left-start':
+      place.top = r.top
+      place.left = r.left - l.width - gap
+      place.x = l.width
+      place.y = minHeight * per - arrowSize
+      break
+    case 'left-end':
+      place.top = r.bottom - l.height
+      place.left = r.left - l.width - gap
+      place.x = l.width
+      place.y = l.height - minHeight * per - arrowSize
+      if (l.height - place.y < limit) {
+        place.y = l.height - limit
+      }
+      break
+    case 'right-start':
+      place.top = r.top
+      place.left = r.right + gap
+      place.x = arrowSize * -2
+      place.y = minHeight * per - arrowSize
+      break
+    case 'right':
+      place.top = r.top + r.height / 2 - l.height / 2
+      place.left = r.right + gap
+      place.x = arrowSize * -2
+      place.y = l.height / 2 - arrowSize
+      break
+    case 'right-end':
+      place.top = r.bottom - l.height
+      place.left = r.right + gap
+      place.x = arrowSize * -2
+      place.y = l.height - minHeight * per - arrowSize
+      if (l.height - place.y < limit) {
+        place.y = l.height - limit
+      }
       break
     case 'bottom-start':
       place.top = r.bottom + gap
@@ -45,11 +103,11 @@ export function getPlacement({
       place.left = r.left + r.width / 2 - l.width / 2
       place.x = l.width * 0.5 - arrowSize
   }
-  if (l.width - place.x < limit) {
-    place.x = place.x - 10
-  } else if (place.x < limit) {
-    place.x = limit
-  }
+  // if (l.width - place.x < limit) {
+  //   place.x = place.x - 10
+  // } else if (place.x < limit) {
+  //   place.x = limit
+  // }
 
   place.top += offset.y
   place.left += offset.x

@@ -48,7 +48,7 @@ const clickout = () => {
 const docListener: EventListener = (e) => {
   const tar = e.target as Node
   docHandlers.forEach(({ exclude, handler }, el) => {
-    console.log(exclude)
+    // console.log(exclude)
     const isSelf = tar === el
     const isContain = el.contains(tar)
     const isExclude =

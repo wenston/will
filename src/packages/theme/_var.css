@@ -20,8 +20,8 @@
   --w-padding-y: 10px;
 
   --w-radius: 6px;
-  --w-box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08),
-    0 0px 2px rgba(0, 0, 0, 0.08);
+  --w-box-shadow: 0 5px 8px 0px rgba(0, 0, 0, 0.08),
+    0 0px 2px rgba(0, 0, 0, 0.05);
 
   --w-transition-time: 0.25s;
   --w-transition-slow-time: 0.5s;
@@ -33,9 +33,9 @@
   --w-color-bg: var(--w-color-font-5);
 
   /* switch */
-  --w-switch-width: 30px;
-  --w-switch-height: 14px;
-  --w-switch-valve-size: 18px;
+  --w-switch-width: 25px;
+  --w-switch-height: 12px;
+  --w-switch-valve-size: 16px;
   --w-switch-valve-color: white;
   --w-switch-bg-color: var(--w-color-border);
   --w-switch-valve-box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.3);

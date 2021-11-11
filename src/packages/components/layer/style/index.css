@@ -36,4 +36,50 @@
       border-color: transparent transparent var(--_layer-background-color);
     }
   }
+  &.w-layer-top,
+  &.w-layer-top-start,
+  &.w-layer-top-end {
+    &:before {
+      left: var(--_layer-arrow-x);
+      top: calc(var(--_layer-arrow-y) - 1px);
+      border-color: var(--_layer-border-color) transparent transparent;
+    }
+    &:after {
+      left: var(--_layer-arrow-x);
+      top: calc(var(--_layer-arrow-y) - 2px);
+      border-color: var(--_layer-background-color) transparent transparent;
+    }
+  }
+  &.w-layer-left,
+  &.w-layer-left-start,
+  &.w-layer-left-end {
+    &:before {
+      left: calc(var(--_layer-arrow-x) - 1px);
+      top: var(--_layer-arrow-y);
+      border-color: transparent transparent transparent
+        var(--_layer-border-color);
+    }
+    &:after {
+      left: calc(var(--_layer-arrow-x) - 2px);
+      top: var(--_layer-arrow-y);
+      border-color: transparent transparent transparent
+        var(--_layer-background-color);
+    }
+  }
+  &.w-layer-right,
+  &.w-layer-right-start,
+  &.w-layer-right-end {
+    &:before {
+      left: calc(var(--_layer-arrow-x) - 2px);
+      top: var(--_layer-arrow-y);
+      border-color: transparent var(--_layer-border-color) transparent
+        transparent;
+    }
+    &:after {
+      left: calc(var(--_layer-arrow-x) - 1px);
+      top: var(--_layer-arrow-y);
+      border-color: transparent var(--_layer-background-color) transparent
+        transparent;
+    }
+  }
 }

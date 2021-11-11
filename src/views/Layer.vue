@@ -3,6 +3,8 @@
     <p>Layer</p>
   </h1>
   <p>
+
+    <!-- @vnode-before-mount="beforeBtnMounted" -->
     <Btn @click="add(1)"
       type="default"
       mode="line">change {{count}}</Btn>
@@ -47,48 +49,157 @@
   <table :class="css.tb">
     <tbody>
       <tr>
+        <td></td>
         <td>
-
-        </td>
-        <td>
-          <Btn>正上</Btn>
-        </td>
-        <td>
-          <Btn>右上</Btn>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <Btn>正左</Btn>
-        </td>
-        <td>
-          <Btn>中间</Btn>
-        </td>
-        <td>
-          <Btn>正右</Btn>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <Layer placement="bottom-start">
+          <Layer placement="top-start">
             <template #trigger>
-              <Btn>左下</Btn>
+              <Btn>上边左对齐</Btn>
             </template>
-            <div>这是左下展示的内容</div>
+            <div :class="css.body">上边左对齐</div>
           </Layer>
         </td>
         <td>
-          <Btn>正下</Btn>
+          <Layer placement="top">
+            <template #trigger>
+              <Btn>上边中间对齐</Btn>
+            </template>
+            <div :class="css.body">上边中间对齐</div>
+          </Layer>
         </td>
         <td>
-          <Btn>右下</Btn>
+          <Layer placement="top-end">
+            <template #trigger>
+              <Btn>上边右对齐</Btn>
+            </template>
+            <div :class="css.body">上右</div>
+          </Layer>
         </td>
+        <td></td>
+      </tr>
+      <tr>
+
+        <td>
+          <Layer placement="left-start">
+            <template #trigger>
+              <Btn>左边顶部对齐</Btn>
+            </template>
+            <div :class="css.body"
+              style="max-width:150px">
+              <h3>三生石</h3>
+              <section style="margin-top:10px">
+                <p>
+                  三生石上旧精魂，赏月吟风莫要论。惭愧故人远相访，此身虽异性长存。
+                </p>
+              </section>
+            </div>
+          </Layer>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <Layer placement="right-start">
+            <template #trigger>
+              <Btn>右边顶部对齐</Btn>
+            </template>
+            <div :class="css.body"
+              style="max-width:150px">
+              <h3>三生石</h3>
+              <section style="margin-top:10px">
+                <p>
+                  三生石上旧精魂，赏月吟风莫要论。惭愧故人远相访，此身虽异性长存。
+                </p>
+              </section>
+            </div>
+          </Layer>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          <Layer placement="left">
+            <template #trigger>
+              <Btn>左边上下居中</Btn>
+            </template>
+            <div :class="css.body"
+              style="max-width:200px">
+              <p>
+                左边上下居中对齐，左边上下居中对齐，左边上下居中对齐，左边上下居中对齐，左边上下居中对齐，
+              </p>
+            </div>
+          </Layer>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <Layer placement="right">
+            <template #trigger>
+              <Btn>右边上下居中</Btn>
+            </template>
+            <div :class="css.body"
+              style="max-width:200px">
+              <p>
+                右边上下居中对齐的一种方式哦
+              </p>
+            </div>
+          </Layer>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <Layer placement="left-end">
+            <template #trigger>
+              <Btn>左边底部对齐</Btn>
+            </template>
+            <div :class="css.body">left-end</div>
+          </Layer>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <Layer placement="right-end">
+            <template #trigger>
+              <Btn>右边底部对齐</Btn>
+            </template>
+            <div :class="css.body">right-end</div>
+          </Layer>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <Layer placement="bottom-start">
+            <template #trigger>
+              <Btn>底部左边对齐</Btn>
+            </template>
+            <div :class="css.body">bottom-start</div>
+          </Layer>
+        </td>
+        <td>
+          <Layer placement="bottom">
+            <template #trigger>
+              <Btn>底部居中对齐</Btn>
+            </template>
+            <div :class="css.body">bottom</div>
+          </Layer>
+        </td>
+        <td>
+          <Layer placement="bottom-end">
+            <template #trigger>
+              <Btn>底部右侧对齐</Btn>
+            </template>
+            <div :class="css.body">右</div>
+          </Layer>
+        </td>
+        <td></td>
       </tr>
     </tbody>
   </table>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, isVNode } from 'vue'
 import useCount from '../packages/use/useCount'
 import useScroll from '../packages/use/useScroll'
 import Layer from '../packages/components/layer'
@@ -98,6 +209,11 @@ function toPrint(str: string) {
 }
 function onClickBottomStart(e: PointerEvent) {
   console.log(e)
+}
+
+function beforeBtnMounted(e: any) {
+  console.log('第一次用这种vnode生命周期钩子', e)
+  e.component.props.type = 'primary'
 }
 const scrollElement = ref(null)
 const { scrollTop, scrollBottom } = useScroll(scrollElement)
@@ -109,5 +225,8 @@ const showLayer = ref(true)
   & td {
     padding: 8px;
   }
+}
+.body {
+  padding: 15px;
 }
 </style>
