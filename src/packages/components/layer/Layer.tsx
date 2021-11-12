@@ -85,6 +85,7 @@ export default defineComponent({
       height: 0
     })
     const defaultSize = reactive({ width: 0, height: 0 })
+    const placementInfo = reactive({ top: 0, left: 0, x: 0, y: 0 })
     const {
       toggle,
       set,
@@ -107,18 +108,12 @@ export default defineComponent({
     )
     const defaultOptions = computed(() => {
       const placement = props.placement
-      const { top, left, x, y } = getPlacement({
-        triggerRect,
-        layerSize: defaultSize,
-        placement: props.placement,
-        gap: props.gap,
-        offset: props.offset
-      })
+      const pInfo = placementInfo
       return {
         ref: defaultRoot,
         class: [
           'w-layer-content',
-          `w-layer-${props.placement}`,
+          `w-layer-${placement}`,
           {
             'w-layer-no-arrow':
               !props.hasArrow ||
@@ -128,17 +123,17 @@ export default defineComponent({
         ],
         style: {
           'z-index': zIndex.value,
-          top: `${top}px`,
-          left: `${left}px`,
-          '--_layer-arrow-x': `${x}px`,
-          '--_layer-arrow-y': `${y}px`
+          top: `${pInfo.top}px`,
+          left: `${pInfo.left}px`,
+          '--_layer-arrow-x': `${pInfo.x}px`,
+          '--_layer-arrow-y': `${pInfo.y}px`
         }
       }
     })
     useTriggerType(triggerRoot, props.trigger, handleTriggerEvent)
 
-    useEvent(Win, 'scroll', calc)
-    useEvent(Win, 'resize', calc)
+    useEvent(Win, 'scroll', handleParentScroll)
+    useEvent(Win, 'resize', handleParentScroll)
     function hide() {
       set({ item: false })
     }
@@ -165,8 +160,23 @@ export default defineComponent({
         toggle()
       }
     }
-    //计算trigger元素的位置大小等信息
-    function calc() {
+    function toGetDefaultPlacement() {
+      if (visible.value) {
+        const { top, left, x, y } = getPlacement({
+          triggerRect,
+          layerSize: defaultSize,
+          placement: props.placement,
+          gap: props.gap,
+          offset: props.offset
+        })
+        placementInfo.top = top
+        placementInfo.left = left
+        placementInfo.x = x
+        placementInfo.y = y
+      }
+    }
+    //计算trigger元素的位置大小等信息，为定位弹出层做准备
+    function calcTriggerRect() {
       if (visible.value && triggerRoot.value) {
         let rect = getElementPositionInPage(triggerRoot)
         for (const k in rect) {
@@ -175,7 +185,7 @@ export default defineComponent({
         justNow.value = true
       }
     }
-    //获取default元素尺寸
+    //获取default元素尺寸，为定位做准备
     function getDefaultRootSize(maybeEl: any) {
       if (visible.value) {
         const { width, height } = getInvisibleElementSize(
@@ -192,34 +202,51 @@ export default defineComponent({
     function getScrollElementAndCalc() {
       if (visible.value && triggerRoot.value) {
         scrollElements = getParentScrollElement(triggerRoot.value)
-        addEvent(scrollElements, 'scroll', calc)
+        addEvent(scrollElements, 'scroll', handleParentScroll)
       }
     }
 
+    //可滚动的父级如果在滚动时，实时计算trigger本身的位置信息，并获取弹出层最新的定位
+    function handleParentScroll() {
+      calcTriggerRect()
+      toGetDefaultPlacement()
+    }
+
     onBeforeUnmount(() => {
-      removeEvent(scrollElements, 'scroll', calc)
+      removeEvent(scrollElements, 'scroll', handleParentScroll)
       scrollElements = []
     })
     onMounted(() => {
-      calc()
+      /**
+       * 挂载之后就查看是否展示了弹出层，
+       *
+       */
+      //计算trigger元素的位置大小等信息
+      calcTriggerRect()
+      //计算弹出层的大小
       getDefaultRootSize(defaultRoot.value)
+      //根据以上两个方法得出的结果，对弹出层进行定位
+      toGetDefaultPlacement()
+      //如果弹出层位于某个滚动元素中，则给可滚动的父级进行事件绑定
       getScrollElementAndCalc()
     })
     onUpdated(() => {
       if (!justNow.value) {
-        calc()
+        calcTriggerRect()
         getDefaultRootSize(defaultRoot.value)
+
+        toGetDefaultPlacement()
       }
     })
 
     watch(visible, (v) => {
       emit('update:show', v)
       if (v) {
-        calc()
         addZIndex()
+        calcTriggerRect()
         getScrollElementAndCalc()
       } else {
-        removeEvent(scrollElements, 'scroll', calc)
+        removeEvent(scrollElements, 'scroll', handleParentScroll)
       }
     })
     watch(
@@ -240,6 +267,8 @@ export default defineComponent({
           name={props.transitionName}
           onBeforeEnter={(el) => {
             getDefaultRootSize(el)
+
+            toGetDefaultPlacement()
           }}
           onAfterEnter={(el) => {
             justNow.value = false
