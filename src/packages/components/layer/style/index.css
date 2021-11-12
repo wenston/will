@@ -22,6 +22,19 @@
     border-style: solid;
     border-color: transparent;
   }
+  &.w-layer-no-arrow {
+    &:after,
+    &:before {
+      display: none;
+    }
+  }
+  &.w-layer-center {
+    transform-origin: center center;
+  }
+  &.w-layer-client-center {
+    /* 因为是在视窗范围内居中，所以应该fixed定位 */
+    position: fixed;
+  }
   &.w-layer-bottom,
   &.w-layer-bottom-start,
   &.w-layer-bottom-end {

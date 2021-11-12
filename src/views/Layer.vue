@@ -130,8 +130,32 @@
           </Layer>
         </td>
         <td></td>
-        <td></td>
-        <td></td>
+        <td>
+          <Layer placement="center">
+            <template #trigger>相对于我居中</template>
+            <div :class="css.body">
+              <p>
+                这是居中显示的弹出层，看看效果怎么样吧
+              </p>
+              <p>
+                居中显示的弹出层，是没有箭头的
+              </p>
+            </div>
+          </Layer>
+        </td>
+        <td>
+          <Layer placement="client-center">
+            <template #trigger>在视窗居中</template>
+            <div :class="css.body">
+              <p>
+                在视窗范围内居中展示弹出层
+              </p>
+              <p>
+                是没有箭头的
+              </p>
+            </div>
+          </Layer>
+        </td>
         <td>
           <Layer placement="right">
             <template #trigger>

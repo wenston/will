@@ -21,6 +21,7 @@ export type PlacementType =
   | 'bottom-start'
   | 'bottom-end'
   | 'center'
+  | 'client-center'
 export type EmptyObject = { [key: string]: any }
 export type BtnType = 'primary' | 'default'
 export type BtnMode = 'text' | 'line' //line是线条形式的

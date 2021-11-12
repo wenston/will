@@ -1,6 +1,7 @@
 import { isRef, unref, isReactive, StyleHTMLAttributes } from 'vue'
 import type { EmptyObject, RectType } from '../config/types'
 import { isObject, isString } from './tools'
+const win = window
 const doc = document
 
 export const transitionState: string[] = [
@@ -54,7 +55,7 @@ export function toPX(el: HTMLElement, value: string | number): number {
 }
 
 export function getStyle(elem: HTMLElement, prop: any) {
-  return window.getComputedStyle(elem, null)[prop]
+  return win.getComputedStyle(elem, null)[prop]
 }
 
 export function isDisplayNone(elem: HTMLElement) {
@@ -69,10 +70,24 @@ export function setAttr(elem: HTMLElement, attrs: EmptyObject) {
   }
 }
 
+export function getWindowSize() {
+  return {
+    outer: {
+      height: win.outerHeight,
+      width: win.outerWidth
+    },
+    //inner的宽高包括了滚动条的尺寸！
+    inner: {
+      height: win.innerHeight,
+      width: win.innerWidth
+    }
+  }
+}
+
 export function getPageScroll() {
   return {
-    left: window.pageXOffset,
-    top: window.pageYOffset
+    x: win.pageXOffset,
+    y: win.pageYOffset
   }
 }
 
@@ -130,7 +145,7 @@ export function getElement(elem: any): HTMLElement {
 export function getElementPositionInPage(elem: any): RectType {
   let _el = getElement(elem)
 
-  const { left, top } = getPageScroll()
+  const { x: left, y: top } = getPageScroll()
   const rect = getBoundingClientRect(_el)
   // const marginLeft = getStyle(elem,'margin-left')
   // const marginTop=getStyle(elem,'margin-top')

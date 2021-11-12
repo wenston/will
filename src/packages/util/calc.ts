@@ -1,4 +1,5 @@
 import type { RectType, PlacementType } from '../config/types'
+import { getWindowSize, getPageScroll } from './dom'
 interface PlacementOptions {
   triggerRect: RectType //触发者的位置大小
   layerSize: { width: number; height: number } //弹出层的宽高
@@ -21,12 +22,26 @@ export function getPlacement({
   const l = layerSize
   const p = placement
 
-  //top和left是弹出层位置，x和y是动画起点，即：transform-origin对应的坐标
-  //x,y同时也是箭头的位置
+  //top和left是弹出层位置，
+  // 注意：x和y是动画起点，即：transform-origin对应的坐标
+  // x,y同时也是箭头的位置，所以，x和y是相对于弹出层的位置！！
   const place = { top: 0, left: 0, x: 0, y: 0 }
   const minWidth = Math.min(r.width, l.width)
   const minHeight = Math.min(r.height, l.height)
   switch (p) {
+    case 'center':
+      place.top = r.top + r.height / 2 - l.height / 2
+      place.left = r.left + r.width / 2 - l.width / 2
+      break
+    case 'client-center':
+      const { inner } = getWindowSize()
+      const { x, y } = getPageScroll()
+      place.top = inner.height / 2 - l.height / 2
+      place.left = inner.width / 2 - l.width / 2
+      //由于client-center是相对于视口定位的，所以如果出现了滚动条，则要减去！
+      place.x = r.left + r.width / 2 - place.left - x
+      place.y = r.top + r.height / 2 - place.top - y
+      break
     case 'top':
       place.top = r.top - l.height - gap
       place.left = r.left + r.width / 2 - l.width / 2

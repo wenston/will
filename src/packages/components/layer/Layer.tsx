@@ -43,19 +43,26 @@ export default defineComponent({
   name: 'Layer',
   inheritAttrs: false,
   props: {
+    //是否显示
     show: { type: Boolean, default: false },
+    //弹出层相对于“trigger”的位置
     placement: { type: String as PropType<PlacementType>, default: 'bottom' },
+    //“触发者trigger”和弹出层之间的间距
     gap: { type: Number, default: 6 },
+    //弹出层相对于自身的偏移量
     offset: {
       type: Object as PropType<{ x: number; y: number }>,
       default: () => ({ x: 0, y: 0 })
     },
     //触发弹出层出现的动作（事件）方式
     trigger: { type: String as PropType<TriggerType>, default: 'click' },
+    //弹出层插入的位置是否紧挨着“触发者trigger”
     nearby: { type: Boolean, default: false },
     canCloseByClickOutside: { type: Boolean, default: true },
+    //当canCloseByClickOutside是true时，exclude指明了哪些元素在点击时不关闭弹出层
     exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },
-    transitionName: { type: String, default: 'w-scale' }
+    transitionName: { type: String, default: 'w-scale' }, //transition过渡动画
+    hasArrow: { type: Boolean, default: true } //弹出层是否有箭头
   },
   emits: ['update:show'],
   directives: { clickOutside },
@@ -99,6 +106,7 @@ export default defineComponent({
       )
     )
     const defaultOptions = computed(() => {
+      const placement = props.placement
       const { top, left, x, y } = getPlacement({
         triggerRect,
         layerSize: defaultSize,
@@ -108,7 +116,16 @@ export default defineComponent({
       })
       return {
         ref: defaultRoot,
-        class: ['w-layer-content', `w-layer-${props.placement}`],
+        class: [
+          'w-layer-content',
+          `w-layer-${props.placement}`,
+          {
+            'w-layer-no-arrow':
+              !props.hasArrow ||
+              placement === 'center' ||
+              placement === 'client-center'
+          }
+        ],
         style: {
           'z-index': zIndex.value,
           top: `${top}px`,
@@ -118,7 +135,7 @@ export default defineComponent({
         }
       }
     })
-    useTriggerType(triggerRoot, props.trigger, handleEvent)
+    useTriggerType(triggerRoot, props.trigger, handleTriggerEvent)
 
     useEvent(Win, 'scroll', calc)
     useEvent(Win, 'resize', calc)
@@ -129,7 +146,7 @@ export default defineComponent({
       set({ item: true })
     }
 
-    function handleEvent(e: MouseEvent) {
+    function handleTriggerEvent(e: MouseEvent) {
       if (props.trigger === 'hover') {
         if (e.type === 'mouseleave' || e.type === 'mouseout') {
           delay(hide)
@@ -250,6 +267,8 @@ export default defineComponent({
 
       if (!props.nearby) {
         default_content = <Teleport to={'body'}>{default_content}</Teleport>
+      } else {
+        //另外一种情况暂未考虑TODO:
       }
 
       return (
