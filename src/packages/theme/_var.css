@@ -39,4 +39,6 @@
   --w-switch-valve-color: white;
   --w-switch-bg-color: var(--w-color-border);
   --w-switch-valve-box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.3);
+
+  --w-mask-background-color: rgba(0, 0, 0, 0.3);
 }

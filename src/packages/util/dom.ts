@@ -23,7 +23,7 @@ function isClass(str: string) {
 function $(str: string) {
   return document.querySelector(str)
 }
-function isDocumentBody(str: any) {
+export function isDocumentBody(str: any) {
   return str === 'body' || str === document.body
 }
 

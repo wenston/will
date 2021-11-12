@@ -1,17 +1,21 @@
 import type { Ref, ComputedRef } from 'vue'
 import { isRef, ref, computed, unref, watch } from 'vue'
-type DataType = Ref<unknown[]> | unknown[]
-interface InitType {
+type DataType<T> = Ref<T[]> | T[]
+interface InitType<T> {
   index?: Ref<number> | ComputedRef<number> | number
-  item?: Ref<any> | ComputedRef<any> | any
+  item?: T
 }
-export default function useToggleArray(data: DataType, current?: InitType) {
+export default function useToggleArray<T>(
+  data: DataType<T>,
+  current?: InitType<T>
+) {
   const computedData = computed(() => unref(data))
   const len = computed(() => computedData.value.length)
   const index = ref(0)
-  const item = ref(computedData.value[0])
+  // const item = ref(computedData.value[0])
+  const item = ref<T>()
 
-  function _set(current: InitType) {
+  function _set(current: InitType<T>) {
     if (current) {
       if ('item' in current) {
         item.value = unref(current.item)
@@ -36,7 +40,7 @@ export default function useToggleArray(data: DataType, current?: InitType) {
       index.value = nextIndex
     }
   }
-  function set(current: InitType) {
+  function set(current: InitType<T>) {
     _set(current)
   }
   _init()

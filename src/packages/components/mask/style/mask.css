@@ -1,0 +1,27 @@
+.w-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--w-mask-background-color);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: var(--__w-mask-z-index, 90);
+}
+
+.w-mask-fade-enter-active,
+.w-mask-fade-leave-active {
+  transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
+}
+.w-mask-fade-leave-active {
+  transition: var(--w-transition-time) var(--w-cubic-bezier);
+}
+
+.w-mask-fade-enter-from,
+.w-mask-fade-leave-to {
+  background-color: rgba(0, 0, 0, 0);
+}

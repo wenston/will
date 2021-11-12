@@ -30,6 +30,7 @@ import useToggleArray from '../../use/toggle/useToggleArray'
 import useEvent from '../../use/useEvent'
 import useDelay from '../../use/useDealy'
 import clickOutside from '../../directives/clickOutside'
+import Mask from '../mask/'
 import {
   isArray,
   getBoundingClientRect,
@@ -42,6 +43,7 @@ import { getPlacement } from '../../util/calc'
 export default defineComponent({
   name: 'Layer',
   inheritAttrs: false,
+  components: { Mask },
   props: {
     //是否显示
     show: { type: Boolean, default: false },
@@ -62,7 +64,8 @@ export default defineComponent({
     //当canCloseByClickOutside是true时，exclude指明了哪些元素在点击时不关闭弹出层
     exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },
     transitionName: { type: String, default: 'w-scale' }, //transition过渡动画
-    hasArrow: { type: Boolean, default: true } //弹出层是否有箭头
+    hasArrow: { type: Boolean, default: true }, //弹出层是否有箭头
+    hasMask: { type: Boolean, default: false } //是否有遮罩层
   },
   emits: ['update:show'],
   directives: { clickOutside },
@@ -303,6 +306,15 @@ export default defineComponent({
       return (
         <>
           {trigger_content}
+          {props.hasMask && (
+            <Mask
+              show={visible.value}
+              zIndex={zIndex.value - 1}
+              onUpdate:show={(v) => {
+                visible.value = v
+              }}
+            />
+          )}
           {default_content}
         </>
       )
