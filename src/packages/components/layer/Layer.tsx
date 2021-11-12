@@ -15,7 +15,8 @@ import {
   computed,
   watch,
   cloneVNode,
-  renderSlot
+  renderSlot,
+  normalizeClass
 } from 'vue'
 import type {
   TriggerType,
@@ -65,7 +66,12 @@ export default defineComponent({
     exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },
     transitionName: { type: String, default: 'w-scale' }, //transition过渡动画
     hasArrow: { type: Boolean, default: true }, //弹出层是否有箭头
-    hasMask: { type: Boolean, default: false } //是否有遮罩层
+    hasMask: { type: Boolean, default: false }, //是否有遮罩层
+    layerVarStyle: {
+      type: Object as PropType<EmptyObject>,
+      default: () => ({})
+    },
+    layerClass: [String, Array, Object]
   },
   emits: ['update:show'],
   directives: { clickOutside },
@@ -110,6 +116,7 @@ export default defineComponent({
       )
     )
     const defaultOptions = computed(() => {
+      console.log(props.layerClass, props.layerVarStyle)
       const placement = props.placement
       const pInfo = placementInfo
       return {
@@ -122,14 +129,16 @@ export default defineComponent({
               !props.hasArrow ||
               placement === 'center' ||
               placement === 'client-center'
-          }
+          },
+          props.layerClass && normalizeClass(props.layerClass)
         ],
         style: {
           'z-index': zIndex.value,
           top: `${pInfo.top}px`,
           left: `${pInfo.left}px`,
           '--_layer-arrow-x': `${pInfo.x}px`,
-          '--_layer-arrow-y': `${pInfo.y}px`
+          '--_layer-arrow-y': `${pInfo.y}px`,
+          ...props.layerVarStyle
         }
       }
     })

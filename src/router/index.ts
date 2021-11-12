@@ -71,14 +71,14 @@ const routes: Array<RouteRecordRaw> = [
       title: '层 Layer'
     }
   },
-  // {
-  //   path: '/tooltip',
-  //   name: 'Tooltip',
-  //   component: () => import('../views/Tooltip.vue'),
-  //   meta: {
-  //     title: '提示 Tooltip'
-  //   }
-  // },
+  {
+    path: '/tooltip',
+    name: 'Tooltip',
+    component: () => import('../views/Tooltip.vue'),
+    meta: {
+      title: '提示 Tooltip'
+    }
+  },
   {
     path: '/test',
     name: 'test',

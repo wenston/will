@@ -1,0 +1,4 @@
+.w-tooltip {
+  padding: var(--w-padding-y) var(--w-padding-x);
+  line-height: var(--w-line-height);
+}

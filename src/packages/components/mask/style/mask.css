@@ -15,10 +15,11 @@
 
 .w-mask-fade-enter-active,
 .w-mask-fade-leave-active {
-  transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
+  transition: background-color var(--w-transition-slow-time)
+    var(--w-cubic-bezier-quick);
 }
 .w-mask-fade-leave-active {
-  transition: var(--w-transition-time) var(--w-cubic-bezier);
+  transition: background-color var(--w-transition-time) var(--w-cubic-bezier);
 }
 
 .w-mask-fade-enter-from,

@@ -27,3 +27,19 @@
 .w-scale-leave-to {
   transform: scale(0, 0);
 }
+
+.w-translate-x-enter-active,
+.w-translate-x-leave-active {
+  transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
+  perspective: 1000px;
+}
+.w-translate-x-leave-active {
+  transition: var(--w-transition-time) var(--w-cubic-bezier);
+  perspective: 1000px;
+}
+
+.w-translate-x-enter-from,
+.w-translate-x-leave-to {
+  transform: translateX(-10px);
+  opacity: 0;
+}

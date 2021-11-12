@@ -6,9 +6,14 @@
   --_layer-arrow-y: 5px;
   /* 箭头尺寸 */
   --_layer-arrow-size: 4px;
+  /* 箭头和trigger之间的距离微调 */
+  --_layer-arrow-gap: 1px;
+  /* 字的颜色 */
+  --_layer-color: var(--w-color-font-3);
   border: 1px solid var(--_layer-border-color);
   border-radius: var(--w-radius);
   position: absolute;
+  color: var(--_layer-color);
   box-shadow: var(--w-box-shadow);
   background-color: var(--_layer-background-color);
   transform-origin: var(--_layer-arrow-x) var(--_layer-arrow-y);
@@ -54,12 +59,12 @@
   &.w-layer-top-end {
     &:before {
       left: var(--_layer-arrow-x);
-      top: calc(var(--_layer-arrow-y) - 1px);
+      top: calc(var(--_layer-arrow-y) - var(--_layer-arrow-gap));
       border-color: var(--_layer-border-color) transparent transparent;
     }
     &:after {
       left: var(--_layer-arrow-x);
-      top: calc(var(--_layer-arrow-y) - 2px);
+      top: calc(var(--_layer-arrow-y) - var(--_layer-arrow-gap) - 1px);
       border-color: var(--_layer-background-color) transparent transparent;
     }
   }
@@ -67,13 +72,13 @@
   &.w-layer-left-start,
   &.w-layer-left-end {
     &:before {
-      left: calc(var(--_layer-arrow-x) - 1px);
+      left: calc(var(--_layer-arrow-x) - var(--_layer-arrow-gap));
       top: var(--_layer-arrow-y);
       border-color: transparent transparent transparent
         var(--_layer-border-color);
     }
     &:after {
-      left: calc(var(--_layer-arrow-x) - 2px);
+      left: calc(var(--_layer-arrow-x) - var(--_layer-arrow-gap) - 1px);
       top: var(--_layer-arrow-y);
       border-color: transparent transparent transparent
         var(--_layer-background-color);
@@ -83,13 +88,13 @@
   &.w-layer-right-start,
   &.w-layer-right-end {
     &:before {
-      left: calc(var(--_layer-arrow-x) - 2px);
+      left: calc(var(--_layer-arrow-x) - var(--_layer-arrow-gap) - 1px);
       top: var(--_layer-arrow-y);
       border-color: transparent var(--_layer-border-color) transparent
         transparent;
     }
     &:after {
-      left: calc(var(--_layer-arrow-x) - 1px);
+      left: calc(var(--_layer-arrow-x) - var(--_layer-arrow-gap));
       top: var(--_layer-arrow-y);
       border-color: transparent var(--_layer-background-color) transparent
         transparent;
