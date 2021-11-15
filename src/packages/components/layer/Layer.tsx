@@ -40,6 +40,14 @@ import {
   getParentScrollElement
 } from '../../util'
 import { getPlacement } from '../../util/calc'
+interface LayerCssVarType {
+  '--_layer-border-color'?: string
+  '--_layer-background-color'?: string
+  '--_layer-arrow-size'?: string
+  '--_layer-arrow-gap'?: string
+  '--_layer-color'?: string
+  '--_layer-transform'?: string
+}
 //renderSlot和slots[插槽名]两种方式得出的插槽内容的格式不一样！
 export default defineComponent({
   name: 'Layer',
@@ -67,8 +75,8 @@ export default defineComponent({
     transitionName: { type: String, default: 'w-scale' }, //transition过渡动画
     hasArrow: { type: Boolean, default: true }, //弹出层是否有箭头
     hasMask: { type: Boolean, default: false }, //是否有遮罩层
-    layerVarStyle: {
-      type: Object as PropType<EmptyObject>,
+    layerCssVar: {
+      type: Object as PropType<LayerCssVarType>,
       default: () => ({})
     },
     layerClass: [String, Array, Object]
@@ -116,7 +124,6 @@ export default defineComponent({
       )
     )
     const defaultOptions = computed(() => {
-      console.log(props.layerClass, props.layerVarStyle)
       const placement = props.placement
       const pInfo = placementInfo
       return {
@@ -133,12 +140,12 @@ export default defineComponent({
           props.layerClass && normalizeClass(props.layerClass)
         ],
         style: {
-          'z-index': zIndex.value,
           top: `${pInfo.top}px`,
           left: `${pInfo.left}px`,
+          'z-index': zIndex.value,
           '--_layer-arrow-x': `${pInfo.x}px`,
           '--_layer-arrow-y': `${pInfo.y}px`,
-          ...props.layerVarStyle
+          ...props.layerCssVar
         }
       }
     })

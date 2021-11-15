@@ -2,3 +2,18 @@
   padding: var(--w-padding-y) var(--w-padding-x);
   line-height: var(--w-line-height);
 }
+.w-translate-enter-active,
+.w-translate-leave-active {
+  transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
+  perspective: 1000px;
+}
+.w-translate-leave-active {
+  transition: var(--w-transition-time) var(--w-cubic-bezier);
+  perspective: 1000px;
+}
+
+.w-translate-enter-from,
+.w-translate-leave-to {
+  transform: var(--_layer-transform);
+  opacity: 0;
+}
