@@ -1,12 +1,16 @@
 import { ref, computed, defineComponent } from 'vue'
-import Layer from '../layer'
+import Layer, { LayerProps } from '../layer'
 
 export default defineComponent({
   inheritAttrs: false,
   components: { Layer },
   name: 'Tooltip',
   props: {
-    ...Layer.props
+    ...LayerProps,
+    trigger: {
+      ...LayerProps.trigger,
+      default: 'hover'
+    }
   },
   setup(props, { slots, emit, attrs }) {
     const d = 10
@@ -35,7 +39,8 @@ export default defineComponent({
         '--_layer-background-color': 'rgba(0,0,0,.75)',
         '--_layer-color': 'rgba(255,255,255,.95)',
         '--_layer-arrow-gap': gap,
-        '--_layer-transform': t
+        '--_layer-transform': t,
+        ...props.layerCssVar
       }
       return {
         ...attrs,

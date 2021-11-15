@@ -16,7 +16,8 @@ import {
   watch,
   cloneVNode,
   renderSlot,
-  normalizeClass
+  normalizeClass,
+  capitalize
 } from 'vue'
 import type {
   TriggerType,
@@ -48,39 +49,42 @@ interface LayerCssVarType {
   '--_layer-color'?: string
   '--_layer-transform'?: string
 }
+const eventEnter = 'mouseenter'
+const eventLeave = 'mouseleave'
 //renderSlot和slots[插槽名]两种方式得出的插槽内容的格式不一样！
+export const LayerProps = {
+  //是否显示
+  show: { type: Boolean, default: false },
+  //弹出层相对于“trigger”的位置
+  placement: { type: String as PropType<PlacementType>, default: 'bottom' },
+  //“触发者trigger”和弹出层之间的间距
+  gap: { type: Number, default: 6 },
+  //弹出层相对于自身的偏移量
+  offset: {
+    type: Object as PropType<{ x: number; y: number }>,
+    default: () => ({ x: 0, y: 0 })
+  },
+  //触发弹出层出现的动作（事件）方式
+  trigger: { type: String as PropType<TriggerType>, default: 'click' },
+  //弹出层插入的位置是否紧挨着“触发者trigger”
+  nearby: { type: Boolean, default: false },
+  canCloseByClickOutside: { type: Boolean, default: true },
+  //当canCloseByClickOutside是true时，exclude指明了哪些元素在点击时不关闭弹出层
+  exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },
+  transitionName: { type: String, default: 'w-scale' }, //transition过渡动画
+  hasArrow: { type: Boolean, default: true }, //弹出层是否有箭头
+  hasMask: { type: Boolean, default: false }, //是否有遮罩层
+  layerCssVar: {
+    type: Object as PropType<LayerCssVarType>,
+    default: () => ({})
+  },
+  layerClass: [String, Array, Object]
+}
 export default defineComponent({
   name: 'Layer',
   inheritAttrs: false,
   components: { Mask },
-  props: {
-    //是否显示
-    show: { type: Boolean, default: false },
-    //弹出层相对于“trigger”的位置
-    placement: { type: String as PropType<PlacementType>, default: 'bottom' },
-    //“触发者trigger”和弹出层之间的间距
-    gap: { type: Number, default: 6 },
-    //弹出层相对于自身的偏移量
-    offset: {
-      type: Object as PropType<{ x: number; y: number }>,
-      default: () => ({ x: 0, y: 0 })
-    },
-    //触发弹出层出现的动作（事件）方式
-    trigger: { type: String as PropType<TriggerType>, default: 'click' },
-    //弹出层插入的位置是否紧挨着“触发者trigger”
-    nearby: { type: Boolean, default: false },
-    canCloseByClickOutside: { type: Boolean, default: true },
-    //当canCloseByClickOutside是true时，exclude指明了哪些元素在点击时不关闭弹出层
-    exclude: { type: Array as PropType<HTMLElement[]>, default: () => [] },
-    transitionName: { type: String, default: 'w-scale' }, //transition过渡动画
-    hasArrow: { type: Boolean, default: true }, //弹出层是否有箭头
-    hasMask: { type: Boolean, default: false }, //是否有遮罩层
-    layerCssVar: {
-      type: Object as PropType<LayerCssVarType>,
-      default: () => ({})
-    },
-    layerClass: [String, Array, Object]
-  },
+  props: LayerProps,
   emits: ['update:show'],
   directives: { clickOutside },
   setup(props, { slots, emit }) {
@@ -125,8 +129,9 @@ export default defineComponent({
     )
     const defaultOptions = computed(() => {
       const placement = props.placement
+      const triggerType = props.trigger
       const pInfo = placementInfo
-      return {
+      const options: EmptyObject = {
         ref: defaultRoot,
         class: [
           'w-layer-content',
@@ -148,6 +153,16 @@ export default defineComponent({
           ...props.layerCssVar
         }
       }
+      if (triggerType === 'hover') {
+        options[`on${capitalize(eventEnter)}`] = () => {
+          stop()
+          show()
+        }
+        options[`on${capitalize(eventLeave)}`] = () => {
+          delay(hide)
+        }
+      }
+      return options
     })
     useTriggerType(triggerRoot, props.trigger, handleTriggerEvent)
 
@@ -162,9 +177,9 @@ export default defineComponent({
 
     function handleTriggerEvent(e: MouseEvent) {
       if (props.trigger === 'hover') {
-        if (e.type === 'mouseleave' || e.type === 'mouseout') {
+        if (e.type === eventLeave) {
           delay(hide)
-        } else if (e.type === 'mouseenter' || e.type === 'mouseover') {
+        } else if (e.type === eventEnter) {
           delay(() => {
             show()
           })
@@ -366,8 +381,8 @@ function useTriggerType(el: Ref, triggerType: TriggerType, handler: Function) {
       useEvent(el, triggerType, handler)
       break
     case 'hover':
-      useEvent(el, 'mouseenter', handler)
-      useEvent(el, 'mouseleave', handler)
+      useEvent(el, eventEnter, handler)
+      useEvent(el, eventLeave, handler)
       break
     case 'focus':
       useTabIndex(el)

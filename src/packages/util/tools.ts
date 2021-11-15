@@ -7,6 +7,5 @@ export const isFunction = (val: unknown): val is Function =>
 export const isArray = (val: unknown): val is any[] => Array.isArray(val)
 export const isSet = (val: unknown): val is Set<any> => val instanceof Set
 export const isMap = (val: unknown): val is Map<any, any> => val instanceof Map
-export function isInvalidValue(v: any) {
-  return v === '' || v === undefined || v === null || isNaN(v)
-}
+export const isInvalidValue = (v: any) =>
+  v === '' || v === undefined || v === null || isNaN(v)

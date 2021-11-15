@@ -33,7 +33,9 @@
       </Tooltip>
     </p>
     <p>
-      <Tooltip placement="bottom-start">
+      <Tooltip placement="bottom-start"
+        :layer-css-var="{'--_layer-background-color':'#fc5531',
+        }">
         <template #trigger>bottom</template>
         <div>在底部出现的提示</div>
       </Tooltip>
