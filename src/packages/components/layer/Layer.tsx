@@ -106,7 +106,14 @@ export default defineComponent({
       height: 0
     })
     const defaultSize = reactive({ width: 0, height: 0 })
-    const placementInfo = reactive({ top: 0, left: 0, x: 0, y: 0 })
+    const placementInfo = reactive({
+      top: 0,
+      left: 0,
+      x: 0,
+      y: 0,
+      //这里的placement同时包括了自动调整后的位置
+      placement: props.placement
+    })
     const {
       toggle,
       set,
@@ -128,9 +135,9 @@ export default defineComponent({
       )
     )
     const defaultOptions = computed(() => {
-      const placement = props.placement
       const triggerType = props.trigger
       const pInfo = placementInfo
+      const placement = pInfo.placement
       const options: EmptyObject = {
         ref: defaultRoot,
         class: [
@@ -196,17 +203,15 @@ export default defineComponent({
     }
     function toGetDefaultPlacement() {
       if (visible.value) {
-        const { top, left, x, y } = getPlacement({
+        const p = getPlacement({
           triggerRect,
           layerSize: defaultSize,
           placement: props.placement,
           gap: props.gap,
           offset: props.offset
         })
-        placementInfo.top = top
-        placementInfo.left = left
-        placementInfo.x = x
-        placementInfo.y = y
+        Object.assign(placementInfo, p)
+        console.log(placementInfo.placement)
       }
     }
     //计算trigger元素的位置大小等信息，为定位弹出层做准备

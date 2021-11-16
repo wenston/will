@@ -83,11 +83,19 @@ export function getWindowSize() {
     }
   }
 }
-
+//获取页面的滚动距离
 export function getPageScroll() {
   return {
     x: win.pageXOffset,
     y: win.pageYOffset
+  }
+}
+
+//获取整个页面的宽高
+export function getPageSize() {
+  return {
+    height: Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight),
+    width: Math.max(doc.body.scrollWidth, doc.documentElement.scrollWidth)
   }
 }
 
@@ -199,10 +207,13 @@ export function hasScrollbar(el: HTMLElement) {
   const y = getStyle(el, 'overflow-y')
 
   if (x === 'hidden' && y === 'hidden') {
-    return false
+    return { x: false, y: false }
   }
 
-  return el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight
+  return {
+    x: el.clientWidth < el.scrollWidth,
+    y: el.clientHeight < el.scrollHeight
+  }
 }
 
 //不包括document.body
@@ -217,7 +228,8 @@ export function getParentScrollElement(el: any) {
     const parent = node.parentNode
     if (parent !== null && parent !== doc.body) {
       const _p = parent as HTMLElement
-      if (hasScrollbar(_p)) {
+      const { x, y } = hasScrollbar(_p)
+      if (x || y) {
         scrolls.push(_p)
       }
       collectParent(_p)
