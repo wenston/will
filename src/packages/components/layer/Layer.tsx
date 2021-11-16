@@ -267,9 +267,8 @@ export default defineComponent({
     onUpdated(() => {
       if (!justNow.value) {
         calcTriggerRect()
-        getDefaultRootSize(defaultRoot.value)
-
-        toGetDefaultPlacement()
+        // getDefaultRootSize(defaultRoot.value)
+        // toGetDefaultPlacement()
       }
     })
 
@@ -278,6 +277,8 @@ export default defineComponent({
       if (v) {
         addZIndex()
         calcTriggerRect()
+        // getDefaultRootSize(defaultRoot.value)
+        // toGetDefaultPlacement()
         getScrollElementAndCalc()
       } else {
         removeEvent(scrollElements, 'scroll', handleParentScroll)

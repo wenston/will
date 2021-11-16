@@ -26,7 +26,7 @@ export default defineComponent({
         gap = '3px'
       } else if (p.indexOf('bottom') > -1) {
         t = `translateY(${d}px)`
-        gap = '1px'
+        gap = '2px'
       } else if (p.indexOf('top') > -1) {
         t = `translateY(${-1 * d}px)`
       }

@@ -45,12 +45,12 @@
   &.w-layer-bottom-end {
     &:before {
       left: var(--_layer-arrow-x);
-      top: calc(var(--_layer-arrow-size) * -2 - var(--_layer-arrow-gap) - 1px);
+      top: calc(var(--_layer-arrow-size) * -2 - var(--_layer-arrow-gap));
       border-color: transparent transparent var(--_layer-border-color);
     }
     &:after {
       left: var(--_layer-arrow-x);
-      top: calc(var(--_layer-arrow-size) * -2 - var(--_layer-arrow-gap));
+      top: calc(var(--_layer-arrow-size) * -2 - var(--_layer-arrow-gap) + 1px);
       border-color: transparent transparent var(--_layer-background-color);
     }
   }
