@@ -211,7 +211,6 @@ export default defineComponent({
           offset: props.offset
         })
         Object.assign(placementInfo, p)
-        console.log(placementInfo.placement)
       }
     }
     //计算trigger元素的位置大小等信息，为定位弹出层做准备

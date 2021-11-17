@@ -1,4 +1,4 @@
-import { ref, computed, defineComponent } from 'vue'
+import { ref, computed, defineComponent, useAttrs, useSlots } from 'vue'
 import Layer, { LayerProps } from '../layer'
 
 export default defineComponent({
@@ -12,7 +12,7 @@ export default defineComponent({
       default: 'hover'
     }
   },
-  setup(props, { slots, emit, attrs }) {
+  setup(props) {
     const d = 10
     const translate = computed(() => {
       const p = props.placement
@@ -43,7 +43,7 @@ export default defineComponent({
         ...props.layerCssVar
       }
       return {
-        ...attrs,
+        ...useAttrs(),
         ...props,
 
         layerCssVar: varStyle,
@@ -52,7 +52,7 @@ export default defineComponent({
       }
     })
     return () => {
-      return <Layer {...layerOptions.value} v-slots={slots} />
+      return <Layer {...layerOptions.value} v-slots={useSlots()} />
     }
   }
 })

@@ -1,13 +1,16 @@
 <template>
   <h3>vue-api-list</h3>
   <p>
-    <Layer trigger="focus"
-      placement="bottom-start"
+    <!-- 问题：如果trigger是click，那么给trigger元素绑定的click事件，在Layer组件里第一次不会触发？ -->
+    <!-- 必须在外层套一层没有事件的元素，才会触发，为什么？ -->
+    <Layer placement="bottom-start"
       v-for="(des,k) in api"
       :key="k">
       <template #trigger>
+
         <span :class="[css.k,{[css.active]:currentApi==k}]"
-          @click="currentApi=k">{{k}}</span>
+          @click="toggleApi(k)">{{k}}</span>
+
       </template>
       <template #default="{toggle}">
         <div :class="css.body">
@@ -31,6 +34,9 @@ import { ref } from 'vue'
 import Layer from '../../../packages/components/layer/'
 const currentApi = ref('')
 // console.log(Object.keys(api).length)
+function toggleApi(k: string) {
+  currentApi.value = k
+}
 </script>
 <style lang="postcss" module="css">
 .k {
@@ -50,6 +56,9 @@ const currentApi = ref('')
 }
 .body {
   padding: 10px;
+  max-width: 60vw;
+  max-height: 300px;
+  overflow: auto;
 }
 .big {
   line-height: 1.6;
