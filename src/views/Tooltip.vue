@@ -4,7 +4,7 @@
     <Btn @click="add(1)">加</Btn>
   </div>
   <div>
-    <p>
+    <!-- <p>
       <Tooltip placement="left"
         v-model:show="showTooltip">
         <template #trigger>
@@ -31,10 +31,13 @@
         <template #trigger>top</template>
         <div>在顶部出现的提示</div>
       </Tooltip>
-    </p>
+    </p> -->
     <p>
       <Tooltip placement="bottom">
-        <template #trigger>bottom</template>
+        <template #trigger>
+          <!-- 注释 -->
+          <span @click="handleClick">bottom</span>
+        </template>
         <div>在底部出现的提示</div>
       </Tooltip>
     </p>
@@ -50,4 +53,7 @@ import Btn from '../packages/components/btn/index'
 
 const { count, add } = useCount()
 const showTooltip = ref(false)
+function handleClick(e: MouseEvent) {
+  console.log(e.target)
+}
 </script>

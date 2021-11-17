@@ -1,6 +1,6 @@
 import type { Slots, VNode, ComputedRef } from 'vue'
 import { Comment, Fragment, Text } from 'vue'
-import { computed, h, cloneVNode, createVNode } from 'vue'
+import { computed, useSlots, cloneVNode, createVNode } from 'vue'
 import { isArray, isSet } from '../util'
 
 const TEMPLATE: 'template' = 'template'
@@ -27,7 +27,7 @@ export default function useSlot(
 ): ComputedRef<VNode | undefined> {
   return computed(() => {
     let c = slotContent.value
-    // console.log(c)
+
     if (hasSlot(c)) {
       if (isFirst) {
         //renderSlot得出的内容总是Fragment类型
@@ -39,13 +39,10 @@ export default function useSlot(
 
         if (first !== undefined) {
           if (isText(first) || isFragment(first)) {
-            const wrapper_c = createVNode(elementTag, {}, c)
+            const wrapper_c = createVNode(elementTag, {}, first)
             return wrapper_c
           }
-          if (isFirst) {
-            return isArray(c) ? c[0] : c
-          }
-          return c
+          return first
         }
       } else {
         return c
@@ -80,6 +77,7 @@ function getFirstValidChild(slotContent: VNode | VNode[]): VNode | undefined {
         vnode = c
         break
       }
+      i++
     }
     return vnode
   }

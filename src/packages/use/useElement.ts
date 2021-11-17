@@ -10,7 +10,7 @@ export default function useElement(v?: any) {
   const width = ref(0)
   const height = ref(0)
   function get(val?: any) {
-    const _el = getElement(val ?? v)
+    const _el = getElement(val || v)
     el.value = _el
     return _el
   }
@@ -20,7 +20,7 @@ export default function useElement(v?: any) {
     relate?: any,
     transitionName?: string
   ) {
-    const s = getSize(get(el ?? v), nearby, relate, transitionName)
+    const s = getSize(get(el || v), nearby, relate, transitionName)
     width.value = s.width
     height.value = s.height
     return s
