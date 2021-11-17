@@ -39,7 +39,7 @@ export default function useSlot(
 
         if (first !== undefined) {
           if (isText(first) || isFragment(first)) {
-            const wrapper_c = createVNode(elementTag, {}, first)
+            const wrapper_c = createVNode(elementTag, {}, [first])
             return wrapper_c
           }
           return first
