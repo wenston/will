@@ -1,5 +1,4 @@
 import { defineComponent, ref, computed, renderSlot } from 'vue'
-import { onMounted } from 'vue'
 import useBoundingClientRect from '../../use/useBoundingClientRect'
 import useScroll from '../../use/useScroll'
 
@@ -14,10 +13,8 @@ export default defineComponent({
   setup: (props, ctx) => {
     //包裹虚拟列表的根元素
     const root = ref<HTMLElement>()
-    //数据渲染起始下标
-    const fromIndex = ref(0)
     //根元素的scrollTop
-    const { scrollTop } = useScroll(root, handleScroll)
+    const { scrollTop } = useScroll(root, handleScroll, true)
     const sourceLength = computed(() => props.sourceData.length)
     //可视范围的宽高
     const { rect: visibleSize } = useBoundingClientRect(root)
@@ -25,6 +22,8 @@ export default defineComponent({
     const visibleDataLength = computed(() => {
       return Math.ceil(visibleSize.height / (props.itemHeight || 1))
     })
+    //数据渲染起始下标
+    const fromIndex = ref(0)
     const toIndex = computed(() => {
       const to = visibleDataLength.value + fromIndex.value + 1
       return Math.min(to, sourceLength.value)
@@ -49,11 +48,7 @@ export default defineComponent({
 
     function handleScroll() {
       fromIndex.value = Math.floor(scrollTop.value / props.itemHeight)
-      // console.log('渲染数据的起止数据下标', fromIndex.value, toIndex.value)
     }
-    onMounted(() => {
-      handleScroll()
-    })
     return () => {
       const content = renderSlot(ctx.slots, 'default', {
         data: visibleData.value,

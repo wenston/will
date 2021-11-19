@@ -3,8 +3,8 @@ import useEvent from './useEvent'
 import useElement from './useElement'
 export default function useScroll(
   elem?: any,
-  scrollCallback?: Function,
-  immediate?: boolean
+  scrollCallback?: Function, //滚动时要做一些事
+  immediate?: boolean //是否在挂载完之后立即触发scrollCallback
 ) {
   const { el } = useElement(elem)
   const scrollTop = ref(0)
@@ -30,6 +30,7 @@ export default function useScroll(
   }
   useEvent(el, 'scroll', () => {
     get()
+    doCallback()
   })
   onMounted(() => {
     get()
