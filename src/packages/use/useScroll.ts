@@ -1,12 +1,16 @@
 import { onMounted, ref } from 'vue'
 import useEvent from './useEvent'
 import useElement from './useElement'
-export default function useScroll(elem?: any) {
+export default function useScroll(
+  elem?: any,
+  scrollCallback?: Function,
+  immediate?: boolean
+) {
   const { el } = useElement(elem)
-  const scrollTop = ref(-1)
-  const scrollLeft = ref(-1)
-  const scrollRight = ref(-1)
-  const scrollBottom = ref(-1)
+  const scrollTop = ref(0)
+  const scrollLeft = ref(0)
+  const scrollRight = ref(0)
+  const scrollBottom = ref(0)
   function get() {
     const el = elem?.value ?? null
     if (el) {
@@ -16,9 +20,22 @@ export default function useScroll(elem?: any) {
       scrollBottom.value = el.scrollHeight - scrollTop.value - el.clientHeight
     }
   }
-
-  useEvent(window, 'scroll', get)
-  useEvent(el, 'scroll', get)
-  onMounted(get)
+  function doCallback() {
+    scrollCallback?.({
+      scrollTop: scrollTop.value,
+      scrollBottom: scrollBottom.value,
+      scrollLeft: scrollLeft.value,
+      scrollRight: scrollRight.value
+    })
+  }
+  useEvent(el, 'scroll', () => {
+    get()
+  })
+  onMounted(() => {
+    get()
+    if (immediate) {
+      doCallback()
+    }
+  })
   return { scrollTop, scrollLeft, scrollRight, scrollBottom, getScroll: get }
 }

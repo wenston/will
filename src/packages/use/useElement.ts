@@ -28,8 +28,5 @@ export default function useElement(v?: any) {
   onMounted(() => {
     v && get()
   })
-  onUpdated(() => {
-    v && get()
-  })
   return { el, get, width, height, getInvisibleElementSize }
 }

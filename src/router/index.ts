@@ -80,6 +80,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/virtual',
+    name: 'Virtual',
+    component: () => import('../views/Virtual.vue'),
+    meta: {
+      title: '虚拟渲染 Virtual'
+    }
+  },
+  {
     path: '/test',
     name: 'test',
     component: () => import('../views/test/Test.vue'),
