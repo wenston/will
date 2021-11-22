@@ -2,6 +2,8 @@
   <h1>Switch</h1>
   <div>
     <Switch v-model="flag"></Switch>
+    <Switch v-model="flag"
+      style="height:30px;width:49px;"></Switch>
 
   </div>
 </template>

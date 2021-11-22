@@ -20,16 +20,14 @@
   cursor: default;
   color: white;
   &:after {
-    /* 圆点尺寸 */
-    --__valve-size: calc(
-      (var(--__switch-height, var(--w-switch-valve-size)) - 2px)
-    );
+    /* 控制阀尺寸 */
+    --__valve-size: calc(var(--__height) - 2px);
     content: '';
     position: absolute;
     width: var(--__valve-size);
     height: var(--__valve-size);
     border-radius: 100%;
-    left: calc(var(--__width) - var(--__valve-size));
+    left: calc(var(--__width) - var(--__valve-size) - 1px);
     top: calc((var(--__height) - var(--__valve-size)) / 2);
     background-color: var(--__off-valve-color);
     box-shadow: var(--w-switch-valve-box-shadow);
@@ -41,7 +39,7 @@
     &:after {
       border-color: var(--__on-color);
       /* box-shadow: var(--w-box-shadow), 0 0 1px 1px white; */
-      left: 0;
+      left: 1px;
       background-color: var(--__on-valve-color);
     }
   }
