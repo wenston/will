@@ -15,9 +15,9 @@ export default defineComponent({
     const root = ref<HTMLElement>()
     //根元素的scrollTop
     const { scrollTop } = useScroll(root, handleScroll, true)
-    const sourceLength = computed(() => props.sourceData.length)
     //可视范围的宽高
     const { rect: visibleSize } = useBoundingClientRect(root)
+    const sourceLength = computed(() => props.sourceData.length)
     //可视范围内可显示的数据条数
     const visibleDataLength = computed(() => {
       return Math.ceil(visibleSize.height / (props.itemHeight || 1))
@@ -35,16 +35,14 @@ export default defineComponent({
     })
     //底部占位元素的高度
     const endPlaceholderHeight = computed(() => {
-      let n = props.sourceData.length - 1 - toIndex.value
+      let n = sourceLength.value - 1 - toIndex.value
       n = n < 0 ? 0 : n
       return n * props.itemHeight
     })
     //可视范围内的数据
-    const visibleData = computed(() => {
-      if (props.sourceData && props.sourceData.length) {
-        return props.sourceData.slice(fromIndex.value, toIndex.value)
-      }
-    })
+    const visibleData = computed(() =>
+      props.sourceData.slice(fromIndex.value, toIndex.value)
+    )
 
     function handleScroll() {
       fromIndex.value = Math.floor(scrollTop.value / props.itemHeight)
