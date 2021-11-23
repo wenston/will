@@ -36,8 +36,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import Btn from "../packages/components/btn/index"
+import Btn from '../packages/components/btn/index'
 function handleClick(e: MouseEvent) {
-  console.log("hhhhhh")
+  console.log('hhhhhh')
 }
 </script>

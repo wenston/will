@@ -1,3 +1,5 @@
+import { EmptyObject } from '../config/types'
+
 export const isString = (val: unknown): val is string => typeof val === 'string'
 export const isNumber = (val: unknown): val is number => typeof val === 'number'
 export const isObject = (val: unknown): val is Record<any, any> =>
@@ -9,3 +11,21 @@ export const isSet = (val: unknown): val is Set<any> => val instanceof Set
 export const isMap = (val: unknown): val is Map<any, any> => val instanceof Map
 export const isInvalidValue = (v: any) =>
   v === '' || v === undefined || v === null || isNaN(v)
+
+export function plattenTreeNode<T extends EmptyObject>(
+  arr: T[],
+  childField: string
+): T[] {
+  let a: T[] = []
+  if (arr.length) {
+    arr.forEach((item: T) => {
+      a.push(item)
+      const child = item[childField]
+      if (child && isArray(child)) {
+        a = a.concat(plattenTreeNode(child, childField))
+      }
+    })
+    return a
+  }
+  return a
+}
