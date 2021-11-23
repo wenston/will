@@ -14,8 +14,7 @@
               &#12288;
             </template>
           </span>
-          <span v-if="item.Childs && item.Childs.length"
-            @click="toShow(item,i)">+&nbsp;</span>
+
           <span>{{item.Name}}</span>
         </div>
       </template>
@@ -33,7 +32,7 @@ import Virtual from '../packages/components/virtual'
 import Btn from '../packages/components/btn'
 import { plattenTreeNode } from '../packages/util'
 import treeData from '../mock-data/3c'
-const plat = plattenTreeNode(treeData, 'Childs')
+// const plat = plattenTreeNode(treeData, 'Childs')
 
 const bigDataList = ref<any[]>([])
 
@@ -49,13 +48,13 @@ function hasChild(from: number, i: number): boolean {
 }
 function toShow(item: any, i: number) {
   bigDataList.value.splice(i + 1, 0, ...item.Childs)
-  console.log(bigDataList.value)
 }
 </script>
 <style module="css" lang="postcss">
 .virtualbox {
   border: 1px solid var(--w-color-border);
   border-radius: var(--w-radius);
+  height: 60vh;
 }
 .btn {
   height: 30px;

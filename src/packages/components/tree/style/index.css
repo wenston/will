@@ -1,0 +1,10 @@
+.w-tree-item {
+  display: flex;
+  align-items: center;
+  transition: var(--w-transition-time);
+  height: 30px;
+  background-color: white;
+  &:hover {
+    background-color: #ccc;
+  }
+}

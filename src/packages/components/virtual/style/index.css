@@ -1,6 +1,5 @@
 .w-virtual {
   overflow: auto;
-  height: 80vh;
   & .w-virtual-placeholder {
     visibility: hidden;
   }

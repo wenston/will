@@ -88,6 +88,12 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/tree',
+    name: 'Tree',
+    component: () => import('../views/Tree.vue'),
+    meta: { title: '树 Tree' }
+  },
+  {
     path: '/test',
     name: 'test',
     component: () => import('../views/test/Test.vue'),
