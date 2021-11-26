@@ -1,3 +1,11 @@
 .w-display-none {
   display: none;
 }
+
+.w-cursor-pointer {
+  cursor: pointer;
+}
+
+.w-no-select {
+  user-select: none;
+}

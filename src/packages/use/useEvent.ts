@@ -34,10 +34,10 @@ export default function useEvent(
     onMounted(() => {
       elem && add()
     })
-    // onUpdated(() => {
-    //   remove()
-    //   add()
-    // })
+    onUpdated(() => {
+      remove()
+      add()
+    })
 
     onUnmounted(remove)
   }

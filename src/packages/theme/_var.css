@@ -1,5 +1,8 @@
 :root {
   --w-color-primary: #409eff;
+  --w-color-primary-3: #80bfff;
+  --w-color-primary-5: #e6f2ff;
+  --w-color-warning-2: #ffda54;
   --w-color-font-1: #333;
   --w-color-font-2: #666;
   --w-color-font-3: #999;
@@ -40,4 +43,8 @@
   --w-switch-valve-box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.3);
 
   --w-mask-background-color: rgba(0, 0, 0, 0.3);
+
+  --w-tree-item-hover-color: var(--w-color-bg);
+  --w-tree-item-current-color: var(--w-color-primary-5);
+  --w-tree-icon-color: #99b8ff;
 }

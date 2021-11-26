@@ -1,9 +1,9 @@
-import { PropType } from 'vue'
+import type { PropType, SetupContext } from 'vue'
 import { defineComponent, ref, computed, renderSlot } from 'vue'
 import useBoundingClientRect from '../../use/useBoundingClientRect'
 import useScroll from '../../use/useScroll'
 import { EmptyObject } from '../../config/types'
-export type TreeDataType = EmptyObject[] | any[]
+export type TreeDataType = any[]
 export interface TreeDefaultSlotOptions extends EmptyObject {
   data: TreeDataType
   index: {
@@ -62,6 +62,9 @@ export default defineComponent({
         index: {
           from: fromIndex.value,
           to: toIndex.value
+        },
+        scrollTo: (x: number, y: number) => {
+          root.value?.scrollTo(x, y)
         }
       }
       const content = renderSlot(ctx.slots, 'default', d)

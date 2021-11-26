@@ -4,10 +4,11 @@
   <Virtual :class="css.virtualbox"
     :sourceData="bigDataList"
     :item-height="30">
-    <template #default="{data,index:{from}}">
+    <template #default="{data,index:{from},scrollTo}">
       <template v-for="(item,i) in data"
         :key="item.Id">
-        <div :class="css.btn">
+        <div :class="css.btn"
+          @click="scrollTo(0,(from+i)*30)">
           <span v-if="item.Levels>1">
             <template v-for="n in item.Levels - 1"
               :key="n">
@@ -32,13 +33,13 @@ import Virtual from '../packages/components/virtual'
 import Btn from '../packages/components/btn'
 import { plattenTreeNode } from '../packages/util'
 import treeData from '../mock-data/3c'
-// const plat = plattenTreeNode(treeData, 'Childs')
+const plat = plattenTreeNode(treeData, 'Childs')
 
 const bigDataList = ref<any[]>([])
 
 onMounted(() => {
   setTimeout(() => {
-    bigDataList.value = treeData
+    bigDataList.value = plat
   }, 10)
 })
 

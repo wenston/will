@@ -3,8 +3,25 @@
   align-items: center;
   transition: var(--w-transition-time);
   height: 30px;
+  padding: 0 var(--w-padding-x);
   background-color: white;
+  font-size: var(--w-font-size);
+  cursor: default;
+  border-radius: var(--w-radius);
+
+  &.w-tree-item-current {
+    background-color: var(--w-tree-item-current-color);
+  }
+
+  & .w-tree-item-icon {
+    margin-right: 6px;
+    color: var(--w-tree-icon-color);
+    transform: translateY(-1px);
+  }
+
   &:hover {
-    background-color: #ccc;
+    &:not(.w-tree-item-current) {
+      background-color: var(--w-tree-item-hover-color);
+    }
   }
 }
