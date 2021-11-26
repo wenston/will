@@ -33,7 +33,7 @@ import Virtual from '../packages/components/virtual'
 import Btn from '../packages/components/btn'
 import { plattenTreeNode } from '../packages/util'
 import treeData from '../mock-data/3c'
-const plat = plattenTreeNode(treeData, 'Childs')
+const plat = plattenTreeNode(null, treeData, 'Childs')
 
 const bigDataList = ref<any[]>([])
 
