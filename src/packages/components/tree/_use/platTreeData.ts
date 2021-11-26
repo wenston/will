@@ -138,21 +138,28 @@ export default function platTreeData(
   watch(
     treeData,
     (sourceData) => {
-      platData.value = plattenTreeNode(sourceData, childField, (item: any) => {
-        if (item[levelField] == 1) {
-          return true
-        } else {
-          const state = getState(item[keyField])
-          if (state) {
-            if (state.isSpread) {
-              return true
+      console.log(stateMap.value)
+      platData.value = plattenTreeNode(
+        null,
+        sourceData,
+        childField,
+        (parentItem: any, item: any) => {
+          if (item[levelField] == 1) {
+            return true
+          } else {
+            //判断父级节点是否展开，如果展开了，则返回true
+            const state = getState(parentItem[keyField])
+            if (state) {
+              if (state.isSpread) {
+                return true
+              }
             }
+            return false
           }
-          return false
         }
-      })
+      )
     },
-    { immediate: true }
+    { immediate: true, deep: true }
   )
   return {
     platData,

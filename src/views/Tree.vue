@@ -1,6 +1,8 @@
 <template>
   <h1>{{currentRoute.meta.title}}</h1>
-  <p></p>
+  <p>
+    <btn @click="toAdd">加点数据看看</btn>
+  </p>
   <div :id="css.info"
     ref="info"></div>
   <div :class="css.tree_box"
@@ -18,6 +20,9 @@
     </Tree>
 
   </div>
+  <!-- <p>
+    <Btn type="primary">给树数据添加点东西测试一下</Btn>
+  </p> -->
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
@@ -25,10 +30,10 @@ import Tree from '../packages/components/tree'
 const { currentRoute } = useRouter()
 
 import { onMounted, ref, Teleport } from 'vue'
-import Btn from '../packages/components/btn'
+import Btn from '../packages/components/btn/index'
 import { plattenTreeNode } from '../packages/util'
 import treeData from '../mock-data/3c'
-const plat = plattenTreeNode(treeData, 'Childs')
+const plat = plattenTreeNode(null, treeData, 'Childs')
 
 const bigDataList = ref<any[]>([])
 const info = ref(null)
@@ -38,8 +43,19 @@ onMounted(() => {
     bigDataList.value = treeData
   })
 })
-function onClick() {
-  console.log('click')
+function toAdd() {
+  bigDataList.value.push({
+    Id: Math.random() * 20000,
+    Name: '新增的数据',
+    Levels: 1,
+    Childs: [
+      {
+        Id: 33333,
+        Name: '新增数据的下级',
+        Levels: 2
+      }
+    ]
+  })
 }
 </script>
 <style module="css" lang="postcss">
@@ -47,11 +63,11 @@ function onClick() {
   background-color: #ccc;
 }
 .tree_box {
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 15px 12px;
 }
 .tree {
-  height: 80vh;
+  height: 60vh;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: var(--w-radius);
 }
