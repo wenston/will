@@ -66,11 +66,12 @@ export const TreeProps = {
   },
   //复选相关参数
   hasCheckbox: { type: Boolean, default: true },
+  
   rows: Array,
   keys: { type: Array, default: () => [] },
   rule: {
     type: String,
-    default: 'some'
+    default: 'every'
   }
 }
 const TreeEmits = ['update:modelValue', 'update:keys']

@@ -139,9 +139,6 @@ export default function platTreeData(
     return parentItem
   }
 
-  function isExist(k: any) {
-    return selectedKeys.value.some((s) => s === k)
-  }
   //兄弟节点是否都选中了？
   function siblingsWereAllSelected(
     set: Set<any>,
@@ -284,7 +281,6 @@ export default function platTreeData(
                 p,
                 i
               )
-              console.log(p, isAllNotSelected)
               if (isAllNotSelected) {
                 keysSet.delete(p[keyField])
               }
@@ -292,67 +288,32 @@ export default function platTreeData(
           })
         }
       } else if (rule === 'every') {
-      }
-    }
-    return [...keysSet]
-
-    /* let shouldSelectedKeys: any[] = []
-    let shouldDeleteKeys: any[] = []
-    if (b) {
-      shouldSelectedKeys.push(item[keyField])
-    } else {
-      shouldDeleteKeys.push(item[keyField])
-    }
-    //选出当前item的所有父级
-    let allParent: [Record<any, any>, number][] = []
-    let i = itemIndex - 1
-    let parentLevel = item[levelField] - 1
-    while (i > -1) {
-      const el = filterPlattenData.value[i]
-      if (el[levelField] < item[levelField] && parentLevel === el[levelField]) {
-        allParent.push([el, i])
-        parentLevel -= 1
-      }
-      if (el[levelField] === 1) {
-        break
-      }
-
-      i--
-    }
-    console.log(allParent)
-    if (allParent.length > 0) {
-      if (rule === 'some') {
         if (b) {
-          allParent.forEach(([p]) => {
-            if (!isExist(p[keyField])) {
-              shouldSelectedKeys.push(p[keyField])
-            }
-          })
-        } else {
-          //先处理直接父级
           allParent.forEach(([p, i], index) => {
             if (index === 0) {
-              const { isAllNotSelected } = siblingsWereAllSelected(
+              const { isAllSelected } = siblingsWereAllSelected(
+                keysSet,
                 item,
                 itemIndex
               )
-              if (isAllNotSelected) {
-                shouldDeleteKeys.push(p[keyField])
+              if (isAllSelected) {
+                keysSet.add(p[keyField])
               }
             } else {
-              const { isAllNotSelected } = allChildrenSelectedState(p, i)
-              console.log(p, isAllNotSelected)
-              if (isAllNotSelected) {
-                shouldDeleteKeys.push(p[keyField])
+              const { isAllSelected } = allChildrenSelectedState(keysSet, p, i)
+              if (isAllSelected) {
+                keysSet.add(p[keyField])
               }
             }
           })
+        } else {
+          allParent.forEach(([p]) => {
+            keysSet.delete(p[keyField])
+          })
         }
-      } else if (rule === 'every') {
       }
     }
-
-    return { shouldSelectedKeys, shouldDeleteKeys } */
+    return [...keysSet]
   }
   //返回应该选中的数据
   function toSelectChildren(
@@ -415,43 +376,6 @@ export default function platTreeData(
     } else {
       shouldDeleteKeys.push(item[keyField])
     }
-    //选择当前item的所有子级
-    //本级节点没有展开的情况下是没有下级数据的，故应使用全量数据
-    /* const allChildren: [Record<any, any>, number][] = []
-    const index = totalPlattenData.value.findIndex(
-      (t) => t[keyField] === item[keyField]
-    )
-    let i = index + 1
-    if (i > 0) {
-      while (i < totalPlattenData.value.length) {
-        const el = totalPlattenData.value[i]
-        if (item[levelField] < el[levelField]) {
-          allChildren.push([el, i])
-        } else {
-          break
-        }
-        i++
-      }
-    }
-
-    if (allChildren.length) {
-      if (rule === 'some') {
-        if (b) {
-          allChildren.forEach(([c, i]) => {
-            if (!isExist(c[keyField])) {
-              shouldSelectedKeys.push(c[keyField])
-            }
-          })
-        } else {
-          allChildren.forEach(([c, i]) => {
-            if (isExist(c[keyField])) {
-              shouldDeleteKeys.push(c[keyField])
-            }
-          })
-        }
-      }
-    }
-    return { shouldDeleteKeys, shouldSelectedKeys } */
   }
 
   watch(
