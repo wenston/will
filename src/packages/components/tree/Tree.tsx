@@ -161,39 +161,16 @@ export default defineComponent({
 
     //同步选择当前数据的上下级
     function onSelectParentAndChildren(b:boolean,item:Record<any,any>,index:number) {
-      const {shouldDeleteKeys:d,shouldSelectedKeys:s} = toSelectChildren(b,item,index)
-      const {shouldDeleteKeys,shouldSelectedKeys} = toSelectParent(b,item,index)
-      const selectedKeys = [...s,...shouldSelectedKeys]
-      const deletedKeys = [...d,...shouldDeleteKeys]
-      // console.log(deletedKeys)
-      if(deletedKeys?.length) {
-        // console.log(deletedKeys)
-        deleteKeys(deletedKeys)
-        
-      }
-      if(selectedKeys?.length) {
-        addKeys(selectedKeys)
-      }
+      const keys = toSelectChildren(b,props.keys,item,index)
+      const finnalKeys = toSelectParent(b,keys,item,index)
+      ctx.emit('update:keys',finnalKeys)
+
     }
 
     function getRows() {
       
     }
 
-    function addKeys(keys:any[]) {
-      const ks =  [...new Set([...props.keys,...keys])]
-      // console.log(props.keys,keys)
-      ctx.emit('update:keys', ks)
-    }
-
-    function deleteKeys(keys:any[]) {
-      const set = new Set(props.keys)
-      // console.log(set,keys)
-      keys.forEach(k=>{
-        set.delete(k)
-      })
-      ctx.emit('update:keys',[...set])
-    }
 
     return () => {
       const treeSlots = {
