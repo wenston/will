@@ -31,9 +31,9 @@ const { currentRoute } = useRouter()
 import { onMounted, ref, VNode } from 'vue'
 import Virtual from '../packages/components/virtual'
 import Btn from '../packages/components/btn'
-import { plattenTreeNode } from '../packages/util'
+import { plattenTreeData } from '../packages/util'
 import treeData from '../mock-data/3c'
-const plat = plattenTreeNode(null, treeData, 'Childs')
+const { filterPlattenData: plat } = plattenTreeData(treeData, 'Childs')
 
 const bigDataList = ref<any[]>([])
 

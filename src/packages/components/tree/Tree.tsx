@@ -14,10 +14,11 @@ import type { ComputedRef, PropType } from 'vue'
 import { EmptyObject } from '../../config/types'
 import Virtual from '../../components/virtual'
 import Icon from '../../components/icon'
+import Checkbox from '../../components/checkbox'
+
 import type { IconType } from '../../components/icon/Icon'
 import { TreeDefaultSlotOptions } from '../../components/virtual/Virtual'
 import type { TreeDataType } from '../../components/virtual/Virtual'
-import { plattenTreeNode } from '../../util'
 import usePlatData from './_use/platTreeData'
 import useTreeState from './_use/treeState'
 
@@ -62,9 +63,17 @@ export const TreeProps = {
   onlyOne: {
     type: Boolean,
     default: true
+  },
+  //复选相关参数
+  hasCheckbox: { type: Boolean, default: true },
+  rows: Array,
+  keys: { type: Array, default: () => [] },
+  rule: {
+    type: String,
+    default: 'some'
   }
 }
-const TreeEmits = ['update:modelValue']
+const TreeEmits = ['update:modelValue', 'update:keys']
 export default defineComponent({
   inheritAttrs: false,
   components: { Virtual },
@@ -77,7 +86,7 @@ export default defineComponent({
       index: number
     }>({ item: null, index: -1 })
     const { stateMap, setState, getState } = useTreeState(props.onlyOne)
-    const { platData, toggle } = usePlatData(
+    const { filterPlattenData, toggle,toSelectParent,toSelectChildren } = usePlatData(
       computed(() => props.data),
       props.keyField,
       props.childField,
@@ -85,19 +94,20 @@ export default defineComponent({
       stateMap,
       getState,
       setState,
-      current,
-      props.onlyOne
+      props.rule,
+      props.onlyOne,
+      computed(()=>props.keys)
     )
-    function renderIdent(item: EmptyObject) {
+    function renderIndent(item: Record<any, any>) {
       let space = []
       let i = 0
       while (i < item[props.levelField] - 1) {
-        space.push(<span class="w-no-select">&#12288;</span>)
+        space.push(<span class="w-no-select">&#12288;&nbsp;&nbsp;</span>)
         i++
       }
       return space
     }
-    function renderIcon(item: EmptyObject, index: number) {
+    function renderIcon(item: Record<any, any>, index: number) {
       if (item[props.childField] && item[props.childField].length) {
         const iconSize: string = props.icons[0].size || '15px'
         return (
@@ -128,6 +138,63 @@ export default defineComponent({
       }
     }
 
+    function renderCheckbox(item: Record<any, any>, index: number) {
+      if (props.hasCheckbox) {
+        const checkboxOptions: EmptyObject = {
+          value: item[props.keyField],
+          modelValue: props.keys,
+          'onUpdate:modelValue': (v: any[]) => {
+            ctx.emit('update:keys', v)
+          },
+          onChange: (b: boolean) => {
+            // console.log(b)
+            //选择时，要处理树形数据中当前数据的上下级，做同步选择
+            onSelectParentAndChildren(b, item,index)
+          },
+          onClick: (e: MouseEvent) => {
+            e.stopPropagation()
+          }
+        }
+        return <Checkbox {...checkboxOptions} />
+      }
+    }
+
+    //同步选择当前数据的上下级
+    function onSelectParentAndChildren(b:boolean,item:Record<any,any>,index:number) {
+      const {shouldDeleteKeys:d,shouldSelectedKeys:s} = toSelectChildren(b,item,index)
+      const {shouldDeleteKeys,shouldSelectedKeys} = toSelectParent(b,item,index)
+      const selectedKeys = [...s,...shouldSelectedKeys]
+      const deletedKeys = [...d,...shouldDeleteKeys]
+      // console.log(deletedKeys)
+      if(deletedKeys?.length) {
+        // console.log(deletedKeys)
+        deleteKeys(deletedKeys)
+        
+      }
+      if(selectedKeys?.length) {
+        addKeys(selectedKeys)
+      }
+    }
+
+    function getRows() {
+      
+    }
+
+    function addKeys(keys:any[]) {
+      const ks =  [...new Set([...props.keys,...keys])]
+      // console.log(props.keys,keys)
+      ctx.emit('update:keys', ks)
+    }
+
+    function deleteKeys(keys:any[]) {
+      const set = new Set(props.keys)
+      // console.log(set,keys)
+      keys.forEach(k=>{
+        set.delete(k)
+      })
+      ctx.emit('update:keys',[...set])
+    }
+
     return () => {
       const treeSlots = {
         default: ({
@@ -153,9 +220,11 @@ export default defineComponent({
                 onClick={(e: MouseEvent) => {
                   current.item = item
                   current.index = realIndex
+                  //向组件外抛出事件
                 }}>
-                {renderIdent(item)}
+                {renderIndent(item)}
                 {renderIcon(item, realIndex)}
+                {renderCheckbox(item, realIndex)}
                 {ctx.slots.default ? (
                   renderSlot(ctx.slots, 'default', {
                     row: item,
@@ -170,7 +239,7 @@ export default defineComponent({
         }
       }
       const virtualOptions = {
-        sourceData: platData.value,
+        sourceData: filterPlattenData.value,
         itemHeight: props.itemHeight,
         ...ctx.attrs
       }
@@ -178,7 +247,7 @@ export default defineComponent({
         <>
           <Virtual {...virtualOptions} v-slots={treeSlots} />
           {ctx.slots.use?.({
-            platData: readonly(platData.value),
+            filterPlattenData: readonly(filterPlattenData.value),
             current: readonly(current)
           })}
         </>

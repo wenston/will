@@ -22,7 +22,7 @@
   --w-padding-x: var(--w-gap);
   --w-padding-y: 10px;
 
-  --w-radius: 6px;
+  --w-radius: 5px;
   --w-box-shadow: 0 5px 8px 0px rgba(0, 0, 0, 0.08),
     0 0px 2px rgba(0, 0, 0, 0.05);
 

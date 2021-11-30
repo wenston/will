@@ -13,8 +13,18 @@
     background-color: var(--w-tree-item-current-color);
   }
 
+  & .w-checkbox {
+    margin-right: 5px;
+    & .w-checkbox-icon {
+      &:not(.w-checkbox-icon-checked) {
+        color: var(--w-color-font-4);
+      }
+      font-size: 14px;
+    }
+  }
+
   & .w-tree-item-icon {
-    margin-right: 6px;
+    margin-right: 5px;
     color: var(--w-tree-icon-color);
     transform: translateY(-1px);
   }

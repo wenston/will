@@ -144,7 +144,8 @@
           </Layer>
         </td>
         <td>
-          <Layer placement="client-center">
+          <Layer placement="client-center"
+            hasMask>
             <template #trigger>在视窗居中</template>
             <div :class="css.body">
               <p>

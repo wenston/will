@@ -16,7 +16,10 @@ export default defineComponent({
       type: [Number, String, Array],
       default: () => [0, 1]
     },
-    text: String
+    text: String,
+    iconSize: String,
+    iconColor: String,
+    iconName: String
   },
   emits: ['update:modelValue', 'change'],
   setup(props, ctx: SetupContext) {
@@ -115,6 +118,8 @@ function useIconProps(isChecked: ComputedRef<boolean>, props: any) {
         'w-checkbox-icon-checked': isChecked.value,
         'w-checkbox-icon-disabled': props.disabled
       }
-    ]
+    ],
+    size: props.iconSize,
+    color: props.iconColor
   }))
 }

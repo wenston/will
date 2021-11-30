@@ -8,7 +8,8 @@
   <div :class="css.tree_box"
     :item-height="15">
     <Tree :data="bigDataList"
-      :class="css.tree">
+      :class="css.tree"
+      v-model:keys="keys">
       <template #use="{current}">
         <Teleport v-if="info"
           :to="info">
@@ -20,6 +21,9 @@
     </Tree>
 
   </div>
+  <div style="word-break:break-word">
+    {{JSON.stringify(keys)}}
+  </div>
   <!-- <p>
     <Btn type="primary">给树数据添加点东西测试一下</Btn>
   </p> -->
@@ -29,15 +33,15 @@ import { useRouter } from 'vue-router'
 import Tree from '../packages/components/tree'
 const { currentRoute } = useRouter()
 
-import { onMounted, ref, Teleport } from 'vue'
+import { onMounted, ref, Teleport, watch } from 'vue'
 import Btn from '../packages/components/btn/index'
-import { plattenTreeNode } from '../packages/util'
+import { plattenTreeData } from '../packages/util'
 import treeData from '../mock-data/3c'
-const plat = plattenTreeNode(null, treeData, 'Childs')
+const { filterPlattenData: plat } = plattenTreeData(treeData, 'Childs')
 
 const bigDataList = ref<any[]>([])
+const keys = ref([])
 const info = ref(null)
-// bigDataList.value = treeData
 onMounted(() => {
   setTimeout(() => {
     bigDataList.value = treeData
