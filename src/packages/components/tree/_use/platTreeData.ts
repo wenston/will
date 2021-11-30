@@ -353,14 +353,12 @@ export default function platTreeData(
       if (b) {
         allChildren.forEach(([c, i]) => {
           if (!keysSet.has(c[keyField])) {
-            // shouldSelectedKeys.push(c[keyField])
             keysSet.add(c[keyField])
           }
         })
       } else {
         allChildren.forEach(([c, i]) => {
           if (keysSet.has(c[keyField])) {
-            // shouldDeleteKeys.push(c[keyField])
             keysSet.delete(c[keyField])
           }
         })
@@ -368,14 +366,6 @@ export default function platTreeData(
     }
 
     return [...keysSet]
-
-    let shouldSelectedKeys: any[] = []
-    let shouldDeleteKeys: any[] = []
-    if (b) {
-      shouldSelectedKeys.push(item[keyField])
-    } else {
-      shouldDeleteKeys.push(item[keyField])
-    }
   }
 
   watch(

@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import Tree from '../packages/components/tree'
+import Tree from '../packages/components/tree/index'
 const { currentRoute } = useRouter()
 
 import { onMounted, ref, Teleport, watch } from 'vue'
