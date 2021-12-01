@@ -1,0 +1,9 @@
+.w-close {
+  font-size: 18px;
+  color: var(--w-color-4);
+  transition: var(--w-transition-time);
+  cursor: pointer;
+  &:hover {
+    color: var(--w-color-2);
+  }
+}

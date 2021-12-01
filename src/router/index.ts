@@ -80,6 +80,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/popup',
+    name: 'Popup',
+    component: () => import('../views/Popup.vue'),
+    meta: {
+      title: '弹出层 Popup'
+    }
+  },
+  {
     path: '/tooltip',
     name: 'Tooltip',
     component: () => import('../views/Tooltip.vue'),

@@ -13,7 +13,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const d = 10
+    const d = 6
     const translate = computed(() => {
       const p = props.placement
       let t = ''

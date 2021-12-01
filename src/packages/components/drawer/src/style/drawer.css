@@ -40,7 +40,7 @@
 }
 .w-drawer-transition--center-enter-from,
 .w-drawer-transition--center-leave-to {
-  transform: scale(1.1, 1.1);
+  transform: scale(1.25, 1.25);
   opacity: 0;
 }
 

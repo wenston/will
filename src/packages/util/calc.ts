@@ -105,13 +105,19 @@ export function getPlacement({
         place.left = r.left + r.width / 2 - l.width / 2
         break
       case 'client-center':
+        console.log(r)
         const { inner } = getWindowSize()
         const { x, y } = getPageScroll()
         place.top = inner.height / 2 - l.height / 2
         place.left = inner.width / 2 - l.width / 2
         //由于client-center是相对于视口定位的，所以如果出现了滚动条，则要减去！
-        place.x = r.left + r.width / 2 - place.left - x
-        place.y = r.top + r.height / 2 - place.top - y
+        if (r.width === 0 || r.height === 0) {
+          place.x = l.width / 2
+          place.y = l.height / 2
+        } else {
+          place.x = r.left + r.width / 2 - place.left - x
+          place.y = r.top + r.height / 2 - place.top - y
+        }
         break
       case 'top':
         place.top = r.top - l.height - gap
