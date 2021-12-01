@@ -27,24 +27,15 @@ export default defineComponent({
     return () => {
       const layerSlots = {
         trigger: ctx.slots.trigger,
-        default: ({ hide, show }: Record<any, any>) => {
-          return (
-            <div>
-              <p>这里是内容</p>
-              <div>
-                <span
-                  onClick={() => {
-                    hide()
-                  }}>
-                  关闭
-                </span>
-              </div>
-            </div>
-          )
+        default: (options: Record<any, any>) => {
+          const header = ctx.slots.header?.(options)
+          const body = ctx.slots.default?.(options)
+          const footer = ctx.slots.footer?.(options)
+          return [header, body, footer]
         }
       }
 
-      const lo = layerOptions.value as any
+      const lo = layerOptions.value as Record<any, any>
       return <Layer {...lo} v-slots={layerSlots} />
     }
   }

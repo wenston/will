@@ -3,7 +3,17 @@
   <p>
     <Btn @click="toShowPopup">弹出</Btn>
   </p>
-  <Popup v-model:show="show"></Popup>
+  <Popup v-model:show="show">
+    <template #header>
+      <div>标题</div>
+    </template>
+    <template #default>
+      <p>弹出框里的内容</p>
+    </template>
+    <template #footer="{toggle}">
+      <Btn @click="toggle">确定</Btn>
+    </template>
+  </Popup>
   <!-- <p>
     <Btn @click="beforeShow('left')">左侧</Btn>
     <Btn @click="beforeShow('right')">右侧</Btn>

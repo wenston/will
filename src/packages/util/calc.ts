@@ -105,7 +105,6 @@ export function getPlacement({
         place.left = r.left + r.width / 2 - l.width / 2
         break
       case 'client-center':
-        console.log(r)
         const { inner } = getWindowSize()
         const { x, y } = getPageScroll()
         place.top = inner.height / 2 - l.height / 2

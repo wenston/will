@@ -169,7 +169,6 @@ export default defineComponent({
           delay(hide)
         }
       }
-      console.log(pInfo)
       return options
     })
     useTriggerType(triggerRoot, props.trigger, handleTriggerEvent)
