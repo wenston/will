@@ -1,13 +1,13 @@
 import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
-export interface IconType {
-  name?: string
-  color?: string
-  size?: string
-}
+// export interface IconType {
+//   name?: string
+//   color?: string
+//   size?: string
+// }
 export default defineComponent({
   props: {
-    name: { type: String as PropType<string>, required: true },
+    name: { type: String as PropType<string> },
     color: String,
     size: String
   },

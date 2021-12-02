@@ -17,6 +17,7 @@ import {
   cloneVNode,
   renderSlot,
   normalizeClass,
+  useAttrs,
   capitalize
 } from 'vue'
 import type {
@@ -78,7 +79,8 @@ export const LayerProps = {
     type: Object as PropType<LayerCssVarType>,
     default: () => ({})
   },
-  layerClass: [String, Array, Object]
+  layerClass: [String, Array, Object],
+  layerStyle: { type: Object, default: () => ({}) }
 }
 export default defineComponent({
   name: 'Layer',
@@ -157,7 +159,8 @@ export default defineComponent({
           'z-index': zIndex.value,
           '--_layer-arrow-x': `${pInfo.x}px`,
           '--_layer-arrow-y': `${pInfo.y}px`,
-          ...props.layerCssVar
+          ...props.layerCssVar,
+          ...props.layerStyle
         }
       }
       if (triggerType === 'hover') {
@@ -208,7 +211,8 @@ export default defineComponent({
           layerSize: defaultSize,
           placement: props.placement,
           gap: props.gap,
-          offset: props.offset
+          offset: props.offset,
+          layer: defaultRoot
         })
         Object.assign(placementInfo, p)
       }

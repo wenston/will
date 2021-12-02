@@ -1,5 +1,5 @@
 import { computed, defineComponent, h } from 'vue'
-import type { PropType } from 'vue'
+import type { VNode, PropType } from 'vue'
 import type { BtnType, BtnMode } from '../../config/types'
 
 export default defineComponent({
@@ -11,7 +11,7 @@ export default defineComponent({
     disabled: Boolean,
     capsule: Boolean
   },
-  setup(props, { slots }) {
+  setup(props, { slots, attrs }) {
     const klass = computed(() => {
       return [
         'w-btn',
@@ -26,8 +26,9 @@ export default defineComponent({
         }
       ]
     })
+
     return () => {
-      const mainBtn = h(
+      const mainBtn: VNode = h(
         props.tag,
         {
           class: klass.value,
@@ -38,7 +39,7 @@ export default defineComponent({
             }
           }
         },
-        [slots.default?.()]
+        slots.default?.()
       )
       return mainBtn
     }

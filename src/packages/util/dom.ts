@@ -101,7 +101,17 @@ export function getPageSize() {
 
 export function getBoundingClientRect(elem: any) {
   const _el = getElement(elem)
-  return _el.getBoundingClientRect()
+  if (_el) {
+    return _el.getBoundingClientRect()
+  }
+  return {
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    bottom: 0,
+    right: 0
+  } as DOMRect
 }
 
 export function getOffset(elem: HTMLElement) {

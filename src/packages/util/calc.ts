@@ -1,4 +1,6 @@
+import { unref } from 'vue'
 import type { RectType, PlacementType } from '../config/types'
+import { getBoundingClientRect } from './dom'
 import { getWindowSize, getPageScroll, getPageSize } from './dom'
 interface PlacementOptions {
   triggerRect: RectType //触发者的位置大小
@@ -6,6 +8,7 @@ interface PlacementOptions {
   placement?: PlacementType
   gap?: number
   offset?: { x: number; y: number }
+  layer?: any
 }
 //双盒定位，包含了位置的自动调整功能
 export function getPlacement({
@@ -13,7 +16,8 @@ export function getPlacement({
   layerSize,
   placement = 'bottom',
   gap = 0,
-  offset = { x: 0, y: 0 }
+  offset = { x: 0, y: 0 },
+  layer
 }: PlacementOptions) {
   //自动调整
   function _adjustPlace(
@@ -107,8 +111,19 @@ export function getPlacement({
       case 'client-center':
         const { inner } = getWindowSize()
         const { x, y } = getPageScroll()
+        const _layer = unref(layer)
+        if (_layer) {
+          const rect = getBoundingClientRect(layer)
+          if (rect) {
+            l.width = rect.width
+            l.height = rect.height
+          }
+        }
+
         place.top = inner.height / 2 - l.height / 2
         place.left = inner.width / 2 - l.width / 2
+        place.top = place.top < 0 ? 0 : place.top
+        place.left = place.left < 0 ? 0 : place.left
         //由于client-center是相对于视口定位的，所以如果出现了滚动条，则要减去！
         if (r.width === 0 || r.height === 0) {
           place.x = l.width / 2

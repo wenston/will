@@ -1,16 +1,16 @@
 import { defineComponent, computed } from 'vue'
 import Icon from '../icon/index'
 export default defineComponent({
-  props: { ...Icon.props },
+  name: 'Close',
+  props: { ...Icon.props, name: { type: String, default: 'w-icon-close' } },
   setup: (props, ctx) => {
-    const iconName = computed(() => props.name || 'w-icon-close')
     const iconOptions = computed(() => {
       return {
-        name: iconName.value,
+        name: props.name,
         size: props.size,
         class: 'w-close'
       }
     })
-    return <Icon {...iconOptions.value} />
+    return () => <Icon {...iconOptions.value} />
   }
 })

@@ -12,6 +12,10 @@
 
   --w-color-border: #e1e1e1;
   --w-font-size-1: 12px;
+  --w-font-size-2: 14px;
+  --w-font-size-3: 16px;
+  --w-font-size-4: 18px;
+  --w-font-size-5: 20px;
   --w-font-size: var(--w-font-size-1);
 
   --w-size: 30px;
@@ -22,9 +26,9 @@
   --w-padding-x: var(--w-gap);
   --w-padding-y: 10px;
 
-  --w-radius: 5px;
-  --w-box-shadow: 0 5px 8px 0px rgba(0, 0, 0, 0.08),
-    0 0px 2px rgba(0, 0, 0, 0.05);
+  --w-radius: 6px;
+  --w-box-shadow: 0 5px 12px 0px rgba(0, 0, 0, 0.09),
+    0 0px 5px rgba(0, 0, 0, 0.076);
 
   --w-transition-time: 0.25s;
   --w-transition-slow-time: 0.5s;
@@ -42,9 +46,13 @@
   --w-switch-bg-color: var(--w-color-border);
   --w-switch-valve-box-shadow: 0 0px 5px 0 rgba(0, 0, 0, 0.3);
 
-  --w-mask-background-color: rgba(0, 0, 0, 0.3);
+  --w-mask-background-color: rgba(0, 0, 0, 0.45);
 
   --w-tree-item-hover-color: var(--w-color-bg);
   --w-tree-item-current-color: var(--w-color-primary-5);
   --w-tree-icon-color: #99b8ff;
+
+  --w-popup-min-width: 420px;
+  --w-popup-min-height: 50px;
+  --w-popup-border-color: transparent;
 }

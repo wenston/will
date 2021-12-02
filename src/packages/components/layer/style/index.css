@@ -11,6 +11,7 @@
   /* 字的颜色 */
   --_layer-color: var(--w-color-font-3);
   border: 1px solid var(--_layer-border-color);
+  max-height: 100%;
   border-radius: var(--w-radius);
   position: absolute;
   color: var(--_layer-color);
