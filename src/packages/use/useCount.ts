@@ -3,7 +3,9 @@ interface CountType {
   init: number
   step?: number
 }
-export default function useCount({ init, step }: CountType = { init: 0, step: 1 }) {
+export default function useCount(
+  { init, step }: CountType = { init: 0, step: 1 }
+) {
   const count = ref(init)
   const _step = ref(step || 1)
   function add(delta?: number) {
@@ -12,6 +14,7 @@ export default function useCount({ init, step }: CountType = { init: 0, step: 1 
     } else {
       count.value += _step.value
     }
+    return count.value
   }
   function reset(num?: number) {
     count.value = num ?? 0

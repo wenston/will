@@ -41,6 +41,7 @@ export default defineComponent({
 
     function cancelBtn(hide: () => void) {
       const p = {
+        mode: 'line',
         onClick: async () => {
           try {
 

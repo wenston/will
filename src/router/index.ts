@@ -17,6 +17,11 @@ const testChildrenRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: 'transition-group',
+    component: () => import('../views/test/children/TransitionGroup.vue'),
+    meta: { title: 'transition-group' }
+  },
+  {
     path: 'vue-api-list',
     component: () => import('../views/test/children/vueApiList.vue'),
     meta: { title: 'vue-api-list' }
@@ -93,6 +98,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Tooltip.vue'),
     meta: {
       title: '提示 Tooltip'
+    }
+  },
+  {
+    path: '/notice',
+    name: 'Notice',
+    component: () => import('../views/Notice.vue'),
+    meta: {
+      title: '通知 Notice'
     }
   },
   {

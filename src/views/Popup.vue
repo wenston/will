@@ -6,7 +6,7 @@
   <Popup v-model:show="show"
     title="弹框的标题"
     @after-ok="afterOk">
-    <Tooltip>
+    <Tooltip placement="left">
       <template #trigger>
         <span>备注</span>
       </template>

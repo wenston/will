@@ -32,6 +32,7 @@ const parentPath = '/test/'
   display: flex;
   width: 200px;
   flex-wrap: wrap;
+  align-content: flex-start;
   & a {
     text-decoration: none;
     color: var(--w-color-font-3);
@@ -43,8 +44,9 @@ const parentPath = '/test/'
     display: inline-flex;
     flex: 0 0 auto;
     transition: var(--w-transition-time);
+    margin: 3px 0px;
     &:not(:last-child) {
-      margin-right: var(--w-gap);
+      margin-right: 3px;
     }
     &.active {
       border-color: var(--w-color-font-3);
