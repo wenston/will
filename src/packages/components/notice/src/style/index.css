@@ -1,0 +1,94 @@
+.w-notice {
+  position: fixed;
+  display: flex;
+  align-items: flex-end;
+  &.w-notice--top {
+    flex-direction: column;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.w-notice--bottom {
+    flex-direction: column-reverse;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.w-notice--top-end {
+    flex-direction: column;
+    top: 0;
+    right: var(--w-gap);
+  }
+  &.w-notice--bottom-end {
+    flex-direction: column-reverse;
+    bottom: 0;
+    right: var(--w-gap);
+  }
+}
+.w-notice-item {
+  position: relative;
+  box-shadow: var(--w-notice-box-shadow);
+  border-radius: var(--w-radius);
+  background-color: white;
+  height: var(--__notice-item-height, auto);
+  @supports (backdrop-filter: blur(15px)) {
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
+  }
+  &.w-notice-item--top,
+  &.w-notice-item--top-end {
+    margin-top: var(--w-gap);
+  }
+  &.w-notice-item--bottom,
+  &.w-notice-item--bottom-end {
+    margin-bottom: var(--w-gap);
+  }
+
+  /* 动画 */
+  &.w-notice-transition-enter-active {
+    transition: transform var(--w-transition-slow-time)
+        var(--w-notice-cubic-bezier),
+      opacity var(--w-transition-slow-time) var(--w-notice-cubic-bezier);
+  }
+  &.w-notice-transition-leave-active {
+    transition: height var(--w-transition-time) var(--w-cubic-bezier),
+      margin-top var(--w-transition-time) var(--w-cubic-bezier),
+      margin-bottom var(--w-transition-time) var(--w-cubic-bezier),
+      opacity var(--w-transition-time) var(--w-cubic-bezier);
+  }
+
+  &.w-notice-transition-enter-from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  &.w-notice-transition-leave-to {
+    height: 0;
+    opacity: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+
+  & .w-notice-close {
+    top: 2px;
+    right: 6px;
+    position: absolute;
+  }
+}
+
+.w-notice {
+  &.w-notice--top {
+    & .w-notice-item {
+      &.w-notice-transition-enter-from {
+        transform: translateY(-100%);
+      }
+    }
+  }
+  &.w-notice--bottom {
+    & .w-notice-item {
+      &.w-notice-transition-enter-from {
+        transform: translateY(100%);
+      }
+    }
+  }
+}

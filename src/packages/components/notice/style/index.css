@@ -1,7 +1,0 @@
-.w-notice {
-  background-color: white;
-  padding: var(--w-padding-x);
-  border-radius: var(--w-radius);
-  box-shadow: var(--w-box-shadow);
-  position: fixed;
-}

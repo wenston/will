@@ -1,24 +1,97 @@
-import type { App, VNode } from 'vue'
-import { createApp, createVNode } from 'vue'
-import Notice from './Notice'
+import { App, createVNode, createApp } from 'vue'
+import type { NoticeOptions } from './Notice'
+import MainNotice from './Notice'
+import { createNoticeWrapper, clearNoticeWrapper } from './src/_util/index'
 
-function NoticeComponent() {
-  const noticeInstance = createVNode('div', {}, [
-    createVNode('i', null, '哈哈哈哈')
-  ])
-  return noticeInstance
-}
-function open(app: App, options) {
-  const ins = NoticeComponent()
-  const wrapper = document.createElement('div')
-  document.body.append(wrapper)
-  const noticeApp = createApp(ins)
-  console.log(noticeApp)
-  //   noticeApp.mount(wrapper)
+const NoticeAppMap = new Map<
+  App,
+  { noticeWrapper: HTMLElement; close: () => void; afterClose?: () => void }
+>()
+
+const defaultOptions: NoticeOptions = {
+  content: '默认的通知',
+  placement: 'top-end',
+  duration: 4500,
+  manual: false
 }
 
-Notice.install = open
+function open(options: NoticeOptions): App {
+  const placement = options.placement || defaultOptions.placement
+  const manual = options.manual ?? defaultOptions.manual
+  const duration = options.duration ?? defaultOptions.duration
+  const content = options.content ?? defaultOptions.content
+  const afterClose = options.afterClose
+  const itemWrapper = document.createElement('div')
+  const noticeWrapper = createNoticeWrapper(placement!)
+  let _close = () => {}
+  const vm = createVNode(
+    MainNotice,
+    {
+      placement,
+      manual,
+      duration,
+      'onAfter-enter': (el: HTMLElement) => {
+        // console.log(el)
+      },
+      'onAfter-leave': (el: HTMLElement) => {
+        _destroy(noticeWrapper, itemWrapper, notice)
+      },
+      onClose: (close: any) => {
+        _close = close
+      }
+    },
+    {
+      default: () => {
+        if (typeof content === 'function') {
+          return _renderContent(_close, content)
+        } else {
+          return content
+        }
+      }
+    }
+  )
+  // console.log(vm)
+  const notice = createApp(vm)
+  notice.mount(itemWrapper)
+  noticeWrapper.appendChild(itemWrapper)
+  NoticeAppMap.set(notice, { noticeWrapper, close: _close, afterClose })
+  return notice
+}
 
-export { default } from './Notice'
+function close(app: App) {
+  if (NoticeAppMap.has(app)) {
+    const n = NoticeAppMap.get(app)
+    if (n) {
+      n.close()
+      if (n.afterClose) {
+        n.afterClose()
+      }
+      // const noticeWrapper = n.noticeWrapper
+      NoticeAppMap.delete(app)
+      if (NoticeAppMap.size === 0) {
+        clearNoticeWrapper()
+      }
+    }
+  }
+}
 
-import './style/index.css'
+function _destroy(
+  noticeWrapper: HTMLElement,
+  wrapper: HTMLElement,
+  app_notice: App
+) {
+  app_notice.unmount()
+  noticeWrapper.removeChild(wrapper)
+  close(app_notice)
+}
+
+function _renderContent(close: any, content: (d: () => void) => void) {
+  return content(close)
+}
+
+function install(app: App) {
+  app.config.globalProperties.$notice = open
+}
+
+export default { install, open, close }
+import './src/style/index.css'
