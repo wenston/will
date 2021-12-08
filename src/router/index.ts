@@ -37,98 +37,124 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/btn',
-    name: 'Btn',
-    component: () => import('../views/Btn.vue'),
+    path: '/will-ui',
+    name: 'will-ui',
+    component: () => import('../views/will/WillUi.vue'),
+    children: [
+      {
+        path: 'btn',
+        name: 'Btn',
+        component: () => import('../views/will/Btn.vue'),
+        meta: {
+          title: '按钮 Btn'
+        }
+      },
+      {
+        path: 'checkbox',
+        name: 'Checkbox',
+        component: () => import('../views/will/Checkbox.vue'),
+        meta: {
+          title: '复选框 Checkbox'
+        }
+      },
+      {
+        path: 'radio',
+        name: 'Radio',
+        component: () => import('../views/will/Radio.vue'),
+        meta: {
+          title: '单选框 Radio'
+        }
+      },
+      {
+        path: 'switch',
+        name: 'Switch',
+        component: () => import('../views/will/Switch.vue'),
+        meta: {
+          title: '切换 Switch'
+        }
+      },
+      {
+        path: 'layer',
+        name: 'Layer',
+        component: () => import('../views/will/Layer.vue'),
+        meta: {
+          title: '层 Layer'
+        }
+      },
+      {
+        path: 'drawer',
+        name: 'Drawer',
+        component: () => import('../views/will/Drawer.vue'),
+        meta: {
+          title: '抽屉 Drawer'
+        }
+      },
+      {
+        path: 'popup',
+        name: 'Popup',
+        component: () => import('../views/will/Popup.vue'),
+        meta: {
+          title: '弹出层 Popup'
+        }
+      },
+      {
+        path: 'tooltip',
+        name: 'Tooltip',
+        component: () => import('../views/will/Tooltip.vue'),
+        meta: {
+          title: '提示 Tooltip'
+        }
+      },
+      {
+        path: 'notice',
+        name: 'Notice',
+        component: () => import('../views/will/Notice.vue'),
+        meta: {
+          title: '通知 Notice'
+        }
+      },
+      {
+        path: 'virtual',
+        name: 'Virtual',
+        component: () => import('../views/will/Virtual.vue'),
+        meta: {
+          title: '虚拟渲染 Virtual'
+        }
+      },
+      {
+        path: 'tree',
+        name: 'Tree',
+        component: () => import('../views/will/Tree.vue'),
+        meta: { title: '树 Tree' }
+      }
+    ],
     meta: {
-      title: '按钮 Btn'
+      title: 'PC端基础组件库'
     }
   },
   {
-    path: '/checkbox',
-    name: 'Checkbox',
-    component: () => import('../views/Checkbox.vue'),
+    path: '/decoration',
+    name: 'decoration',
+    // redirect: 'decoration-default',
+    component: () => import('../views/decoration/Main.vue'),
+    // children: [
+    //   {
+    //     path: 'decoration-default',
+    //     name: 'decoration-default',
+    //     component: () => import('../views/decoration/Default.vue'),
+    //     meta: { title: '店铺装修' }
+    //   }
+    // ],
     meta: {
-      title: '复选框 Checkbox'
+      title: '店铺装修'
     }
-  },
-  {
-    path: '/radio',
-    name: 'Radio',
-    component: () => import('../views/Radio.vue'),
-    meta: {
-      title: '单选框 Radio'
-    }
-  },
-  {
-    path: '/switch',
-    name: 'Switch',
-    component: () => import('../views/Switch.vue'),
-    meta: {
-      title: '切换 Switch'
-    }
-  },
-  {
-    path: '/layer',
-    name: 'Layer',
-    component: () => import('../views/Layer.vue'),
-    meta: {
-      title: '层 Layer'
-    }
-  },
-  {
-    path: '/drawer',
-    name: 'Drawer',
-    component: () => import('../views/Drawer.vue'),
-    meta: {
-      title: '抽屉 Drawer'
-    }
-  },
-  {
-    path: '/popup',
-    name: 'Popup',
-    component: () => import('../views/Popup.vue'),
-    meta: {
-      title: '弹出层 Popup'
-    }
-  },
-  {
-    path: '/tooltip',
-    name: 'Tooltip',
-    component: () => import('../views/Tooltip.vue'),
-    meta: {
-      title: '提示 Tooltip'
-    }
-  },
-  {
-    path: '/notice',
-    name: 'Notice',
-    component: () => import('../views/Notice.vue'),
-    meta: {
-      title: '通知 Notice'
-    }
-  },
-  {
-    path: '/virtual',
-    name: 'Virtual',
-    component: () => import('../views/Virtual.vue'),
-    meta: {
-      title: '虚拟渲染 Virtual'
-    }
-  },
-  {
-    path: '/tree',
-    name: 'Tree',
-    component: () => import('../views/Tree.vue'),
-    meta: { title: '树 Tree' }
   },
   {
     path: '/test',
     name: 'test',
     component: () => import('../views/test/Test.vue'),
     meta: {
-      title: '测试用',
-      others: true
+      title: '测试用的'
     },
     children: testChildrenRoutes
   }

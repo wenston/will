@@ -225,10 +225,10 @@
 </template>
 <script lang="ts" setup>
 import { ref, isVNode } from 'vue'
-import useCount from '../packages/use/useCount'
-import useScroll from '../packages/use/useScroll'
-import Layer from '../packages/components/layer'
-import Btn from '../packages/components/btn/index'
+import useCount from '../../packages/use/useCount'
+import useScroll from '../../packages/use/useScroll'
+import Layer from '../../packages/components/layer'
+import Btn from '../../packages/components/btn/index'
 function toPrint(str: string) {
   // console.log(str, count.value)
 }

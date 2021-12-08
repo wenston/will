@@ -19,8 +19,8 @@
 </template>
 <script  setup lang="ts">
 import { ref, reactive, watch } from 'vue'
-import Btn from '../packages/components/btn/index'
-import Checkbox from '../packages/components/checkbox/index'
+import Btn from '../../packages/components/btn/index'
+import Checkbox from '../../packages/components/checkbox/index'
 const citys = ref(['北京', '上海', '广州', '深圳'])
 const isChecked = ref(0)
 const checkedCitys = ref(['北京'])

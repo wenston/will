@@ -9,6 +9,6 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-import Switch from '../packages/components/switch'
+import Switch from '../../packages/components/switch'
 const flag = ref(0)
 </script>

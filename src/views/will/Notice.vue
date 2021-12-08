@@ -16,8 +16,8 @@
 <script lang="tsx" setup>
 import { ref, useCssModule, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import Notice from '../packages/components/notice/index'
-import Btn from '../packages/components/btn/index'
+import Notice from '../../packages/components/notice/index'
+import Btn from '../../packages/components/btn/index'
 const { currentRoute } = useRouter()
 const showNotice = ref(false)
 const css = useCssModule('css')

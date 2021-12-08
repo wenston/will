@@ -12,7 +12,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import Radio from '../packages/components/radio/'
+import Radio from '../../packages/components/radio/'
 const fruits = ['苹果', '香蕉', '大鸭梨', '草莓', '葡萄', '橘子']
 const f = ref('')
 setTimeout(() => {

@@ -13,11 +13,12 @@
 <script lang="ts" setup>
 import type { RouteRecordRaw } from 'vue-router'
 import { useRouter } from 'vue-router'
-import { routes } from '../router/'
+import { routes } from './router/'
 const router = useRouter()
 console.log(router)
 function navigateTo(route: RouteRecordRaw) {
-  router.push(route)
+  console.log(route)
+  router.push({ path: route.path })
 }
 </script>
 <style>
