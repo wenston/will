@@ -1,5 +1,6 @@
 
 <script lang="tsx">
+import type {Ref} from 'vue'
 import {
   ref,
   inject,
@@ -8,26 +9,34 @@ import {
   computed,
   defineComponent
 } from 'vue'
-import Icon from '../../../../packages/components/icon/index'
+import Icon from 'will-ui/components/icon/index'
 import Close from '../../../../packages/components/close/index'
 import Notice from '../../../../packages/components/notice/index'
 import Tooltip from '../../../../packages/components/tooltip/index'
 import Btn from '../../../../packages/components/btn/index'
 interface Wrapper {
+  uid?: number | string;
   isActive?: boolean;
 }
 
 export default defineComponent({
   inheritAttrs: false,
-  props: { isActive: Boolean },
+  props: { isActive: Boolean, uid: {type:String,required: true}},
   emits: ['toDelete'],
   setup(props, ctx) {
     const css = useCssModule('css')
+    const setCurrentComponent = inject('setCurrentComponent') as (
+      uid: string
+    ) => void
+    const currentComponent = inject<Ref<Record<any,any>>>('currentComponent')
     const wrapperOptions = computed(() => {
-      const klass = [css.wrapper, { [css.active]: props.isActive }]
+      const klass = [css.wrapper, { [css.active]: props.uid===currentComponent?.value?.uid }]
       const { class: outClass, ...others } = ctx.attrs
       return {
         class: [klass, outClass],
+        onClick: ()=> {
+          setCurrentComponent(props.uid)
+        },
         ...others
       }
     })
@@ -96,7 +105,7 @@ export default defineComponent({
   &:hover {
     &:not(.active) {
       &::after {
-        border: 1px dashed var(--w-color-primary);
+        border: 2px dashed var(--w-color-primary);
       }
     }
   }

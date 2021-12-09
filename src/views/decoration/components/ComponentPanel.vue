@@ -15,8 +15,9 @@
 <script lang="ts" setup>
 import { ref, onMounted, defineEmits } from 'vue'
 import Icon from '../../../packages/components/icon/index'
+import { ComponentDescription } from '../config/type'
 const emit = defineEmits(['toAddComponent'])
-const pseudoCcomponents = ref<Record<any, any>>([])
+const pseudoCcomponents = ref<ComponentDescription[]>([])
 function toadd(item: Record<any, any>) {
   emit('toAddComponent', item)
 }

@@ -6,9 +6,9 @@
     <div :class="css.preview_container">
       <div :class="css.preview_box">
         <template v-for="com in pageComponents"
-          :key="com.__id">
+          :key="com.uid">
           <component :is="com.componentName"
-            :__id="com.__id"></component>
+            :uid="com.uid"></component>
         </template>
       </div>
     </div>
@@ -21,21 +21,28 @@
 import { ref, provide, onMounted, readonly } from 'vue'
 import ComponentPanel from './components/ComponentPanel.vue'
 import ComponentOptions from './components/ComponentOptions.vue'
-const pageComponents = ref<Record<any, any>[]>([])
-const currentComponent = ref<Record<any, any>>({})
-function onAddComponent(item: Record<any, any>) {
+import type { ComponentDescription } from './config/type'
+
+/**
+ * 当前装修页面中的组件列表
+ */
+const pageComponents = ref<ComponentDescription[]>([])
+function onAddComponent(item: ComponentDescription) {
   pageComponents.value.push({
     ...item,
-    __id: (Math.random() + '').slice(2).toString() + new Date().getTime()
+    uid: (Math.random() + '').slice(2).toString() + new Date().getTime()
   })
 }
+
+/**
+ * 当前处于活动状态，即正在操作配置参数的组件
+ */
+const currentComponent = ref<ComponentDescription>({}) //ref<Record<any, any>>({})
 provide('currentComponent', readonly(currentComponent))
-provide('setCurrentComponent', (__id: string) => {
-  currentComponent.value = pageComponents.value.filter(
-    (c) => c.__id === __id
-  )[0]
-  console.log(currentComponent.value)
+provide('setCurrentComponent', (uid: string) => {
+  currentComponent.value = pageComponents.value.filter((c) => c.uid === uid)[0]
 })
+
 onMounted(() => {
   // console.log('Main组件挂载')
 })

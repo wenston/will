@@ -2,18 +2,20 @@
   <h3>组件配置</h3>
   <div :class="css.options">
     <template v-for="com in pageComponents"
-      :key="com.__id">
+      :key="com.uid">
       <component :is="com.componentName+'-options'"
-        v-if="com.__id==currentComponent.__id"></component>
+        v-if="com.uid==currentComponent?.uid"></component>
     </template>
   </div>
 </template>
 
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import { ref, onMounted, defineEmits, defineProps, inject } from 'vue'
 import Icon from '../../../packages/components/icon/index'
+import { ComponentDescription } from '../config/type'
 
-const currentComponent = inject('currentComponent') as Record<any, any>
+const currentComponent = inject<Ref<ComponentDescription>>('currentComponent')
 
 const emit = defineEmits(['toAddComponent'])
 const props = defineProps<{ pageComponents?: Record<any, any> }>()

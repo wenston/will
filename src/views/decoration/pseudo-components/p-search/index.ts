@@ -5,11 +5,11 @@ export default {
     app
       .component(
         'p-search',
-        defineAsyncComponent(() => import('./Search'))
+        defineAsyncComponent(() => import('./PSearch'))
       )
       .component(
         'p-search-options',
-        defineAsyncComponent(() => import('./Options'))
+        defineAsyncComponent(() => import('./PSearchOptions'))
       )
   }
 }

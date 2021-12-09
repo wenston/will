@@ -5,6 +5,9 @@ import router from './router'
 import './packages/theme/index.css'
 import './assets/style/index.css'
 
+// 问题点：如何用d.ts里定义的类型，如何全局引入？
+// import type { ComponentDescription } from './views/decoration/config/type'
+
 import Notice from './packages/components/notice/index'
 
 //移动端组件全局引入

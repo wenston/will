@@ -1,5 +1,5 @@
 import { defineComponent, computed } from 'vue'
-import './index.css'
+import css from './index.module.css'
 export default defineComponent({
   name: 'p-search-options',
   props: {
@@ -12,7 +12,7 @@ export default defineComponent({
   setup(props, ctx) {
     const containerOptions = computed(() => {
       return {
-        class: 'p-search w-cursor-pointer'
+        class: [css['p-search'], 'w-cursor-pointer']
       }
     })
     const inputOptions = computed(() => {
