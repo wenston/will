@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import type { Ref } from 'vue'
-import { ref, onMounted, defineEmits, defineProps, inject } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import Icon from 'will-ui/components/icon/index'
 import type { ComponentDescription } from 'decoration-types'
 import { ComponentDescriptionKey } from 'decoration-symbols'

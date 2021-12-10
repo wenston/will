@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, defineEmits } from 'vue'
+import { ref, onMounted } from 'vue'
 import Icon from 'will-ui/components/icon/index'
 import type { ComponentDescription } from 'decoration-types'
 const emit = defineEmits(['toAddComponent'])

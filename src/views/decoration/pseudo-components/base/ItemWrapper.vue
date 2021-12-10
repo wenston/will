@@ -68,7 +68,7 @@ export default defineComponent({
             ]),
             createVNode(
               'p',
-              null,
+              { style: { padding: '20px', maxWidth: '200px' } },
               '未来需要用一个confirm组件来替代此组件，用以获取用户是确认还是取消'
             ),
             createVNode(
