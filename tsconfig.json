@@ -12,8 +12,11 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "paths": {
-      "src": ["c/b"],
-      "will-ui": ["src/packages"],
+      // "src": ["c/b"],
+      "will-ui/*": ["src/packages/*"],
+      "decoration-types": ["src/views/decoration/config/types.ts"],
+      "decoration-symbols": ["src/views/decoration/config/symbols.ts"],
+      "decoration-modules": ["src/views/decoration/modules/index.ts"]
     }
     
   },

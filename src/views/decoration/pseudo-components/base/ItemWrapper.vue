@@ -1,6 +1,6 @@
 
 <script lang="tsx">
-import type {Ref} from 'vue'
+import type { Ref } from 'vue'
 import {
   ref,
   inject,
@@ -9,32 +9,48 @@ import {
   computed,
   defineComponent
 } from 'vue'
+import {
+  ComponentDescriptionKey,
+  SetCurrentComponentKey,
+  DeleteComponentKey
+} from 'decoration-symbols'
 import Icon from 'will-ui/components/icon/index'
-import Close from '../../../../packages/components/close/index'
-import Notice from '../../../../packages/components/notice/index'
-import Tooltip from '../../../../packages/components/tooltip/index'
-import Btn from '../../../../packages/components/btn/index'
-interface Wrapper {
-  uid?: number | string;
-  isActive?: boolean;
-}
+import Close from 'will-ui/components/close/index'
+import Notice from 'will-ui/components/notice/index'
+import Tooltip from 'will-ui/components/tooltip/index'
+import Btn from 'will-ui/components/btn/index'
+
+// interface Wrapper {
+//   uid?: number | string;
+// }
 
 export default defineComponent({
   inheritAttrs: false,
-  props: { isActive: Boolean, uid: {type:String,required: true}},
-  emits: ['toDelete'],
+  props: {
+    //每个组件都有一个唯一标识
+    uid: { type: String, required: true }
+  },
   setup(props, ctx) {
     const css = useCssModule('css')
-    const setCurrentComponent = inject('setCurrentComponent') as (
-      uid: string
-    ) => void
-    const currentComponent = inject<Ref<Record<any,any>>>('currentComponent')
+    const setCurrentComponent = inject(
+      SetCurrentComponentKey,
+      (uid: string) => {
+        throw new Error('setCurrentComponent 失败')
+      }
+    )
+    const currentComponent = inject(ComponentDescriptionKey, ref(null))
+    const deleteComponent = inject(DeleteComponentKey, () => {
+      throw new Error('没有给uid，删除失败')
+    })
     const wrapperOptions = computed(() => {
-      const klass = [css.wrapper, { [css.active]: props.uid===currentComponent?.value?.uid }]
+      const klass = [
+        css.wrapper,
+        { [css.active]: props.uid === currentComponent.value?.uid }
+      ]
       const { class: outClass, ...others } = ctx.attrs
       return {
         class: [klass, outClass],
-        onClick: ()=> {
+        onClick: () => {
           setCurrentComponent(props.uid)
         },
         ...others
@@ -42,7 +58,7 @@ export default defineComponent({
     })
 
     function beforeDelete() {
-      ctx.emit('toDelete')
+      deleteComponent(props.uid)
       Notice.open({
         placement: 'bottom',
         content: (close: () => void) => {

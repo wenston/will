@@ -10,4 +10,10 @@
     padding: 0 var(--w-padding-x);
     cursor: pointer;
   }
+  & .icon {
+    color: var(--w-color-font-3);
+    position: absolute;
+    right: 20px;
+    top: 12px;
+  }
 }

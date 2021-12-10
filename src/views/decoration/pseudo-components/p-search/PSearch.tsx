@@ -1,27 +1,40 @@
 import { defineComponent, computed, inject } from 'vue'
 import Wrapper from '../base/ItemWrapper.vue'
+import props from './props'
 import css from './index.module.css'
+import Icon from 'will-ui/components/icon/index'
 export default defineComponent({
   name: 'p-search',
   components: { Wrapper },
   props: {
     ...Wrapper.props,
-    placeholder: {
-      type: String,
-      default: '关键字搜索'
-    }
+    ...props
   },
   setup(props, ctx) {
     const containerOptions = computed(() => {
       return {
         uid: props.uid,
-        class: [css['p-search'], ' w-cursor-pointer']
+        class: [css['p-search'], ' w-cursor-pointer'],
+        style: {
+          background: props.background
+        }
+      }
+    })
+    const inputOptions = computed(() => {
+      return {
+        readonly: true,
+        placeholder: props.placeholder,
+        type: 'text',
+        style: {
+          backgroundColor: props.inputBackground
+        }
       }
     })
     return () => {
       return (
         <Wrapper {...containerOptions.value}>
-          <input readonly placeholder={props.placeholder} type="text" />
+          <input {...inputOptions.value} />
+          {props.icon && <Icon class={css.icon} name={props.icon} />}
         </Wrapper>
       )
     }

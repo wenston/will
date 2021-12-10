@@ -14,46 +14,50 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, defineEmits } from 'vue'
-import Icon from '../../../packages/components/icon/index'
-import { ComponentDescription } from '../config/type'
+import Icon from 'will-ui/components/icon/index'
+import type { ComponentDescription } from 'decoration-types'
 const emit = defineEmits(['toAddComponent'])
 const pseudoCcomponents = ref<ComponentDescription[]>([])
-function toadd(item: Record<any, any>) {
-  emit('toAddComponent', item)
+function toadd(item: ComponentDescription) {
+  emit('toAddComponent', JSON.parse(JSON.stringify(item)))
 }
 onMounted(() => {
   //   console.log('ComponentPanel组件挂载')
   pseudoCcomponents.value = [
     {
+      uid: '',
       componentId: '1',
       componentName: 'p-search',
       icon: 'w-icon-add',
       name: '搜索',
-      props: {},
+      options: {},
       data: []
     },
     {
+      uid: '',
       componentId: '2',
       componentName: 'p-swiper',
       icon: 'w-icon-add',
       name: '图片轮播',
-      props: {},
+      options: {},
       data: []
     },
     {
+      uid: '',
       componentId: '3',
-      componentName: 'p-title',
+      componentName: 'p-headline',
       icon: 'w-icon-add',
       name: '标题',
-      props: {},
+      options: {},
       data: []
     },
     {
+      uid: '',
       componentId: '4',
       componentName: 'p-goods',
       icon: 'w-icon-add',
       name: '商品',
-      props: {},
+      options: {},
       data: []
     }
   ]

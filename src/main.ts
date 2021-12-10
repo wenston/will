@@ -20,6 +20,7 @@ app.component(
 
 //pc端伪组件,伪组件和移动端的组件是有对应关系的
 import PSearch from './views/decoration/pseudo-components/p-search/index'
-app.use(PSearch)
+import PHeadline from './views/decoration/pseudo-components/p-headline/index'
+app.use(PSearch).use(PHeadline)
 
 app.use(router).use(Notice).mount('#will')

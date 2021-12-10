@@ -4,7 +4,8 @@
     <template v-for="com in pageComponents"
       :key="com.uid">
       <component :is="com.componentName+'-options'"
-        v-if="com.uid==currentComponent?.uid"></component>
+        v-bind="com.options"
+        v-if="com.uid===currentComponent?.uid"></component>
     </template>
   </div>
 </template>
@@ -12,14 +13,14 @@
 <script lang="ts" setup>
 import type { Ref } from 'vue'
 import { ref, onMounted, defineEmits, defineProps, inject } from 'vue'
-import Icon from '../../../packages/components/icon/index'
-import { ComponentDescription } from '../config/type'
+import Icon from 'will-ui/components/icon/index'
+import type { ComponentDescription } from 'decoration-types'
+import { ComponentDescriptionKey } from 'decoration-symbols'
 
-const currentComponent = inject<Ref<ComponentDescription>>('currentComponent')
+const currentComponent = inject(ComponentDescriptionKey, ref(null))
 
 const emit = defineEmits(['toAddComponent'])
-const props = defineProps<{ pageComponents?: Record<any, any> }>()
-const optionsComponents = ref<Record<any, any>>([])
+const props = defineProps<{ pageComponents?: ComponentDescription[] }>()
 
 onMounted(() => {
   // console.log('ComponentOptions组件挂载')
