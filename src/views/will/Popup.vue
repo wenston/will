@@ -32,9 +32,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Popup from '../../packages/components/popup/index'
-import Btn from '../../packages/components/btn/index'
-import Tooltip from '../../packages/components/tooltip/index'
+import Popup from 'will-ui/components/popup/index'
+import Btn from 'will-ui/components/btn/index'
+import Tooltip from 'will-ui/components/tooltip/index'
 const { currentRoute } = useRouter()
 const placement = ref('left')
 const show = ref(false)

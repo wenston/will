@@ -30,8 +30,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import Drawer from '../../packages/components/drawer/index'
-import Btn from '../../packages/components/btn/index'
+import Drawer from 'will-ui/components/drawer/index'
+import Btn from 'will-ui/components/btn/index'
 const { currentRoute } = useRouter()
 const placement = ref('left')
 const showDrawer = ref(false)

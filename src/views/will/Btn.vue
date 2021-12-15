@@ -36,7 +36,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import Btn from '../../packages/components/btn/index'
+import Btn from 'will-ui/components/btn/index'
 function handleClick(e: MouseEvent) {
   console.log('hhhhhh')
 }

@@ -29,9 +29,9 @@ import { useRouter } from 'vue-router'
 const { currentRoute } = useRouter()
 
 import { onMounted, ref, VNode } from 'vue'
-import Virtual from '../../packages/components/virtual'
-import Btn from '../../packages/components/btn'
-import { plattenTreeData } from '../../packages/util'
+import Virtual from 'will-ui/components/virtual'
+import Btn from 'will-ui/components/btn'
+import { plattenTreeData } from 'will-ui/util'
 import treeData from '../../mock-data/3c'
 const { filterPlattenData: plat } = plattenTreeData(treeData, 'Childs')
 

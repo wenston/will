@@ -2,6 +2,7 @@
   <h1>{{currentRoute.meta.title}}</h1>
   <p>
     <Btn @click="toShowNotice">展示一个通知</Btn>
+    <Btn @click="toCloseNotice">关闭一个通知</Btn>
   </p>
   <!-- <Notice v-model:show="showNotice"></Notice> -->
 
@@ -14,23 +15,23 @@
 </template>
 
 <script lang="tsx" setup>
+import type { App } from 'vue'
 import { ref, useCssModule, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import Notice from '../../packages/components/notice/index'
-import Btn from '../../packages/components/btn/index'
+import Notice from 'will-ui/components/notice/index'
+import Btn from 'will-ui/components/btn/index'
 const { currentRoute } = useRouter()
 const showNotice = ref(false)
+let oneNotice: App
 const css = useCssModule('css')
 const currentInstance = getCurrentInstance()
 function toShowNotice() {
   const $notice = currentInstance?.appContext.config.globalProperties.$notice
   console.log(currentInstance?.appContext.config.globalProperties.$notice)
   //使用Notice.open或者$notice
-  Notice.open({
+  oneNotice = Notice.open({
     manual: true,
-    placement: ['bottom', 'top', 'top-end', 'bottom-end'][
-      Math.floor(Math.random() * 4)
-    ],
+    placement: 'top-end',
     duration: Math.random() * 10000 + 2,
     content: (close: () => void) => {
       return (
@@ -45,6 +46,10 @@ function toShowNotice() {
       )
     }
   })
+}
+function toCloseNotice() {
+  console.log(oneNotice._instance)
+  Notice.close(oneNotice)
 }
 </script>
 <style module="css" lang="postcss">

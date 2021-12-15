@@ -46,9 +46,9 @@
 </template>
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import useCount from '../../packages/use/useCount'
-import Tooltip from '../../packages/components/tooltip'
-import Btn from '../../packages/components/btn/index'
+import useCount from 'will-ui/use/useCount'
+import Tooltip from 'will-ui/components/tooltip'
+import Btn from 'will-ui/components/btn/index'
 
 const { count, add } = useCount()
 const showTooltip = ref(false)

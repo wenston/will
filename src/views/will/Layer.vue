@@ -225,10 +225,10 @@
 </template>
 <script lang="ts" setup>
 import { ref, isVNode } from 'vue'
-import useCount from '../../packages/use/useCount'
-import useScroll from '../../packages/use/useScroll'
-import Layer from '../../packages/components/layer'
-import Btn from '../../packages/components/btn/index'
+import useCount from 'will-ui/use/useCount'
+import useScroll from 'will-ui/use/useScroll'
+import Layer from 'will-ui/components/layer'
+import Btn from 'will-ui/components/btn/index'
 function toPrint(str: string) {
   // console.log(str, count.value)
 }

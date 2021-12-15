@@ -30,12 +30,12 @@
 </template>
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import Tree from '../../packages/components/tree/index'
+import Tree from 'will-ui/components/tree/index'
 const { currentRoute } = useRouter()
 
 import { onMounted, ref, Teleport, watch } from 'vue'
-import Btn from '../../packages/components/btn/index'
-import { plattenTreeData } from '../../packages/util'
+import Btn from 'will-ui/components/btn/index'
+import { plattenTreeData } from 'will-ui/util'
 import treeData from '../../mock-data/3c'
 const { filterPlattenData: plat } = plattenTreeData(treeData, 'Childs')
 
