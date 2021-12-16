@@ -1,3 +1,10 @@
+export interface ComponentProps {
+  [k: string]: {
+    type: any
+    default?: any
+    [p: string]: any
+  }
+}
 export type RectType = {
   top: number
   bottom: number

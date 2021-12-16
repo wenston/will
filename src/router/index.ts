@@ -114,6 +114,22 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'confirm',
+        name: 'Confirm',
+        component: () => import('../views/will/Confirm.vue'),
+        meta: {
+          title: '确认 Confirm'
+        }
+      },
+      {
+        path: 'choose',
+        name: 'Choose',
+        component: () => import('../views/will/Choose.vue'),
+        meta: {
+          title: '选择 Choose'
+        }
+      },
+      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),

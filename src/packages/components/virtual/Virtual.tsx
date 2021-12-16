@@ -2,6 +2,7 @@ import type { PropType, SetupContext } from 'vue'
 import { defineComponent, ref, computed, renderSlot } from 'vue'
 import useBoundingClientRect from '../../use/useBoundingClientRect'
 import useScroll from '../../use/useScroll'
+import useElement from '../../use/useElement'
 import { EmptyObject } from '../../config/types'
 export type TreeDataType = any[]
 export interface TreeDefaultSlotOptions extends EmptyObject {
@@ -31,6 +32,7 @@ export default defineComponent({
     const fromIndex = ref(0)
     //可视范围内可显示的数据条数
     const visibleDataLength = computed(() => {
+      console.log(visibleSize)
       return Math.ceil(visibleSize.height / (props.itemHeight || 1))
     })
     const toIndex = computed(() => {

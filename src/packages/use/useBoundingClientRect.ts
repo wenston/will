@@ -1,4 +1,4 @@
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, onUpdated, reactive } from 'vue'
 import useEvent from './useEvent'
 import { getElement, getBoundingClientRect } from '../util'
 
@@ -19,6 +19,7 @@ export default function useBoundingClientRect(el: any) {
   }
   onMounted(() => {
     elem.value = getElement(el)
+    console.log('useB', elem.value)
     get()
   })
   useEvent(window, 'resize', get)

@@ -17,7 +17,7 @@ import {
   cloneVNode,
   renderSlot,
   normalizeClass,
-  useAttrs,
+  readonly,
   capitalize
 } from 'vue'
 import type {
@@ -79,7 +79,7 @@ export const LayerProps = {
     type: Object as PropType<LayerCssVarType>,
     default: () => ({})
   },
-  layerClass: [String, Array, Object],
+  layerClass: { type: [String, Array, Object] },
   layerStyle: { type: Object, default: () => ({}) }
 }
 export default defineComponent({
@@ -87,7 +87,7 @@ export default defineComponent({
   inheritAttrs: false,
   components: { Mask },
   props: LayerProps,
-  emits: ['update:show'],
+  emits: ['update:show', 'get-trigger-rect'],
   directives: { clickOutside },
   setup(props, { slots, emit }) {
     const Win = window
@@ -224,6 +224,7 @@ export default defineComponent({
         for (const k in rect) {
           triggerRect[k] = rect[k]
         }
+        emit('get-trigger-rect', readonly(rect))
         justNow.value = true
       }
     }

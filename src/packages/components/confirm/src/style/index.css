@@ -1,0 +1,21 @@
+.w-confirm-header {
+  padding: 10px var(--w-gap);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > span {
+    font-size: 16px;
+  }
+}
+
+.w-confirm-body {
+  min-width: 420px;
+  min-height: 44px;
+  padding: var(--w-gap);
+}
+.w-confirm-footer {
+  display: flex;
+  padding: 10px var(--w-gap);
+  justify-content: flex-end;
+  align-items: center;
+}

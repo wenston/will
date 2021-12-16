@@ -27,3 +27,19 @@
 .w-scale-leave-to {
   transform: scale(0, 0);
 }
+
+.w-slide-y-enter-active,
+.w-slide-y-leave-active {
+  transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
+  perspective: 1000px;
+}
+.w-slide-y-leave-active {
+  transition: var(--w-transition-time) var(--w-cubic-bezier);
+  perspective: 1000px;
+}
+
+.w-slide-y-enter-from,
+.w-slide-y-leave-to {
+  transform: scale(1, 0);
+  opacity: 0;
+}

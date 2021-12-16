@@ -1,4 +1,6 @@
 @import './_var.css';
 @import './_base.css';
 @import './_common.css';
+@import './_text.css';
+@import './_size.css';
 @import './_transition.css';

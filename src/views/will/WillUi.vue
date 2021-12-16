@@ -29,19 +29,30 @@ const { currentRoute } = useRouter()
   align-items: flex-start;
   background-color: var(--w-color-bg);
   background-image: radial-gradient(
-      circle at 20% 75%,
-      var(--w-color-primary-3) 1%,
+      circle at 20% 85%,
+      rgb(255, 129, 129) 1%,
       transparent 20%
     ),
-    radial-gradient(circle at 80% 25%, rgb(255, 191, 132) 1%, transparent 30%),
-    radial-gradient(circle at 80% 45%, rgb(181, 255, 166) 1%, transparent 15%),
-    radial-gradient(circle at 90% 15%, rgb(181, 255, 166) 1%, transparent 15%),
-    radial-gradient(circle at 25% 80%, rgb(194, 141, 255) 1%, transparent 15%);
+    radial-gradient(
+      circle at 95% 95%,
+      rgb(255, 223, 196) 8%,
+      rgb(255, 223, 196) 10%,
+      transparent 10%
+    ),
+    radial-gradient(
+      circle at 1% 35%,
+      rgb(167, 255, 159) 5%,
+      rgb(167, 255, 159) 6%,
+      transparent 6%
+    ),
+    radial-gradient(circle at 25% 90%, rgb(255, 253, 227) 5%, transparent 10%);
+
+  background-blend-mode: multiply;
 
   & .nav {
     /* display: none; */
     margin: var(--w-gap);
-    /* backdrop-filter: blur(10px); */
+    backdrop-filter: blur(20px);
     border-radius: calc(2 * var(--w-radius));
     background-color: rgba(255, 255, 255, 0.4);
     align-content: stretch;
@@ -75,8 +86,8 @@ const { currentRoute } = useRouter()
   & .view {
     /* display: none; */
     margin: var(--w-gap);
-    background-color: rgba(255, 255, 255, 0.4);
-    /* backdrop-filter: blur(10px); */
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(20px);
     margin-left: 0;
     border-radius: calc(2 * var(--w-radius));
     flex: 1;
