@@ -1,0 +1,31 @@
+.w-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  & .w-loading-text {
+    color: var(--w-color-font-2);
+    white-space: nowrap;
+    margin-top: var(--w-gap);
+  }
+
+  & .w-loading-icon {
+    --w-loading-icon-size: 14px;
+    display: inline-flex;
+    font-size: var(--w-loading-icon-size);
+    width: var(--w-loading-icon-size);
+    height: var(--w-loading-icon-size);
+    color: var(--w-color-font-2);
+    animation: w-loading-roll 1.2s linear infinite;
+  }
+}
+
+@keyframes w-loading-roll {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}

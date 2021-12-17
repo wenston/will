@@ -28,6 +28,15 @@
 
     </Choose>
   </p>
+  <p style="display: flex;">
+    <Btn mode="line"
+      type="primary"
+      @click="showLoading=!showLoading">加载中</Btn>
+
+    <Loading :show="showLoading"
+      size="20px"
+      color="var(--w-color-font-2)" />
+  </p>
   <p style="margin-top:450px">
     <Choose v-model="supplierId2"
       clearable
@@ -48,20 +57,22 @@ import { useRouter } from 'vue-router'
 const { currentRoute } = useRouter()
 import { Choose } from 'will-ui/components/choose/index'
 import Virtual from 'will-ui/components/virtual/Virtual'
+import Loading from 'will-ui/components/loading/index'
+import Btn from 'will-ui/components/btn/index'
 import supplierData from '../../mock-data/supplier'
 const suppliers = ref<{ Id: number; Name: string }[]>([])
 const supplierId = ref<number | string>()
 const supplierId2 = ref<number | string>()
 const supplierId3 = ref<number | string>()
 const showChoose = ref(false)
-
+const showLoading = ref(false)
 function onChange({ label, value }: any) {
   console.log(label, value)
 }
 async function toLoad() {
   return new Promise((res, rej) => {
     setTimeout(() => {
-      res(supplierData)
+      res([])
     }, 1000)
   })
 }

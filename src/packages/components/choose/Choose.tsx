@@ -3,6 +3,9 @@ import Layer, { LayerProps } from '../layer/index'
 import Virtual from '../virtual/index'
 import Close from '../close/index'
 import Arrow from '../arrow/index'
+import Loading from '../loading/index'
+import Empty from '../empty/index'
+import Fallback from '../fallback/index'
 import {
   SetCurrentValueKey,
   SetCurrentLabelKey,
@@ -168,12 +171,24 @@ export default defineComponent({
         default: () => {
           if (props.lazyLoad) {
             if (loading.value) {
-              return <div>正在加载中...</div>
+              return (
+                <Loading
+                  class="w-choose-loading-empty"
+                  show={true}
+                  text="努力加载中"
+                />
+              )
             } else if (
               !data.value ||
               (isArray(data.value) && data.value.length === 0)
             ) {
-              return <div>暂无数据</div>
+              return (
+                <Empty
+                  class="w-choose-loading-empty"
+                  show={true}
+                  text="暂无相关数据"
+                />
+              )
             } else {
               return ctx.slots.default?.({
                 data: data.value,

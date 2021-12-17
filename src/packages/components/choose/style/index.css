@@ -45,6 +45,9 @@
   background-color: var(--w-choose-background);
   max-height: 360px;
   overflow: auto;
+  & .w-choose-loading-empty {
+    min-height: 70px;
+  }
 }
 
 .w-choose-item {
