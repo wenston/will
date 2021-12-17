@@ -10,6 +10,7 @@ import {
   ToCloseKey
 } from './injectionKey'
 import { RectType } from '../../config/types'
+import { isArray } from '../../util'
 const props = {
   ...LayerProps,
   placement: { type: LayerProps.placement.type, default: 'bottom-start' },
@@ -23,7 +24,8 @@ const props = {
   clearable: { type: Boolean, default: false },
   block: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  modelValue: { type: [Number, String], default: undefined }
+  modelValue: { type: [Number, String], default: undefined },
+  lazyLoad: { type: Function }
 }
 export default defineComponent({
   inheritAttrs: false,
@@ -32,6 +34,8 @@ export default defineComponent({
   emit: ['update:show', 'update:modelValue', 'change'],
   setup(props, ctx) {
     const visible = ref(props.show)
+    const data = ref<any[] | object | null | undefined>()
+    const loading = ref(false)
     const txt = ref<number | string | undefined>()
     const triggerRect = ref<RectType>()
     const showCloseBtn = computed(() => {
@@ -94,6 +98,9 @@ export default defineComponent({
     )
     watch(visible, (v) => {
       ctx.emit('update:show', v)
+      if (v) {
+        toLoad()
+      }
     })
     function renderTrigger() {
       const triggerOptions = {
@@ -135,13 +142,48 @@ export default defineComponent({
         </div>
       )
     }
-    function renderContent() {
-      return ctx.slots.default?.()
+
+    function toLoad() {
+      if (props.lazyLoad) {
+        if (
+          data.value === undefined ||
+          (isArray(data.value) && data.value.length === 0)
+        ) {
+          loading.value = true
+          props
+            .lazyLoad()
+            .then((d: any[] | object | null | undefined) => {
+              data.value = d
+              loading.value = false
+            })
+            .catch((err: any) => {
+              loading.value = false
+            })
+        }
+      }
     }
 
     return () => {
       const layerSlots = {
-        default: renderContent,
+        default: () => {
+          if (props.lazyLoad) {
+            if (loading.value) {
+              return <div>正在加载中...</div>
+            } else if (
+              !data.value ||
+              (isArray(data.value) && data.value.length === 0)
+            ) {
+              return <div>暂无数据</div>
+            } else {
+              return ctx.slots.default?.({
+                data: data.value,
+                loading: loading.value
+              })
+            }
+          } else {
+            return ctx.slots.default?.()
+          }
+        }, //props.lazyLoad ? renderLazyContent : ctx.slots.default,
         trigger: renderTrigger
       }
       const options = layerOptions.value as any

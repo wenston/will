@@ -87,7 +87,7 @@ export default defineComponent({
   inheritAttrs: false,
   components: { Mask },
   props: LayerProps,
-  emits: ['update:show', 'get-trigger-rect'],
+  emits: ['update:show', 'get-trigger-rect', 'after-enter'],
   directives: { clickOutside },
   setup(props, { slots, emit }) {
     const Win = window
@@ -316,6 +316,7 @@ export default defineComponent({
           }}
           onAfterEnter={(el) => {
             justNow.value = false
+            emit('after-enter', el)
           }}>
           {visible.value ? (
             <div {...defaultOptions.value}>{vnode_default.value}</div>

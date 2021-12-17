@@ -12,6 +12,22 @@
         :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
     </Choose>
   </p>
+  <!-- 数据懒加载的情况 -->
+  <p style="display:flex;">
+    <Choose v-model="supplierId3"
+      @change="onChange"
+      :lazy-load="toLoad"
+      clearable>
+      <template #default="{data}">
+        <Choose.item v-for="item in data"
+          :key="item.Id"
+          :label="item.Name"
+          :value="item.Id"
+          :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
+      </template>
+
+    </Choose>
+  </p>
   <p style="margin-top:450px">
     <Choose v-model="supplierId2"
       clearable
@@ -33,18 +49,21 @@ const { currentRoute } = useRouter()
 import { Choose } from 'will-ui/components/choose/index'
 import Virtual from 'will-ui/components/virtual/Virtual'
 import supplierData from '../../mock-data/supplier'
+const suppliers = ref<{ Id: number; Name: string }[]>([])
 const supplierId = ref<number | string>()
 const supplierId2 = ref<number | string>()
+const supplierId3 = ref<number | string>()
 const showChoose = ref(false)
 
-function onChange({
-  label,
-  value
-}: {
-  readonly label: number | string | undefined
-  readonly value: number | string | undefined
-}) {
+function onChange({ label, value }: any) {
   console.log(label, value)
+}
+async function toLoad() {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      res(supplierData)
+    }, 1000)
+  })
 }
 </script>
 
