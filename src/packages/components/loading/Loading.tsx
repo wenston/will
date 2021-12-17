@@ -3,9 +3,12 @@ import {
   defineComponent,
   Transition,
   vShow,
-  withDirectives
+  withDirectives,
+  defineProps,
+  withDefaults
 } from 'vue'
 import Icon from '../icon/index'
+// import type { LoadingComponentProps } from './type'
 export default defineComponent({
   props: {
     ...Icon.props,
@@ -17,7 +20,8 @@ export default defineComponent({
     text: { type: String, default: '' },
     hasTransition: { type: Boolean, default: true }
   },
-  setup(props, ctx) {
+
+  setup(props, { slots }) {
     const wrapperOptions = computed(() => {
       return {
         class: 'w-loading'
@@ -37,8 +41,12 @@ export default defineComponent({
     return () => {
       let comp = withDirectives(
         <div {...wrapperOptions.value}>
-          <Icon {...iconOptions.value} />
-          {props.text && <div class="w-loading-text">{props.text}</div>}
+          {slots.default?.() ?? (
+            <>
+              <Icon {...iconOptions.value} />
+              {props.text && <div class="w-loading-text">{props.text}</div>}
+            </>
+          )}
         </div>,
         [[vShow, props.show]]
       )

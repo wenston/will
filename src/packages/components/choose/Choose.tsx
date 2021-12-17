@@ -169,32 +169,31 @@ export default defineComponent({
     return () => {
       const layerSlots = {
         default: () => {
+          const fallback = (
+            <Fallback
+              loading={loading.value}
+              class="w-choose-fallback"
+              loadingProps={{
+                text: '加载数据中'
+              }}
+              emptyProps={{
+                text: '暂无相关数据'
+              }}
+              v-slots={{ loading: ctx.slots.loading, empty: ctx.slots.empty }}
+            />
+          )
+          const content = ctx.slots.default?.({
+            data: data.value,
+            loading: loading.value
+          })
           if (props.lazyLoad) {
-            if (loading.value) {
-              return (
-                <Loading
-                  class="w-choose-loading-empty"
-                  show={true}
-                  text="努力加载中"
-                />
-              )
-            } else if (
-              !data.value ||
-              (isArray(data.value) && data.value.length === 0)
-            ) {
-              return (
-                <Empty
-                  class="w-choose-loading-empty"
-                  show={true}
-                  text="暂无相关数据"
-                />
-              )
-            } else {
-              return ctx.slots.default?.({
-                data: data.value,
-                loading: loading.value
-              })
+            if (data.value) {
+              if (isArray(data.value) && data.value.length === 0) {
+                return fallback
+              }
+              return content
             }
+            return fallback
           } else {
             return ctx.slots.default?.()
           }

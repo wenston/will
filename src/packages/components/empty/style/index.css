@@ -14,8 +14,6 @@
     --w-empty-icon-size: 14px;
     display: inline-flex;
     font-size: var(--w-empty-icon-size);
-    width: var(--w-empty-icon-size);
-    height: var(--w-empty-icon-size);
     color: var(--w-color-font-2);
   }
 }

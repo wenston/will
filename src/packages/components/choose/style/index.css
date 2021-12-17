@@ -45,8 +45,9 @@
   background-color: var(--w-choose-background);
   max-height: 360px;
   overflow: auto;
-  & .w-choose-loading-empty {
+  & .w-choose-fallback {
     min-height: 70px;
+    overflow: hidden;
   }
 }
 

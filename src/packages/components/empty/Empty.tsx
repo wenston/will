@@ -17,7 +17,7 @@ export default defineComponent({
     text: { type: String, default: '' },
     hasTransition: { type: Boolean, default: true }
   },
-  setup(props, ctx) {
+  setup(props, { slots }) {
     const wrapperOptions = computed(() => {
       return {
         class: 'w-empty'
@@ -37,8 +37,12 @@ export default defineComponent({
     return () => {
       let comp = withDirectives(
         <div {...wrapperOptions.value}>
-          <Icon {...iconOptions.value} />
-          {props.text && <div class="w-empty-text">{props.text}</div>}
+          {slots.default?.() ?? (
+            <>
+              <Icon {...iconOptions.value} />
+              {props.text && <div class="w-empty-text">{props.text}</div>}
+            </>
+          )}
         </div>,
         [[vShow, props.show]]
       )

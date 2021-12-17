@@ -25,6 +25,18 @@
           :value="item.Id"
           :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
       </template>
+      <!-- <template #loading>
+
+        <p>
+          加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊
+
+        </p>
+      </template>
+      <template #empty>
+        <p>
+          sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据
+        </p>
+      </template> -->
 
     </Choose>
   </p>
