@@ -3,9 +3,7 @@ import {
   defineComponent,
   Transition,
   vShow,
-  withDirectives,
-  defineProps,
-  withDefaults
+  withDirectives
 } from 'vue'
 import Icon from '../icon/index'
 // import type { LoadingComponentProps } from './type'
@@ -18,7 +16,8 @@ export default defineComponent({
     },
     show: { type: Boolean, default: false },
     text: { type: String, default: '' },
-    hasTransition: { type: Boolean, default: true }
+    hasTransition: { type: Boolean, default: true },
+    transitionName: { type: String, default: 'w-scale' }
   },
 
   setup(props, { slots }) {
@@ -51,7 +50,7 @@ export default defineComponent({
         [[vShow, props.show]]
       )
       if (props.hasTransition) {
-        comp = <Transition name="w-scale">{comp}</Transition>
+        comp = <Transition name={props.transitionName}>{comp}</Transition>
       }
       return comp
     }

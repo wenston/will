@@ -3,4 +3,5 @@ export interface EmptyComponentProps extends IconComponentProps {
   show?: boolean
   text?: string
   hasTransition?: boolean
+  transitionName?: string
 }

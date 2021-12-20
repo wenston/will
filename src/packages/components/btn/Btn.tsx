@@ -28,7 +28,7 @@ export default defineComponent({
     })
 
     return () => {
-      const mainBtn: VNode = h(
+      const mainBtn = h(
         props.tag,
         {
           class: klass.value,

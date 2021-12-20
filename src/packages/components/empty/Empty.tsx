@@ -15,7 +15,8 @@ export default defineComponent({
     },
     show: { type: Boolean, default: false },
     text: { type: String, default: '' },
-    hasTransition: { type: Boolean, default: true }
+    hasTransition: { type: Boolean, default: true },
+    transitionName: { type: String, default: 'w-scale' }
   },
   setup(props, { slots }) {
     const wrapperOptions = computed(() => {
@@ -47,7 +48,7 @@ export default defineComponent({
         [[vShow, props.show]]
       )
       if (props.hasTransition) {
-        comp = <Transition name="w-scale">{comp}</Transition>
+        comp = <Transition name={props.transitionName}>{comp}</Transition>
       }
       return comp
     }

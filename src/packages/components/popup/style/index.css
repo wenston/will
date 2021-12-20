@@ -1,4 +1,5 @@
 .w-popup {
+  --w-popup-header-height: var(--w-size);
   min-width: var(--w-popup-min-width);
   min-height: var(--w-popup-min-height);
   max-height: calc(100% - var(--w-size) * 2);
@@ -6,8 +7,8 @@
   display: flex;
   flex-direction: column;
   & .w-popup-header {
-    height: var(--w-size);
-    line-height: var(--w-line-height);
+    height: var(--w-popup-header-height);
+    line-height: var(--w-popup-header-height);
     padding: 0 var(--w-padding-x);
     display: flex;
     align-items: center;
@@ -33,5 +34,13 @@
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
+  }
+  & .w-popup-loading {
+    position: absolute;
+    top: var(--w-popup-header-height);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--w-fade-white-background-color);
   }
 }

@@ -66,4 +66,7 @@
 
   --w-choose-background: white;
   --w-choose-item-gackground-active: var(--w-color-primary-3);
+
+  --w-fade-white-background-color: rgba(255, 255, 255, 0.7);
+  --w-fade-black-background-color: rgba(0, 0, 0, 0.45);
 }

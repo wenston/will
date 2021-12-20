@@ -1,18 +1,23 @@
-.w-fade-enter-active,
-.w-fade-leave-active {
+.w-fade-white-enter-active,
+.w-fade-white-leave-active {
   transition: var(--w-transition-time) var(--w-cubic-bezier-quick);
   perspective: 1000px;
 }
-.w-fade-leave-active {
+.w-fade-white-leave-active {
   transition: var(--w-transition-time);
   perspective: 1000px;
 }
 
-.w-fade-enter-from,
-.w-fade-leave-to {
-  background-color: rgba(0, 0, 0, 0);
+.w-fade-white-enter-from,
+.w-fade-white-leave-to {
+  background-color: rgba(255, 255, 255, 0) !important;
+  opacity: 0;
 }
-
+.w-fade-white-enter-to,
+.w-fade-white-leave-from {
+  background-color: var(--w-fade-white-background-color) !important;
+  opacity: 1;
+}
 .w-scale-enter-active,
 .w-scale-leave-active {
   transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);

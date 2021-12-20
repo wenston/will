@@ -34,7 +34,7 @@ export default defineComponent({
     manual: { type: Boolean, default: false } //是否手动控制关闭，也就是一直显示
   },
   emits: ['update:show', 'after-enter', 'after-leave', 'close', 'get-uid'],
-  setup(props, { emit, slots, expose }) {
+  setup(props, { emit, slots, attrs, expose }) {
     // const { zIndex: order, add } = useGlobalZIndex()
     const ins = getCurrentInstance()
     const noticeHeight = ref(0)
