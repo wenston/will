@@ -73,7 +73,7 @@ import Loading from 'will-ui/components/loading/index'
 import Btn from 'will-ui/components/btn/index'
 import supplierData from '../../mock-data/supplier'
 const suppliers = ref<{ Id: number; Name: string }[]>([])
-const supplierId = ref<number | string>()
+const supplierId = ref<number | string>(792)
 const supplierId2 = ref<number | string>()
 const supplierId3 = ref<number | string>()
 const showChoose = ref(false)

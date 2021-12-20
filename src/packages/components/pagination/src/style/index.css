@@ -1,0 +1,99 @@
+ol.w-pagination {
+  list-style: none;
+  padding: 0;
+  margin: var(--w-gap) 0;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  &.w-pagination__right {
+    justify-content: flex-end;
+  }
+  &.w-pagination__left {
+    justify-content: flex-start;
+  }
+  &.w-pagination__center {
+    justify-content: center;
+  }
+  & li {
+    flex-shrink: 0;
+    &.w-pagination-total {
+      margin-right: var(--w-gap);
+    }
+    &.w-pagination-sizes {
+      margin: 0 var(--w-gap);
+    }
+    &.w-pagination-pager {
+      display: flex;
+
+      & > span {
+        background-color: white;
+        border: 1px solid var(--w-color-border);
+        margin-left: -1px;
+        width: calc(2px + var(--w-size));
+        height: var(--w-size);
+        text-align: center;
+        line-height: calc(var(--w-size) - 2px);
+        color: var(--w-color-font-3);
+        transition: var(--w-transition-time);
+        cursor: pointer;
+        flex-shrink: 0;
+
+        &:first-child {
+          border-radius: var(--w-radius) 0 0 var(--w-radius);
+        }
+        &:last-child {
+          border-radius: 0 var(--w-radius) var(--w-radius) 0;
+        }
+        &.w-pagination--disabled {
+          cursor: not-allowed;
+        }
+        &.w-pagination-prev,
+        &.w-pagination-next {
+          position: relative;
+          &:after {
+            content: '';
+            position: absolute;
+            border-width: 1px;
+            border-style: solid;
+            border-color: var(--w-color-font-4) transparent transparent
+              var(--w-color-font-4);
+            transform: rotate(-45deg);
+            width: 6px;
+            height: 6px;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+          }
+        }
+        &.w-pagination-next {
+          &:after {
+            transform: rotate(135deg);
+            left: 11px;
+          }
+        }
+        &:hover {
+          &:not(.w-pagination--disabled),
+          &:not(.w-pagination--active) {
+            color: var(--w-color-primary);
+            font-weight: bold;
+            box-shadow: var(--w-box-shadow);
+          }
+        }
+        &.w-pagination--active {
+          border-color: var(--w-color-primary);
+          position: relative;
+          z-index: 1;
+          color: white;
+          font-weight: bold;
+          background-color: var(--w-color-primary);
+          &:hover {
+            color: white;
+          }
+        }
+      }
+    }
+    &.w-pagination-go {
+      margin-left: var(--w-gap);
+    }
+  }
+}

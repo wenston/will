@@ -130,6 +130,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'pagination',
+        name: 'Pagination',
+        component: () => import('../views/will/Pagination.vue'),
+        meta: {
+          title: '分页 Pagination'
+        }
+      },
+      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),
