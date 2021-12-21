@@ -3,8 +3,6 @@ import Layer, { LayerProps } from '../layer/index'
 import Virtual from '../virtual/index'
 import Close from '../close/index'
 import Arrow from '../arrow/index'
-import Loading from '../loading/index'
-import Empty from '../empty/index'
 import Fallback from '../fallback/index'
 import {
   SetCurrentValueKey,
@@ -34,8 +32,9 @@ const props = {
   lazyLoad: { type: Function }
 }
 export default defineComponent({
+  name: 'Choose',
   inheritAttrs: false,
-  components: { Layer, Virtual, Close, Arrow },
+  components: { Layer, Virtual, Close, Arrow, Fallback },
   props,
   emit: ['update:show', 'update:modelValue', 'change'],
   setup(props, ctx) {

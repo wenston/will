@@ -186,7 +186,7 @@ export default defineComponent({
               }
             }
             const itemProps = {
-              key: s,
+              key: label,
               label,
               value: s
             }

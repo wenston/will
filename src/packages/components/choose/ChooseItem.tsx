@@ -4,7 +4,9 @@ import {
   defineComponent,
   inject,
   computed,
-  watchEffect
+  watchEffect,
+  onRenderTracked,
+  onRenderTriggered
 } from 'vue'
 import {
   CurrentValueKey,
@@ -44,6 +46,9 @@ export default defineComponent({
       if (isActive.value) {
         setCurrentLabel(props.label)
       }
+    })
+    onRenderTracked(({ target, key }) => {
+      // console.log(target, key)
     })
     return () => {
       const options: Record<string, any> = {

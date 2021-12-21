@@ -18,8 +18,7 @@ import {
   renderSlot,
   normalizeClass,
   readonly,
-  capitalize,
-  nextTick
+  capitalize
 } from 'vue'
 import type {
   TriggerType,
