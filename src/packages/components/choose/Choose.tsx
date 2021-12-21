@@ -53,7 +53,7 @@ export default defineComponent({
     })
     const layerContentStyle = computed(() => {
       if (triggerRect.value) {
-        return { width: triggerRect.value.width + 'px' }
+        return { minWidth: triggerRect.value.width + 'px' }
       }
       return {}
     })

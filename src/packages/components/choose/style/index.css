@@ -44,13 +44,15 @@
 .w-choose-layer {
   background-color: var(--w-choose-background);
   max-height: 360px;
-  overflow: auto;
+  overflow: hidden auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   & .w-choose-fallback {
     min-height: 70px;
     overflow: hidden;
   }
 }
-
+/* 给以下class加overflow:hidden会导致抖动！ */
 .w-choose-item {
   height: var(--w-size);
   line-height: var(--w-size);
@@ -58,10 +60,6 @@
   color: var(--w-color-font-2);
   cursor: pointer;
   display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  width: 100%;
-  text-overflow: ellipsis;
   transition: var(--w-transition-time);
   &.w-choose-item-disabled {
     color: var(--w-color-disabled);
