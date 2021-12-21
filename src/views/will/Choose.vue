@@ -5,7 +5,7 @@
       @change="onChange"
       clearable>
 
-      <Choose.item v-for="item in supplierData"
+      <Choose.item v-for="item in supplierData.slice(1,6)"
         :key="item.Id"
         :label="item.Name"
         :value="item.Id"
@@ -55,7 +55,7 @@
       clearable
       block>
 
-      <Choose.item v-for="item in supplierData"
+      <Choose.item v-for="item in supplierData.slice(1,6)"
         :key="item.Id"
         :label="item.Name"
         :value="item.Id"
