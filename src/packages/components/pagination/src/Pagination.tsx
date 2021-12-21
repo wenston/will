@@ -2,10 +2,11 @@ import type { PropType } from 'vue'
 import { defineComponent, ref, computed, watch } from 'vue'
 // import Num from '../../number'
 import { Choose } from '../../choose/index'
+import Tooltip from '../../tooltip/index'
 import Btn from '../../btn'
 export default defineComponent({
   name: 'Pagination',
-  components: { Choose, Btn },
+  components: { Choose, Btn, Tooltip },
   props: {
     total: {
       type: Number,
@@ -77,9 +78,9 @@ export default defineComponent({
     })
     const chooseProps = computed(() => {
       const o: any = {
-        style: { width: '8em' },
         modelValue: ps.value,
         clearable: false,
+        mode: 'text',
         'onUpdate:modelValue': (size: number) => {
           ps.value = size
           pi.value = 1
@@ -196,7 +197,7 @@ export default defineComponent({
       }
       let goProps: any = {
         onClick: toJump,
-        mode: 'line'
+        mode: 'text'
       }
       let goSlots = {
         default: () => 'Go'
@@ -233,21 +234,37 @@ export default defineComponent({
           )}
           <li class="w-pagination-pager" style={{ order: setOrder('pager') }}>
             {showItem('prev') && (
-              <span
-                class={[
-                  'w-pagination-prev',
-                  { ['w-pagination--disabled']: pi.value === 1 }
-                ]}
-                onClick={toPrev}></span>
+              <Tooltip
+                v-slots={{
+                  trigger: () => (
+                    <span
+                      class={[
+                        'w-pagination-prev',
+                        { ['w-pagination--disabled']: pi.value === 1 }
+                      ]}
+                      onClick={toPrev}></span>
+                  ),
+                  default: () => '上一页'
+                }}></Tooltip>
             )}
             {showItem('pager') && all_pages}
             {showItem('next') && (
-              <span
-                class={[
-                  'w-pagination-next',
-                  { ['w-pagination--disabled']: pi.value === totalPages.value }
-                ]}
-                onClick={toNext}></span>
+              <Tooltip
+                v-slots={{
+                  trigger: () => (
+                    <span
+                      class={[
+                        'w-pagination-next',
+                        {
+                          ['w-pagination--disabled']:
+                            pi.value === totalPages.value
+                        }
+                      ]}
+                      onClick={toNext}></span>
+                  ),
+                  default: () => '下一页'
+                }}
+              />
             )}
           </li>
           {showItem('sizes') && (

@@ -20,16 +20,16 @@ ol.w-pagination {
       margin-right: var(--w-gap);
     }
     &.w-pagination-sizes {
-      margin: 0 var(--w-gap);
+      /* margin: 0 var(--w-gap); */
     }
     &.w-pagination-pager {
       display: flex;
 
       & > span {
-        background-color: white;
-        border: 1px solid var(--w-color-border);
-        margin-left: -1px;
-        width: calc(2px + var(--w-size));
+        /* background-color: white; */
+        /* border: 1px solid var(--w-color-border); */
+        /* margin-left: -1px; */
+        width: var(--w-size);
         height: var(--w-size);
         text-align: center;
         line-height: calc(var(--w-size) - 2px);
@@ -37,6 +37,7 @@ ol.w-pagination {
         transition: var(--w-transition-time);
         cursor: pointer;
         flex-shrink: 0;
+        border-radius: var(--w-radius);
 
         &:first-child {
           border-radius: var(--w-radius) 0 0 var(--w-radius);
@@ -76,19 +77,17 @@ ol.w-pagination {
           &:not(.w-pagination--active) {
             color: var(--w-color-primary);
             font-weight: bold;
-            box-shadow: var(--w-box-shadow);
+            transform: scale(1.2);
           }
         }
         &.w-pagination--active {
-          border-color: var(--w-color-primary);
+          color: var(--w-color-primary);
           position: relative;
           z-index: 1;
-          color: white;
           font-weight: bold;
-          background-color: var(--w-color-primary);
-          &:hover {
-            color: white;
-          }
+          text-shadow: 0 4px 6px var(--w-color-primary), 0 -1px white,
+            1px -2px 4px var(--w-color-primary);
+          transform: scale(1.2);
         }
       }
     }

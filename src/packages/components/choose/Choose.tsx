@@ -29,6 +29,7 @@ const props = {
   block: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   modelValue: { type: [Number, String], default: undefined },
+  mode: { type: String, default: 'default' },
   lazyLoad: { type: Function }
 }
 export default defineComponent({
@@ -112,6 +113,7 @@ export default defineComponent({
       const triggerOptions = {
         class: [
           'w-choose-trigger',
+          [`w-choose-mode-${props.mode}`],
           {
             'w-choose-spread': visible.value,
             'w-choose-disabled': props.disabled,

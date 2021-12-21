@@ -1,11 +1,7 @@
 .w-choose-trigger {
   position: relative;
-  width: var(--w-form-item-width);
   display: inline-flex;
-  background-color: var(--w-choose-background);
   align-items: center;
-  border-radius: var(--w-radius);
-  border: 1px solid var(--w-color-border);
   height: var(--w-size);
   cursor: pointer;
   user-select: none;
@@ -13,10 +9,6 @@
   outline: 0;
   transition: var(--w-transition-time);
 
-  &.w-choose-block {
-    display: flex;
-    width: auto;
-  }
   &.w-choose-disabled {
     cursor: not-allowed;
   }
@@ -38,6 +30,21 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: var(--w-font-size);
+  }
+  &.w-choose-mode-default {
+    background-color: var(--w-choose-background);
+    border-radius: var(--w-radius);
+    border: 1px solid var(--w-color-border);
+    width: var(--w-form-item-width);
+    &.w-choose-block {
+      display: flex;
+      width: auto;
+    }
+  }
+  &.w-choose-mode-text {
+    & .w-choose-text {
+      width: auto;
+    }
   }
 }
 
