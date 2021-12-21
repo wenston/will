@@ -22,8 +22,7 @@ export default defineComponent({
       type: String,
       default: 'total,prev,pager,next,sizes,jumper'
     },
-    sizesPlacement: { type: String, default: 'bottom-start' },
-    hideWhenNoData: Boolean
+    hideWhenNoData: { type: Boolean, default: true }
   },
   emits: [
     'update:pageIndex',
@@ -221,22 +220,9 @@ export default defineComponent({
         return <span {...ps}>{p}</span>
       })
 
-      if (props.total == 0) {
+      if (props.total == 0 && props.hideWhenNoData) {
         return null
       }
-
-      return (
-        <Choose {...chooseProps.value}>
-          {props.sizes.map((s: number) => {
-            const label = s + '条/页'
-            return (
-              <Choose.item value={s} label={label}>
-                {label}
-              </Choose.item>
-            )
-          })}
-        </Choose>
-      )
 
       return (
         <ol class={['w-pagination', `w-pagination__${props.align}`]}>

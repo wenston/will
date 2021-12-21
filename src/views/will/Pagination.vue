@@ -1,6 +1,6 @@
 <template>
   <h1>{{currentRoute.meta.title}}</h1>
-  <div>
+  <div style="margin-top: calc(100vh - 100px)">
     <Pagination :total="4210"
       v-model:page-index="pager.pageIndex"
       v-model:page-size="pager.pageSize"></Pagination>

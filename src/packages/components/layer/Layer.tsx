@@ -18,7 +18,8 @@ import {
   renderSlot,
   normalizeClass,
   readonly,
-  capitalize
+  capitalize,
+  nextTick
 } from 'vue'
 import type {
   TriggerType,
@@ -326,7 +327,6 @@ export default defineComponent({
           name={props.transitionName}
           onBeforeEnter={(el) => {
             getDefaultRootSize(el)
-
             toGetDefaultPlacement()
           }}
           onAfterEnter={(el) => {

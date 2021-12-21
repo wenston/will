@@ -48,10 +48,9 @@ export default defineComponent({
       if (props.disabled) {
         return false
       }
-      return props.modelValue !== undefined
-    })
-    const showArrowBtn = computed(() => {
-      return props.modelValue === undefined
+      if (props.clearable) {
+        return props.modelValue !== undefined
+      }
     })
     const layerContentStyle = computed(() => {
       if (triggerRect.value) {
@@ -145,8 +144,11 @@ export default defineComponent({
       return (
         <div {...triggerOptions}>
           <span class="w-choose-text">{txt.value}</span>
-          {showArrowBtn.value && <Arrow {...arrowOptions} />}
-          {showCloseBtn.value && <Close {...closeOptions} />}
+          {showCloseBtn.value ? (
+            <Close {...closeOptions} />
+          ) : (
+            <Arrow {...arrowOptions} />
+          )}
         </div>
       )
     }
