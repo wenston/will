@@ -1,6 +1,14 @@
-import { createVNode, defineComponent, inject, computed } from 'vue'
+import {
+  // ref,
+  createVNode,
+  defineComponent,
+  inject,
+  computed,
+  watchEffect
+} from 'vue'
 import {
   CurrentValueKey,
+  // CurrentLabelKey,
   SetCurrentValueKey,
   SetCurrentLabelKey,
   ToCloseKey
@@ -17,6 +25,7 @@ export default defineComponent({
       CurrentValueKey,
       computed(() => undefined)
     )
+    // const currentLabel = inject(CurrentLabelKey, ref(undefined))
     const setCurrentValue = inject(SetCurrentValueKey, () => {
       throw new Error('setCurrentValue出现问题，请检查')
     })
@@ -30,6 +39,11 @@ export default defineComponent({
       return (
         currentValue.value !== undefined && props.value === currentValue.value
       )
+    })
+    watchEffect(() => {
+      if (isActive.value) {
+        setCurrentLabel(props.label)
+      }
     })
     return () => {
       const options: Record<string, any> = {

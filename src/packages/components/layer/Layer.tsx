@@ -54,6 +54,7 @@ const eventEnter = 'mouseenter'
 const eventLeave = 'mouseleave'
 //renderSlot和slots[插槽名]两种方式得出的插槽内容的格式不一样！
 export const LayerProps = {
+  bind: { type: String as PropType<'v-if' | 'v-show'>, default: 'v-if' },
   //是否显示
   show: { type: Boolean, default: false },
   //弹出层相对于“trigger”的位置
@@ -300,6 +301,20 @@ export default defineComponent({
       }
     )
 
+    function renderDefaultContent() {
+      if (props.bind === 'v-show') {
+        return (
+          <div v-show={visible.value} {...defaultOptions.value}>
+            {vnode_default.value}
+          </div>
+        )
+      } else {
+        return visible.value ? (
+          <div {...defaultOptions.value}>{vnode_default.value}</div>
+        ) : null
+      }
+    }
+
     return () => {
       let trigger_content =
         vnode_trigger.value === undefined
@@ -318,9 +333,7 @@ export default defineComponent({
             justNow.value = false
             emit('after-enter', el)
           }}>
-          {visible.value ? (
-            <div {...defaultOptions.value}>{vnode_default.value}</div>
-          ) : null}
+          {renderDefaultContent()}
         </Transition>
       )
 

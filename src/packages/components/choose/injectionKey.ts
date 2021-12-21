@@ -1,6 +1,6 @@
-import type { InjectionKey, ComputedRef } from 'vue'
+import type { InjectionKey, ComputedRef, Ref } from 'vue'
 type SetValue = (v: number | string | undefined) => void
-export const CurrentLabelKey: InjectionKey<number | string | undefined> =
+export const CurrentLabelKey: InjectionKey<Ref<number | string | undefined>> =
   Symbol()
 export const CurrentValueKey: InjectionKey<
   ComputedRef<number | string | undefined>

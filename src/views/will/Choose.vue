@@ -17,13 +17,14 @@
     <Choose v-model="supplierId3"
       @change="onChange"
       :lazy-load="toLoad"
+      bind="v-if"
       clearable>
       <template #default="{data}">
         <Choose.item v-for="item in data"
           :key="item.Id"
           :label="item.Name"
           :value="item.Id"
-          :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
+          :disabled="item.Name.indexOf('米')>-1">{{item.Name}}</Choose.item>
       </template>
       <!-- <template #loading>
 
@@ -73,7 +74,7 @@ import Loading from 'will-ui/components/loading/index'
 import Btn from 'will-ui/components/btn/index'
 import supplierData from '../../mock-data/supplier'
 const suppliers = ref<{ Id: number; Name: string }[]>([])
-const supplierId = ref<number | string>(792)
+const supplierId = ref<number | string>(791)
 const supplierId2 = ref<number | string>()
 const supplierId3 = ref<number | string>()
 const showChoose = ref(false)
@@ -88,6 +89,11 @@ async function toLoad() {
     }, 1000)
   })
 }
+onMounted(() => {
+  setTimeout(() => {
+    supplierId2.value = 34
+  }, 200)
+})
 </script>
 
 <style lang="postcss" module="css">

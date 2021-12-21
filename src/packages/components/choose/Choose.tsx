@@ -10,12 +10,15 @@ import {
   SetCurrentValueKey,
   SetCurrentLabelKey,
   CurrentValueKey,
+  CurrentLabelKey,
   ToCloseKey
 } from './injectionKey'
 import { RectType } from '../../config/types'
 import { isArray } from '../../util'
 const props = {
   ...LayerProps,
+  //v-show时，Choose.item组件已经创建好了；v-if时，Choose.item是在展开时才初始化的
+  bind: { type: LayerProps.bind.type, default: 'v-show' },
   placement: { type: LayerProps.placement.type, default: 'bottom-start' },
   hasArrow: { type: LayerProps.hasArrow.type, default: false },
   gap: { type: LayerProps.gap.type, default: 2 },
@@ -58,6 +61,7 @@ export default defineComponent({
     })
     const layerOptions = computed(() => {
       return {
+        bind: props.bind,
         placement: props.placement,
         hasArrow: props.hasArrow,
         gap: props.gap,
@@ -90,6 +94,7 @@ export default defineComponent({
       CurrentValueKey,
       computed(() => props.modelValue)
     )
+    provide(CurrentLabelKey, readonly(txt))
     provide(ToCloseKey, () => {
       visible.value = false
     })
