@@ -12,8 +12,6 @@
   --w-color-font: var(--w-color-font-1);
 
   --w-color-border: #e1e1e1;
-  --w-color-border-hover: var(--w-color-primary-3);
-  --w-color-border-active: var(--w-color-primary-3);
   --w-font-size-1: 12px;
   --w-font-size-2: 14px;
   --w-font-size-3: 16px;
@@ -63,6 +61,8 @@
   --w-notice-cubic-bezier: cubic-bezier(0.01, 0.7, 0.1, 1.2);
 
   --w-form-item-width: 180px;
+  --w-form-item-border-color: var(--w-color-border);
+  --w-form-item-border-color-focus: var(--w-color-primary-3);
 
   --w-choose-background: white;
   --w-choose-item-gackground-active: var(--w-color-primary-3);

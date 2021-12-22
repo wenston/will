@@ -10,8 +10,9 @@ export const isArray = (val: unknown): val is any[] => Array.isArray(val)
 export const isSet = (val: unknown): val is Set<any> => val instanceof Set
 export const isMap = (val: unknown): val is Map<any, any> => val instanceof Map
 export const isInvalidValue = (v: any) =>
-  v === '' || v === undefined || v === null || isNaN(v)
+  v === '' || v === undefined || v === null
 
+export const isValidValue = (v: any) => !isInvalidValue(v)
 //将树形结构的数据扁平化，支持条件筛选
 //如何用ts更规范的定义此函数？
 export function plattenTreeData<T extends Record<any, any>>(

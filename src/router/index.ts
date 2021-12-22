@@ -138,6 +138,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'write',
+        name: 'Write',
+        component: () => import('../views/will/Write.vue'),
+        meta: {
+          title: '输入框 Write'
+        }
+      },
+      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),

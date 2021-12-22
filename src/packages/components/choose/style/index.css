@@ -18,10 +18,6 @@
   & .w-choose-arrow-btn {
     pointer-events: none;
   }
-  &:hover,
-  &.w-choose-spread {
-    border-color: var(--w-color-border-hover);
-  }
   & .w-choose-text {
     color: var(--w-color-font-2);
     flex: 1;
@@ -34,11 +30,15 @@
   &.w-choose-mode-default {
     background-color: var(--w-choose-background);
     border-radius: var(--w-radius);
-    border: 1px solid var(--w-color-border);
+    border: 1px solid var(--w-form-item-border-color);
     width: var(--w-form-item-width);
     &.w-choose-block {
       display: flex;
       width: auto;
+    }
+    &:hover,
+    &.w-choose-spread {
+      border-color: var(--w-form-item-border-color-focus);
     }
   }
   &.w-choose-mode-text {
