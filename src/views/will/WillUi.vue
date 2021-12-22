@@ -27,25 +27,7 @@ const { currentRoute } = useRouter()
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: var(--w-color-bg);
-  background-image: radial-gradient(
-      circle at 20% 85%,
-      rgb(255, 129, 129) 1%,
-      transparent 20%
-    ),
-    radial-gradient(
-      circle at 95% 95%,
-      rgb(255, 223, 196) 8%,
-      rgb(255, 223, 196) 10%,
-      transparent 10%
-    ),
-    radial-gradient(
-      circle at 1% 35%,
-      rgb(167, 255, 159) 5%,
-      rgb(167, 255, 159) 6%,
-      transparent 6%
-    ),
-    radial-gradient(circle at 25% 90%, rgb(255, 253, 227) 5%, transparent 10%);
+  background-color: white;
 
   background-blend-mode: multiply;
 

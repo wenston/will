@@ -235,6 +235,7 @@ export default defineComponent({
           <li class="w-pagination-pager" style={{ order: setOrder('pager') }}>
             {showItem('prev') && (
               <Tooltip
+                placement="top"
                 v-slots={{
                   trigger: () => (
                     <span
@@ -250,6 +251,7 @@ export default defineComponent({
             {showItem('pager') && all_pages}
             {showItem('next') && (
               <Tooltip
+                placement="top"
                 v-slots={{
                   trigger: () => (
                     <span

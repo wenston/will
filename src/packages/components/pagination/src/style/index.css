@@ -16,9 +16,9 @@ ol.w-pagination {
   }
   & li {
     flex-shrink: 0;
-    &.w-pagination-total {
+    /* &.w-pagination-total {
       margin-right: var(--w-gap);
-    }
+    } */
     &.w-pagination-sizes {
       /* margin: 0 var(--w-gap); */
     }
@@ -32,8 +32,8 @@ ol.w-pagination {
         width: var(--w-size);
         height: var(--w-size);
         text-align: center;
-        line-height: calc(var(--w-size) - 2px);
-        color: var(--w-color-font-3);
+        line-height: var(--w-size);
+        color: var(--w-color-font-2);
         transition: var(--w-transition-time);
         cursor: pointer;
         flex-shrink: 0;
@@ -56,8 +56,8 @@ ol.w-pagination {
             position: absolute;
             border-width: 1px;
             border-style: solid;
-            border-color: var(--w-color-font-4) transparent transparent
-              var(--w-color-font-4);
+            border-color: var(--w-color-font-2) transparent transparent
+              var(--w-color-font-2);
             transform: rotate(-45deg);
             width: 6px;
             height: 6px;
@@ -85,8 +85,8 @@ ol.w-pagination {
           position: relative;
           z-index: 1;
           font-weight: bold;
-          text-shadow: 0 4px 6px var(--w-color-primary), 0 -1px white,
-            1px -2px 4px var(--w-color-primary);
+          text-shadow: 3px 5px 6px var(--w-color-primary), 0 -1px white,
+            1px -2px 5px var(--w-color-primary);
           transform: scale(1.2);
         }
       }
