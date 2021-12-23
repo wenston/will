@@ -146,6 +146,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'number',
+        name: 'Number',
+        component: () => import('../views/will/Number.vue'),
+        meta: {
+          title: '数值输入框 Number'
+        }
+      },
+      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),

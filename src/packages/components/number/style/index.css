@@ -1,0 +1,29 @@
+.w-number {
+  padding-right: 0 !important;
+  overflow: hidden;
+}
+.w-number-btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border-left: 1px solid var(--w-form-item-border-color);
+  & .w-number-btn {
+    flex: 1;
+    height: 0;
+    color: var(--w-color-font-3);
+    cursor: pointer;
+    background-color: var(--w-color-bg);
+    transition: var(--w-transition-time);
+    &:first-child {
+      box-shadow: 0 -1px var(--w-color-font-4);
+    }
+    &:hover {
+      color: var(--w-color-primary);
+      background-color: var(--w-color-primary-5);
+      flex: 2;
+    }
+    &.w-number-btn-rotate {
+      transform: rotateX(180deg);
+    }
+  }
+}

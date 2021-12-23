@@ -16,10 +16,12 @@ export default defineComponent({
     readonly: Boolean,
     disabled: Boolean,
     maxlength: [String, Number],
-    minlength: [String, Number]
+    width: { type: String },
+    inputClass: { type: [Object, Array, String] }
   },
   setup(props, ctx) {
     const input = ref<HTMLInputElement>()
+    const isZH = ref(false) //是否在输入中文
     const showCloseBtn = computed(() => {
       const v = props.modelValue
       return props.clearable && isValidValue(v)
@@ -31,9 +33,21 @@ export default defineComponent({
         readonly: props.readonly,
         value: props.modelValue,
         maxlength: props.maxlength,
+        onCompositionstart: (e: CompositionEvent) => {
+          isZH.value = true
+        },
         onInput: (e: Event) => {
           const val = (e.target as HTMLInputElement).value
-          ctx.emit('update:modelValue', val)
+          if (!isZH.value) {
+            ctx.emit('update:modelValue', val, input.value)
+          }
+        },
+        onCompositionend: (e: CompositionEvent) => {
+          setTimeout(() => {
+            const val = (e.target as HTMLInputElement).value
+            ctx.emit('update:modelValue', val, input.value)
+            isZH.value = false
+          })
         },
         ...filterListeners(ctx.attrs)
       }
@@ -48,18 +62,22 @@ export default defineComponent({
         <div {...outerOptions.value}>
           {ctx.slots.before?.()}
           <div
-            class={{
-              'w-write-wrapper': true,
-              'w-write-input-block': props.block
-            }}>
+            style={{ width: props.width }}
+            class={[
+              'w-write-wrapper',
+              normalizeClass(props.inputClass),
+              {
+                'w-write-input-block': props.block
+              }
+            ]}>
             {ctx.slots.prepend?.()}
             <input {...inputOptions.value} />
             {showCloseBtn.value && (
               <Close
                 name="w-icon-close-fill"
                 onClick={(e: MouseEvent) => {
-                  ctx.emit('update:modelValue', undefined)
                   const options = { input: input.value }
+                  ctx.emit('update:modelValue', undefined, input.value)
                   ctx.emit('clear', options)
                   e.stopPropagation()
                 }}
