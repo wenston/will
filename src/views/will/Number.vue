@@ -19,7 +19,8 @@
     </Number>
   </p>
   <p>
-    <Number block>
+    <Number disabled
+      block>
       <template #before>
         <span>姓名：</span>
       </template>
@@ -45,7 +46,7 @@ import Number from 'will-ui/components/number/index'
 import Btn from 'will-ui/components/btn/index'
 import Icon from 'will-ui/components/icon/index'
 const { currentRoute } = useRouter()
-const txt1 = ref('')
+const txt1 = ref<number | string>(3)
 function onFocus() {
   console.log('focus了')
 }

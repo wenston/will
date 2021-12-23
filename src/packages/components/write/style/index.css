@@ -26,6 +26,13 @@
     &.w-write-input-block {
       flex: 1;
     }
+    &.w-write-input-disabled {
+      background-color: var(--w-color-disabled);
+      & .w-write-input {
+        background-color: transparent;
+        cursor: not-allowed;
+      }
+    }
   }
 
   &:hover {

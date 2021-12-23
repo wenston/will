@@ -1,14 +1,14 @@
-import { defineComponent, ref, computed, readonly, normalizeClass } from 'vue'
+import { defineComponent, ref, computed, readonly, watch } from 'vue'
 import Write from '../write/index'
 import Tooltip from '../layer/index'
 import Icon from '../icon/index'
+import useCount from '../../use/useCount'
 
 export default defineComponent({
   inheritAttrs: false,
   components: { Write, Tooltip, Icon },
   emits: {
-    'update:modelValue': null,
-    clear: null
+    'update:modelValue': null
   },
   props: {
     modelValue: { type: [Number, String] },
@@ -17,9 +17,13 @@ export default defineComponent({
     disabled: Boolean,
     maxlength: [String, Number],
     max: Number,
-    min: Number
+    min: Number,
+    step: { type: Number, default: 1 }
   },
   setup(props, ctx) {
+    const { add, count, set } = useCount({
+      init: computed(() => Number(props.modelValue) ?? 0)
+    })
     const isZH = ref(false)
     const numberOptions = computed(() => {
       return {
@@ -62,6 +66,10 @@ export default defineComponent({
       }
     })
 
+    function emitValue(v: number | string | undefined) {
+      ctx.emit('update:modelValue', v)
+    }
+
     function toValidate(elem: HTMLInputElement) {
       let v = elem.value
       if (v !== undefined) {
@@ -75,20 +83,55 @@ export default defineComponent({
           }
         }
       }
-      ctx.emit('update:modelValue', v)
-      elem.value = v || ''
+      if (v === '') {
+        emitValue(undefined)
+        elem.value = ''
+      } else {
+        emitValue(v)
+        elem.value = v + ''
+      }
     }
+    function toAdd() {
+      add(props.step)
+      emitValue(count.value)
+    }
+    function toMinus() {
+      add(props.step * -1)
+      emitValue(count.value)
+    }
+
+    watch(
+      () => props.modelValue,
+      (v) => {
+        if (v === undefined || v === '') {
+          set(0)
+        } else {
+          set(Number(v))
+        }
+      }
+    )
 
     return () => {
       const writeSlots = {
         default: () => {
+          const disabledClass = { 'w-number-btn-disabled': props.disabled }
+
+          const addBtnOptions: Record<string, any> = {
+            class: ['w-number-btn w-number-btn-rotate', disabledClass],
+            name: 'w-icon-sort-down'
+          }
+          const minusBtnOptions: Record<string, any> = {
+            class: ['w-number-btn', disabledClass],
+            name: 'w-icon-sort-down'
+          }
+          if (!props.disabled) {
+            addBtnOptions.onClick = toAdd
+            minusBtnOptions.onClick = toMinus
+          }
           return (
             <div class="w-number-btn-wrapper">
-              <Icon
-                class="w-number-btn w-number-btn-rotate"
-                name="w-icon-sort-down"
-              />
-              <Icon class="w-number-btn" name="w-icon-sort-down" />
+              <Icon {...addBtnOptions} />
+              <Icon {...minusBtnOptions} />
             </div>
           )
         }
@@ -98,7 +141,8 @@ export default defineComponent({
   }
 })
 
-//在键盘按下的时候进行初步的验证，拦截掉无效的输入
+//在键盘按下的时候进行初步的验证，拦截掉无效的输入，这种方式拦截不住中文输入法，
+//中文输入的情况，需在compositionend里去规范
 function validOnKeypress(val: string, keyCode: number) {
   let b = false
   //首次按下键盘

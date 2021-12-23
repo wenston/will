@@ -31,6 +31,7 @@ export default defineComponent({
         ref: input,
         class: ['w-write-input'],
         readonly: props.readonly,
+        disabled: props.disabled,
         value: props.modelValue,
         maxlength: props.maxlength,
         onCompositionstart: (e: CompositionEvent) => {
@@ -67,7 +68,8 @@ export default defineComponent({
               'w-write-wrapper',
               normalizeClass(props.inputClass),
               {
-                'w-write-input-block': props.block
+                'w-write-input-block': props.block,
+                'w-write-input-disabled': props.disabled
               }
             ]}>
             {ctx.slots.prepend?.()}

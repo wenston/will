@@ -8,7 +8,7 @@
   --w-color-font-3: #999;
   --w-color-font-4: #ccc;
   --w-color-font-5: #eee;
-  --w-color-disabled: var(--w-color-font-4);
+  --w-color-disabled: var(--w-color-font-5);
   --w-color-font: var(--w-color-font-1);
 
   --w-color-border: #e1e1e1;

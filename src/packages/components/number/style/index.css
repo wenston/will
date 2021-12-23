@@ -17,10 +17,16 @@
     &:first-child {
       box-shadow: 0 -1px var(--w-color-font-4);
     }
+    &.w-number-btn-disabled {
+      cursor: not-allowed;
+      color: var(--w-color-font-4);
+    }
     &:hover {
-      color: var(--w-color-primary);
-      background-color: var(--w-color-primary-5);
-      flex: 2;
+      &:not(.w-number-btn-disabled) {
+        color: var(--w-color-primary);
+        background-color: var(--w-color-primary-5);
+        flex: 2;
+      }
     }
     &.w-number-btn-rotate {
       transform: rotateX(180deg);

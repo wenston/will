@@ -2,6 +2,14 @@ import { unref } from 'vue'
 import type { RectType, PlacementType } from '../config/types'
 import { getBoundingClientRect } from './dom'
 import { getWindowSize, getPageScroll, getPageSize } from './dom'
+//简单解决计算出现的精度问题
+export const resolveAccuracy = (v: number) => Number(v.toFixed(8))
+//计算器，可以使用柯里化！待优化
+export const calculator = {
+  add: (...items: number[]) => {
+    return resolveAccuracy(items.reduce((x, y) => x + y, 0))
+  }
+}
 interface PlacementOptions {
   triggerRect: RectType //触发者的位置大小
   layerSize: { width: number; height: number } //弹出层的宽高
