@@ -3,6 +3,7 @@ import Wrapper from '../base/ItemWrapper.vue'
 import props from './props'
 import css from './index.module.css'
 import Icon from 'will-ui/components/icon/index'
+import Write from 'will-ui/components/write/index'
 export default defineComponent({
   name: 'p-search',
   components: { Wrapper },
@@ -14,7 +15,7 @@ export default defineComponent({
     const containerOptions = computed(() => {
       return {
         uid: props.uid,
-        class: [css['p-search'], ' w-cursor-pointer'],
+        class: [css['p-search']],
         style: {
           background: props.background
         }

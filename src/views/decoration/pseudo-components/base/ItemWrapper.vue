@@ -16,7 +16,7 @@ import {
 } from 'decoration-symbols'
 import Icon from 'will-ui/components/icon/index'
 import Close from 'will-ui/components/close/index'
-import Notice from 'will-ui/components/notice/index'
+import Confirm from 'will-ui/components/confirm/index'
 import Tooltip from 'will-ui/components/tooltip/index'
 import Btn from 'will-ui/components/btn/index'
 
@@ -58,27 +58,16 @@ export default defineComponent({
     })
 
     function beforeDelete() {
-      deleteComponent(props.uid)
-      Notice.open({
-        placement: 'bottom',
+      Confirm.open({
         content: (close: () => void) => {
           return createVNode('p', null, [
-            createVNode('div', { style: { padding: '20px' } }, [
-              '你将要删除这个组件了！'
-            ]),
-            createVNode(
-              'p',
-              { style: { padding: '20px', maxWidth: '200px' } },
-              '未来需要用一个confirm组件来替代此组件，用以获取用户是确认还是取消'
-            ),
-            createVNode(
-              Btn,
-              { mode: 'line', type: 'primary', onClick: close },
-              {
-                default: () => '好的，我知道了'
-              }
-            )
+            createVNode('div', { style: { padding: '10px' } }, [
+              '你将要删除这个组件了，删除后不可恢复！'
+            ])
           ])
+        },
+        ok: () => {
+          deleteComponent(props.uid)
         }
       })
     }

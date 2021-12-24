@@ -11,7 +11,10 @@ import props from './props'
 import css from './index.module.css'
 import Icon from 'will-ui/components/icon/index'
 import Layer from 'will-ui/components/layer/index'
+import { Choose } from 'will-ui/components/choose/index'
+import Write from 'will-ui/components/write/index'
 export default defineComponent({
+  components: { Choose, Write },
   name: 'p-search-options',
   props,
   setup(props, ctx) {
@@ -21,18 +24,15 @@ export default defineComponent({
     })
     const containerOptions = computed(() => {
       return {
-        class: [css['p-search']]
+        class: []
       }
     })
     const inputOptions = computed(() => {
       return {
-        value: props.placeholder,
-        style: {
-          width: '100%'
-        },
-        onInput: (e: Event) => {
-          const val = (e.target as HTMLInputElement).value
-          updateOptions({ key: 'placeholder', val })
+        modelValue: props.placeholder,
+        block: true,
+        'onUpdate:modelValue': (v: string) => {
+          updateOptions({ key: 'placeholder', val: v })
         }
       }
     })
@@ -67,9 +67,8 @@ export default defineComponent({
             <h3>搜索组件</h3>
           </p>
           <p>搜索框内文本描述</p>
-          <div style="width:100%;">
-            <input {...inputOptions.value} />
-          </div>
+
+          <Write {...inputOptions.value} />
           <p>图标选择</p>
           <Icon name={props.icon} />
           <Layer
