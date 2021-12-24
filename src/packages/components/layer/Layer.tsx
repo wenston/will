@@ -57,6 +57,7 @@ export const LayerProps = {
   bind: { type: String as PropType<'v-if' | 'v-show'>, default: 'v-if' },
   //是否显示
   show: { type: Boolean, default: false },
+  manual: { type: Boolean, default: false },
   //弹出层相对于“trigger”的位置
   placement: { type: String as PropType<PlacementType>, default: 'bottom' },
   //“触发者trigger”和弹出层之间的间距
@@ -175,7 +176,9 @@ export default defineComponent({
       }
       return options
     })
-    useTriggerType(triggerRoot, props.trigger, handleTriggerEvent)
+    if (!props.manual) {
+      useTriggerType(triggerRoot, props.trigger, handleTriggerEvent)
+    }
 
     useEvent(Win, 'scroll', handleParentScroll)
     useEvent(Win, 'resize', handleParentScroll)

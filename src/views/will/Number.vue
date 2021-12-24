@@ -2,6 +2,8 @@
   <h1>{{currentRoute.meta.title}}</h1>
   <p>
     <Number :class="css.number"
+      :max="10"
+      :min="2"
       @clear="onClear"
       clearable
       v-model="txt1"></Number>

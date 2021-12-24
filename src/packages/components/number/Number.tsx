@@ -36,6 +36,7 @@ export default defineComponent({
           v: number | string | undefined,
           elem: HTMLInputElement
         ) => {
+          console.log(elem)
           setTimeout(() => {
             toValidate(elem)
           })
@@ -87,17 +88,30 @@ export default defineComponent({
         emitValue(undefined)
         elem.value = ''
       } else {
-        emitValue(v)
-        elem.value = v + ''
+        const _v = isOutofRange(Number(v))
+        emitValue(_v)
+        elem.value = _v + ''
       }
     }
     function toAdd() {
       add(props.step)
-      emitValue(count.value)
+      emitValue(isOutofRange(count.value))
     }
     function toMinus() {
       add(props.step * -1)
-      emitValue(count.value)
+
+      emitValue(isOutofRange(count.value))
+    }
+    function isOutofRange(v: number) {
+      if (props.max !== undefined && v > props.max) {
+        set(props.max)
+        return props.max
+      }
+      if (props.min !== undefined && v < props.min) {
+        set(props.min)
+        return props.min
+      }
+      return v
     }
 
     watch(

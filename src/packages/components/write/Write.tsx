@@ -1,10 +1,11 @@
 import { defineComponent, ref, computed, readonly, normalizeClass } from 'vue'
 import { filterListeners, isValidValue } from '../../util'
 import Close from '../close/index'
+import Layer from '../layer/index'
 
 export default defineComponent({
   inheritAttrs: false,
-  components: { Close },
+  components: { Close, Layer },
   emits: {
     'update:modelValue': null,
     clear: null
@@ -17,7 +18,16 @@ export default defineComponent({
     disabled: Boolean,
     maxlength: [String, Number],
     width: { type: String },
-    inputClass: { type: [Object, Array, String] }
+    inputClass: { type: [Object, Array, String] },
+    //验证，未实现
+    validate: {
+      type: Object,
+      default: () => ({
+        when: 'blur', //验证时机
+        condition: '',
+        invalidTip: ''
+      })
+    }
   },
   setup(props, ctx) {
     const input = ref<HTMLInputElement>()
@@ -58,36 +68,52 @@ export default defineComponent({
         class: ['w-write', normalizeClass(ctx.attrs.class)]
       }
     })
+    const layerOptions = computed(() => {
+      return {
+        manual: true
+      }
+    })
     return () => {
+      const inputEl = <input {...inputOptions.value} />
+      const inputWithLayer = (
+        <Layer
+          {...layerOptions.value}
+          v-slots={{
+            trigger: () => (
+              <div
+                style={{ width: props.width }}
+                class={[
+                  'w-write-wrapper',
+                  normalizeClass(props.inputClass),
+                  {
+                    'w-write-input-block': props.block,
+                    'w-write-input-disabled': props.disabled
+                  }
+                ]}>
+                {ctx.slots.prepend?.()}
+                {inputEl}
+                {showCloseBtn.value && (
+                  <Close
+                    name="w-icon-close-fill"
+                    onClick={(e: MouseEvent) => {
+                      const options = { input: input.value }
+                      ctx.emit('update:modelValue', undefined, input.value)
+                      ctx.emit('clear', options)
+                      e.stopPropagation()
+                    }}
+                  />
+                )}
+                {ctx.slots.default?.()}
+              </div>
+            ),
+            default: () => '输入无效'
+          }}
+        />
+      )
       return (
         <div {...outerOptions.value}>
           {ctx.slots.before?.()}
-          <div
-            style={{ width: props.width }}
-            class={[
-              'w-write-wrapper',
-              normalizeClass(props.inputClass),
-              {
-                'w-write-input-block': props.block,
-                'w-write-input-disabled': props.disabled
-              }
-            ]}>
-            {ctx.slots.prepend?.()}
-            <input {...inputOptions.value} />
-            {showCloseBtn.value && (
-              <Close
-                name="w-icon-close-fill"
-                onClick={(e: MouseEvent) => {
-                  const options = { input: input.value }
-                  ctx.emit('update:modelValue', undefined, input.value)
-                  ctx.emit('clear', options)
-                  e.stopPropagation()
-                }}
-              />
-            )}
-            {ctx.slots.default?.()}
-          </div>
-
+          {inputWithLayer}
           {ctx.slots.after?.()}
         </div>
       )
