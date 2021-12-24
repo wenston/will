@@ -1,4 +1,14 @@
-import { ref, watch, computed, defineComponent, provide, readonly } from 'vue'
+import {
+  ref,
+  watch,
+  computed,
+  defineComponent,
+  provide,
+  readonly,
+  renderSlot,
+  reactive,
+  toRefs
+} from 'vue'
 import Layer, { LayerProps } from '../layer/index'
 import Virtual from '../virtual/index'
 import Close from '../close/index'
@@ -9,10 +19,12 @@ import {
   SetCurrentLabelKey,
   CurrentValueKey,
   CurrentLabelKey,
-  ToCloseKey
+  ToCloseKey,
+  ChooseLayerSizeKey
 } from './injectionKey'
 import { RectType } from '../../config/types'
 import { isArray } from '../../util'
+import number from '../number'
 const props = {
   ...LayerProps,
   //v-show时，Choose.item组件已经创建好了；v-if时，Choose.item是在展开时才初始化的
@@ -39,11 +51,17 @@ export default defineComponent({
   props,
   emit: ['update:show', 'update:modelValue', 'change'],
   setup(props, ctx) {
+    const transitionName = 'w-slide-y'
     const visible = ref(props.show)
     const data = ref<any[] | object | null | undefined>()
     const loading = ref(false)
     const txt = ref<number | string | undefined>()
     const triggerRect = ref<RectType>()
+    const layerSize = reactive({
+      width: 0,
+      height: 0
+    })
+    provide(ChooseLayerSizeKey, toRefs(layerSize))
     const showCloseBtn = computed(() => {
       if (props.disabled) {
         return false
@@ -64,7 +82,7 @@ export default defineComponent({
         placement: props.placement,
         hasArrow: props.hasArrow,
         gap: props.gap,
-        transitionName: 'w-slide-y',
+        transitionName,
         layerClass: [props.layerClass],
         layerStyle: layerContentStyle.value,
         show: visible.value,
@@ -73,6 +91,17 @@ export default defineComponent({
         },
         'onGet-trigger-rect': (rect: RectType) => {
           triggerRect.value = rect
+        },
+        'onGet-layer-size': ({
+          width,
+          height
+        }: {
+          width: number
+          height: number
+        }) => {
+          console.log(width, height)
+          layerSize.width = width
+          layerSize.height = height
         }
       }
     })
@@ -203,7 +232,8 @@ export default defineComponent({
             }
             return fallback
           } else {
-            return ctx.slots.default?.()
+            const cont = ctx.slots.default?.()
+            return cont
           }
         }, //props.lazyLoad ? renderLazyContent : ctx.slots.default,
         trigger: renderTrigger

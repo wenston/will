@@ -54,12 +54,17 @@
     <Choose v-model="supplierId2"
       clearable
       block>
+      <Virtual :source-data="supplierData"
+        :item-height="30">
+        <template #default="{data}">
+          <Choose.item v-for="item in data"
+            :key="item.Id"
+            :label="item.Name"
+            :value="item.Id"
+            :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
+        </template>
+      </Virtual>
 
-      <Choose.item v-for="item in supplierData.slice(1,6)"
-        :key="item.Id"
-        :label="item.Name"
-        :value="item.Id"
-        :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
     </Choose>
 
   </p>

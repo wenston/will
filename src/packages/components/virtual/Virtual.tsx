@@ -1,9 +1,10 @@
-import type { PropType, SetupContext } from 'vue'
+import { inject, PropType, reactive, SetupContext, toRefs } from 'vue'
 import { defineComponent, ref, computed, renderSlot } from 'vue'
 import useBoundingClientRect from '../../use/useBoundingClientRect'
 import useScroll from '../../use/useScroll'
 import useElement from '../../use/useElement'
 import { EmptyObject } from '../../config/types'
+import { ChooseLayerSizeKey } from '../choose/injectionKey'
 export type TreeDataType = any[]
 export interface TreeDefaultSlotOptions extends EmptyObject {
   data: TreeDataType
@@ -23,6 +24,11 @@ export default defineComponent({
   setup: (props, ctx) => {
     //包裹虚拟列表的根元素
     const root = ref<HTMLElement>()
+    //
+    const { width, height: visibleHeight } = inject(
+      ChooseLayerSizeKey,
+      toRefs(reactive({ width: 0, height: 0 }))
+    )
     //根元素的scrollTop
     const { scrollTop } = useScroll(root, handleScroll, true)
     //可视范围的宽高
@@ -32,8 +38,10 @@ export default defineComponent({
     const fromIndex = ref(0)
     //可视范围内可显示的数据条数
     const visibleDataLength = computed(() => {
-      console.log(visibleSize)
-      return Math.ceil(visibleSize.height / (props.itemHeight || 1))
+      return Math.ceil(
+        Math.max(visibleSize.height, visibleHeight.value) /
+          (props.itemHeight || 1)
+      )
     })
     const toIndex = computed(() => {
       const to = visibleDataLength.value + fromIndex.value + 1

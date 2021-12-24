@@ -1,5 +1,6 @@
 <template>
   <h3>按钮</h3>
+  <p>x:{{client.x}},y:{{client.y}}</p>
   <div>
     <Btn type="primary"
       @click="handleClick">按钮哈
@@ -37,6 +38,8 @@
 </template>
 <script setup lang="ts">
 import Btn from 'will-ui/components/btn/index'
+import useMouse from 'will-ui/use/useMouse'
+const { client } = useMouse()
 function handleClick(e: MouseEvent) {
   console.log('hhhhhh')
 }

@@ -4,7 +4,7 @@
  * 根据trigger内容当前在页面中的位置计算弹出层的位置
  *
  */
-import type { Ref, PropType, DirectiveArguments } from 'vue'
+import { Ref, PropType, DirectiveArguments, toRefs } from 'vue'
 import { Transition, Teleport } from 'vue'
 import { onMounted, onUpdated, onBeforeUnmount } from 'vue'
 import { withDirectives, resolveDirective } from 'vue'
@@ -18,7 +18,8 @@ import {
   renderSlot,
   normalizeClass,
   readonly,
-  capitalize
+  capitalize,
+  provide
 } from 'vue'
 import type {
   TriggerType,
@@ -42,6 +43,7 @@ import {
   getParentScrollElement
 } from '../../util'
 import { getPlacement } from '../../util/calc'
+import { LayerSizeKey } from './injectionKey'
 interface LayerCssVarType {
   '--_layer-border-color'?: string
   '--_layer-background-color'?: string
@@ -89,7 +91,7 @@ export default defineComponent({
   inheritAttrs: false,
   components: { Mask },
   props: LayerProps,
-  emits: ['update:show', 'get-trigger-rect', 'after-enter'],
+  emits: ['update:show', 'get-trigger-rect', 'get-layer-size', 'after-enter'],
   directives: { clickOutside },
   setup(props, { slots, emit }) {
     const Win = window
@@ -110,6 +112,7 @@ export default defineComponent({
       height: 0
     })
     const defaultSize = reactive({ width: 0, height: 0 })
+    provide(LayerSizeKey, readonly(toRefs(defaultSize)))
     const placementInfo = reactive({
       top: 0,
       left: 0,
@@ -243,6 +246,7 @@ export default defineComponent({
         )
         defaultSize.width = width
         defaultSize.height = height
+        emit('get-layer-size', { width, height })
       }
     }
     //选出有滚动条的父级，绑定滚动事件，在滚动时计算trigger的位置信息

@@ -142,6 +142,8 @@ export function getElement(elem: any): HTMLElement {
   let _: any
   if (el === window) {
     _ = window
+  } else if (el === document) {
+    _ = document
   } else if (isElement(el)) {
     _ = el
   } else if (isDocumentBody(el)) {
