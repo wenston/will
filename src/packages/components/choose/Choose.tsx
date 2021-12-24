@@ -99,7 +99,6 @@ export default defineComponent({
           width: number
           height: number
         }) => {
-          console.log(width, height)
           layerSize.width = width
           layerSize.height = height
         }

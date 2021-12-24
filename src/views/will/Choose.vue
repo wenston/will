@@ -12,7 +12,6 @@
         :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
     </Choose>
   </p>
-  <!-- 数据懒加载的情况 -->
   <p style="display:flex;">
     <Choose v-model="supplierId3"
       @change="onChange"
@@ -26,18 +25,6 @@
           :value="item.Id"
           :disabled="item.Name.indexOf('米')>-1">{{item.Name}}</Choose.item>
       </template>
-      <!-- <template #loading>
-
-        <p>
-          加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊加载中啊
-
-        </p>
-      </template>
-      <template #empty>
-        <p>
-          sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据sorry，没有数据
-        </p>
-      </template> -->
 
     </Choose>
   </p>
@@ -54,16 +41,11 @@
     <Choose v-model="supplierId2"
       clearable
       block>
-      <Virtual :source-data="supplierData"
-        :item-height="30">
-        <template #default="{data}">
-          <Choose.item v-for="item in data"
-            :key="item.Id"
-            :label="item.Name"
-            :value="item.Id"
-            :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
-        </template>
-      </Virtual>
+      <Choose.item v-for="item in supplierData"
+        :key="item.Id"
+        :label="item.Name"
+        :value="item.Id"
+        :disabled="item.Name.indexOf('北京')>-1">{{item.Name}}</Choose.item>
 
     </Choose>
 
