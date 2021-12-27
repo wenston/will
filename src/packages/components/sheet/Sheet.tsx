@@ -206,7 +206,7 @@ export default defineComponent({
     provide('rightFixed', readonly(computed(() => props.rightFixed)))
 
     //列宽调整
-    //给组件根节点添加k-no-select的class，以免在拖拽时选择了文本
+    //给组件根节点添加w-no-select的class，以免在拖拽时选择了文本
     provide('beforeResize', (tdElem: HTMLElement) => {
       resizing.value = true
       tableRoot.value.classList.add('w-no-select')

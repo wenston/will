@@ -105,7 +105,7 @@ export function useTdWidth(
 
     return widths
   })
-  useEvent(ref(window), 'resize', () => {
+  useEvent(window, 'resize', () => {
     // start(() => {
     //   a.value += 1
     // })
@@ -190,17 +190,17 @@ export function useFixed(
   function getTdsAndThs() {
     const scrollTarget = innerTable.value
     const trs = [
-      ...scrollTarget.querySelectorAll('.k-sheet-tbody>.k-sheet>tbody>tr')
+      ...scrollTarget.querySelectorAll('.w-sheet-tbody>.w-sheet>tbody>tr')
     ]
     const ths = [
       ...scrollTarget.querySelectorAll(
-        '.k-sheet-thead>.k-sheet>thead>tr>th.k-cell--sticky'
+        '.w-sheet-thead>.w-sheet>thead>tr>th.w-cell--sticky'
       )
     ]
     const footThs = hasSum.value
       ? [
           ...scrollTarget.querySelectorAll(
-            '.k-sheet-tfoot>.k-sheet>tfoot>tr>th.k-cell--sticky'
+            '.w-sheet-tfoot>.w-sheet>tfoot>tr>th.w-cell--sticky'
           )
         ].slice(0, leftNumber.value)
       : []
@@ -213,11 +213,11 @@ export function useFixed(
     if (rightNumber.value > 0) {
       rightThs = [
         ...scrollTarget.querySelectorAll(
-          '.k-sheet-thead>.k-sheet>thead>tr>th.k-cell--sticky'
+          '.w-sheet-thead>.w-sheet>thead>tr>th.w-cell--sticky'
         )
       ].slice(rightNumber.value * -1)
       rightTfootThs = [
-        ...scrollTarget.querySelectorAll('.k-sheet-tfoot>.k-sheet>tfoot>tr>th')
+        ...scrollTarget.querySelectorAll('.w-sheet-tfoot>.w-sheet>tfoot>tr>th')
       ].slice(rightNumber.value * -1)
     }
     return {
@@ -235,27 +235,28 @@ export function useFixed(
     rightOffset.value = []
     const { trs, firstRowLeftTds, firstRowRightTds, ths, footThs } =
       getTdsAndThs()
-    trs.forEach((tr: HTMLElement, i: number) => {
+    trs.forEach((tr: HTMLTableRowElement, i: number) => {
       if (i === 0) {
-        const tds = [...tr.querySelectorAll('td')]
+        const _tds = tr.querySelectorAll('td')
+        const tds = Array.from(_tds)
         const leftTds = tds.slice(0, leftNumber.value)
         const rightTds = tds.slice(-1 * rightNumber.value)
         leftTds.forEach((td: any) => {
-          td.classList.remove('k-cell--sticky')
+          td.classList.remove('w-cell--sticky')
           td.style.removeProperty('left')
         })
         rightTds.forEach((td: any) => {
-          td.classList.remove('k-cell--sticky')
+          td.classList.remove('w-cell--sticky')
           td.style.removeProperty('right')
         })
       }
     })
     // firstRowRightTds.forEach((td: HTMLElement, i: number) => {
-    //   td.classList.remove("k-cell--sticky")
+    //   td.classList.remove("w-cell--sticky")
     //   td.style.removeProperty("right")
     // })
     // firstRowLeftTds.forEach((td: HTMLElement, i: number) => {
-    //   td.classList.remove("k-cell--sticky")
+    //   td.classList.remove("w-cell--sticky")
     //   td.style.removeProperty("left")
     // })
     getScroll()
@@ -301,7 +302,7 @@ export function useFixed(
                 )
                 tds.forEach((td: HTMLElement, i: number) => {
                   td.style.left = leftOffset.value[i] + 'px'
-                  td.classList.add('k-cell--sticky')
+                  td.classList.add('w-cell--sticky')
                 })
               }
             })
@@ -350,21 +351,21 @@ export function useFixed(
               )
               tds.forEach((td: HTMLElement, i: number) => {
                 td.style.right = rightOffset.value[i] + 'px'
-                td.classList.add('k-cell--sticky')
+                td.classList.add('w-cell--sticky')
               })
             }
           })
 
           rightThs.forEach((th: HTMLElement, i: number) => {
             th.style.right = rightOffset.value[i] + 'px'
-            th.classList.add('k-cell--sticky')
+            th.classList.add('w-cell--sticky')
             if (i === 0) {
               rightShadowPosition.value = th.offsetLeft + 1 - scrollLeft.value
             }
           })
           rightTfootThs.forEach((th: HTMLElement, i: number) => {
             th.style.right = rightOffset.value[i] + 'px'
-            th.classList.add('k-cell--sticky')
+            th.classList.add('w-cell--sticky')
           })
           showRightShadow.value = true
         } else {
