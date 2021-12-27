@@ -1,6 +1,6 @@
 .w-virtual {
   overflow: auto;
-  & .w-virtual-placeholder {
-    visibility: hidden;
+  & .w-virtual-content {
+    position: relative;
   }
 }

@@ -19,7 +19,7 @@ export default function useBoundingClientRect(el: any) {
   }
   onMounted(() => {
     elem.value = getElement(el)
-    console.log('useB', elem.value)
+    // console.log('useB', elem.value)
     get()
   })
   useEvent(window, 'resize', get)

@@ -1,4 +1,4 @@
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import useEvent from './useEvent'
 import useElement from './useElement'
 export default function useScroll(
@@ -28,6 +28,7 @@ export default function useScroll(
       scrollRight: scrollRight.value
     })
   }
+
   useEvent(el, 'scroll', () => {
     get()
     doCallback()

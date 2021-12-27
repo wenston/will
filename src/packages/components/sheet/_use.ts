@@ -15,6 +15,7 @@ import {
   hasUnit,
   getUnit,
   getStyle,
+  getElement,
   getBoundingClientRect
 } from '../../util'
 import useEvent from '../../use/useEvent'
@@ -49,7 +50,7 @@ export const IS_RADIO = (field: string) => PRESET_RADIO === field
 
 export function useTdWidth(
   isAuto: ComputedRef<boolean>,
-  inner: Ref,
+  inner: Ref | ComputedRef,
   bodyColumns: ComputedRef
 ) {
   // const { start } = useDelay()
@@ -160,13 +161,20 @@ export function useColumns(columns: ComputedRef, opts: ComputedRef) {
 
 export function useFixed(
   tableRoot: Ref,
-  innerTable: Ref,
+  innerTable: Ref | ComputedRef,
   leftFixed: ComputedRef,
   rightFixed: ComputedRef,
   hasSum: Ref
 ) {
   const { scrollTop, scrollBottom, scrollLeft, scrollRight, getScroll } =
-    useScroll(innerTable)
+    useScroll(
+      innerTable,
+      () => {
+        nextTick(setFixed)
+      },
+      true
+    )
+
   const showTopShadow = ref(false)
   const showBottomShadow = ref(false)
   const showLeftShadow = ref(false)
@@ -188,7 +196,7 @@ export function useFixed(
     return 0
   })
   function getTdsAndThs() {
-    const scrollTarget = innerTable.value
+    const scrollTarget = getElement(innerTable.value) as any
     const trs = [
       ...scrollTarget.querySelectorAll('.w-sheet-tbody>.w-sheet>tbody>tr')
     ]
@@ -265,7 +273,9 @@ export function useFixed(
     })
   }
   function setFixed(e?: any) {
-    const scrollTarget = e ? (e.target as HTMLElement) : innerTable.value
+    const scrollTarget = getElement(
+      e ? (e.target as HTMLElement) : innerTable.value
+    )
     if (leftNumber.value !== 0 || rightNumber.value !== 0) {
       const {
         trs,
@@ -377,9 +387,9 @@ export function useFixed(
     showTopShadow.value = scrollTop.value > 0
     showBottomShadow.value = scrollBottom.value > 0
   }
-  useEvent(innerTable, 'scroll', setFixed)
-  useEvent(ref(window), 'resize', setFixed)
-  onMounted(() => nextTick(setFixed))
+  // useEvent(innerTable, 'scroll', setFixed)
+  useEvent(window, 'resize', setFixed)
+  // onMounted(() => nextTick(setFixed))
   return {
     showLeftShadow,
     showRightShadow,

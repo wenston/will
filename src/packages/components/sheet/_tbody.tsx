@@ -8,6 +8,8 @@ export default defineComponent({
   props: {
     columns: Array,
     data: Array,
+    from: Number,
+    to: Number,
     hasIndex: Boolean,
     hasAction: [Boolean, Array, String],
     pageIndex: { type: [String, Number] },
@@ -81,6 +83,9 @@ export default defineComponent({
             cont = index + 1
             if (pi.value && ps.value) {
               cont = ps.value * (pi.value - 1) + cont
+            }
+            if (props.from !== undefined) {
+              cont = cont + props.from
             }
             if (props.hasAction) {
               const actionSlot =

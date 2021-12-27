@@ -1,5 +1,5 @@
 import type { Ref, ComputedRef } from 'vue'
-import { onMounted, onUnmounted, onUpdated, getCurrentInstance } from 'vue'
+import { onMounted, onBeforeUnmount, onUpdated, getCurrentInstance } from 'vue'
 import { getElement } from '../util'
 import useElement from './useElement'
 type ElemType = Window | Document | HTMLElement | Ref | ComputedRef
@@ -35,11 +35,12 @@ export default function useEvent(
       elem && add()
     })
     onUpdated(() => {
-      remove()
+      // TODO: 这里不能一股脑的remove在add，应当判断elem是否发生了变化
+      // remove()
       add()
     })
 
-    onUnmounted(remove)
+    onBeforeUnmount(remove)
   }
 
   return {

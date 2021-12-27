@@ -25,7 +25,7 @@
     <!-- :can-highlight="h"
       highlightKey="BillCode"
       v-model:highlight="hValue" -->
-    <Sheet :data='D.slice(0,100)'
+    <Sheet :data='D.slice(0)'
       :columns="columns"
       :autoWidth="isAuto"
       :stripe="stripe"

@@ -11,9 +11,11 @@ import {
   getCurrentInstance,
   nextTick
 } from 'vue'
+import Virtual from '../virtual/index'
+import type { DataListOptions } from '../virtual/Virtual'
 import useDelay from '../../use/useDelay'
 import useToggleArray from '../../use/toggle/useToggleArray'
-import { getBoundingClientRect, hasUnit } from '../../util'
+import { getBoundingClientRect, getElement, hasUnit } from '../../util'
 import Thead from './_thead'
 import Tbody from './_tbody'
 import Tfoot from './_tfoot'
@@ -36,7 +38,7 @@ interface SorterType {
 }
 
 export default defineComponent({
-  components: { Thead, Tbody, Tfoot },
+  components: { Thead, Tbody, Tfoot, Virtual },
   props: _props,
   emits: [...EMITS, ...TBODYEMITS],
   setup(props, { emit, attrs, slots }) {
@@ -56,6 +58,7 @@ export default defineComponent({
     const tableRoot = ref()
     const tableRootLeft = ref(0)
     const inner = ref()
+    const innerElem = computed(() => getElement(inner))
     const innerProps = computed(() => {
       let o: any = {
         ref: inner,
@@ -116,7 +119,7 @@ export default defineComponent({
       reset
     } = useFixed(
       tableRoot,
-      inner,
+      innerElem,
       computed(() => props.leftFixed),
       computed(() => props.rightFixed),
       hasSum
@@ -135,7 +138,7 @@ export default defineComponent({
     const tbodyProps = computed(() => {
       let o: any = {
         columns: tbodyColumns.value,
-        data: props.data,
+        // data: props.data,
         hasIndex: props.hasIndex,
         hasAction: props.hasAction,
         pageSize: props.pageSize,
@@ -162,7 +165,7 @@ export default defineComponent({
 
     const { tdWidths } = useTdWidth(
       computed(() => props.autoWidth),
-      inner,
+      innerElem,
       tbodyColumns
     )
 
@@ -368,40 +371,60 @@ export default defineComponent({
     onMounted(() => {
       //刷新页面时，FF浏览器会记录滚动条的位置，故在此重置为0
       //不管三七二十一，全部重置
-      inner.value.scrollLeft = 0
-      inner.value.scrollTop = 0
+      if (innerElem.value) {
+        innerElem.value.scrollLeft = 0
+        innerElem.value.scrollTop = 0
+      }
       // console.timeEnd(String(ins?.uid))
     })
     return () => {
       const thead = <Thead {...theadProps.value}></Thead>
-      const tbody = <Tbody {...tbodyProps.value}></Tbody>
+      const tbody = (data: any[] | undefined, from?: number, to?: number) => (
+        <Tbody data={data} from={from} to={to} {...tbodyProps.value}></Tbody>
+      )
 
-      return (
-        <div class="w-sheet-container" ref={tableRoot}>
-          <div {...innerProps.value}>
-            <div class="w-sheet-thead">
-              <table class="w-sheet">
-                {colGroup(tdWidths.value)}
-                <thead>{thead}</thead>
-              </table>
-            </div>
-            <div class="w-sheet-tbody">
-              <table class="w-sheet">
-                {colGroup(tdWidths.value)}
-                <tbody>{tbody}</tbody>
-              </table>
-            </div>
-            {hasSum.value && (
-              <div class="w-sheet-tfoot">
-                <table class="w-sheet">
-                  {colGroup(tdWidths.value)}
-                  <tfoot>
-                    <Tfoot {...tfootProps.value} />
-                  </tfoot>
-                </table>
-              </div>
-            )}
+      const innerTable = ({
+        data,
+        index
+      }: {
+        data: any[] | undefined
+        index?: { from: number; to: number }
+      }) => (
+        <>
+          <div class="w-sheet-thead">
+            <table class="w-sheet">
+              {colGroup(tdWidths.value)}
+              <thead>{thead}</thead>
+            </table>
           </div>
+          <div class="w-sheet-tbody">
+            <table class="w-sheet">
+              {colGroup(tdWidths.value)}
+              <tbody>
+                {tbody(
+                  data,
+                  index ? index.from : undefined,
+                  index ? index.to : undefined
+                )}
+              </tbody>
+            </table>
+          </div>
+          {hasSum.value && (
+            <div class="w-sheet-tfoot">
+              <table class="w-sheet">
+                {colGroup(tdWidths.value)}
+                <tfoot>
+                  <Tfoot {...tfootProps.value} />
+                </tfoot>
+              </table>
+            </div>
+          )}
+        </>
+      )
+
+      const table = (content: any) => (
+        <div class="w-sheet-container" ref={tableRoot}>
+          {content}
           <div
             class="w-sheet-resize-line"
             v-show={resizing.value}
@@ -417,6 +440,24 @@ export default defineComponent({
             style={{ left: rightShadowPosition.value + 'px' }}
           />
         </div>
+      )
+
+      if (props.data && props.data.length > 40) {
+        return table(
+          <Virtual
+            {...innerProps.value}
+            itemHeight={30}
+            sourceData={props.data}
+            v-slots={{
+              default: (e: DataListOptions) => {
+                return innerTable(e)
+              }
+            }}></Virtual>
+        )
+      }
+
+      return table(
+        <div {...innerProps.value}>{innerTable({ data: props.data })}</div>
       )
     }
   }
