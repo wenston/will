@@ -32,7 +32,7 @@ import useSlot from '../../use/useSlot'
 import useGlobalZIndex from '../../use/useGlobalZIndex'
 import useToggleArray from '../../use/toggle/useToggleArray'
 import useEvent from '../../use/useEvent'
-import useDelay from '../../use/useDealy'
+import useDelay from '../../use/useDelay'
 import clickOutside from '../../directives/clickOutside'
 import Mask from '../mask/'
 import {

@@ -1,0 +1,394 @@
+.w-sheet-container {
+  border: 1px solid var(--w-sheet-container-border-color);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  position: relative;
+  & .w-sheet-inner-container {
+    overflow: auto;
+    margin: -1px;
+
+    & .w-sheet {
+      border-collapse: collapse;
+      /* width: 100%; */
+    }
+
+    & .w-cell {
+      padding: var(--w-sheet-td-padding);
+      height: var(--w-size);
+      border: 1px solid var(--w-sheet-td-border-color);
+      color: var(--w-color-font-2);
+      text-align: left;
+      position: relative;
+      transition: background-color var(--w-transition-time);
+      &.w-cell--sticky {
+        position: sticky;
+        background-color: var(--w-sheet-tr-background-color);
+        z-index: 1;
+        box-shadow: 1px 1px var(--w-sheet-td-border-color);
+      }
+      &.w-cell--narrow {
+        padding: var(--w-sheet-td-narrow-padding);
+      }
+      &.w-cell--center {
+        text-align: center;
+      }
+      &.w-cell--right {
+        text-align: right;
+      }
+      & .w-cell-index,
+      & .w-cell-action {
+        /* transition: var(--w-transition); */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+      }
+      & .w-cell-action {
+        color: var(--w-color-font-3);
+        transform: translateX(100%);
+        visibility: hidden;
+        & .w-cell-action-add {
+          font-size: 1.2em;
+          cursor: pointer;
+          &:hover {
+            color: var(--w-color-primary);
+          }
+        }
+        & .w-cell-action-delete {
+          font-size: 1.2em;
+          cursor: pointer;
+          &:hover {
+            color: var(--w-color-danger);
+          }
+        }
+      }
+      & .w-cell-resize-line {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 8px;
+        cursor: w-resize;
+        z-index: 1;
+      }
+
+      & .w-cell-sorter {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        height: 24px;
+        display: flex;
+        border-radius: calc(2 * var(--w-radius));
+        flex-direction: column;
+        margin: auto;
+        cursor: pointer;
+        transition: background-color var(--w-transition-quick-time);
+        & .w-cell-sorter-icon {
+          color: var(--w-color-font-3);
+          display: inline-flex;
+          position: absolute;
+          font-size: 19px;
+          width: 19px;
+          height: 21px;
+        }
+        &:hover {
+          background-color: white;
+          & .w-cell-sorter-icon {
+            color: var(--w-color-font-2);
+          }
+        }
+        & .w-cell-sorter-up {
+          transform: rotate(180deg);
+          top: -4px;
+          left: 0px;
+          &.w-cell-sorter--0 {
+            color: var(--w-color-primary);
+          }
+        }
+        & .w-cell-sorter-down {
+          top: 5px;
+          &.w-cell-sorter--1 {
+            color: var(--w-color-primary);
+          }
+        }
+      }
+
+      &:hover {
+      }
+    }
+    & .w-sheet-thead {
+      position: sticky;
+      top: 0;
+      background-color: var(--w-sheet-thead-background-color);
+      min-width: min-content;
+      width: 100%;
+      z-index: 2;
+      & thead {
+        background-color: var(--w-sheet-thead-background-color);
+        & .w-cell {
+          border-color: var(--w-sheet-thead-th-border-color);
+          color: var(--w-color-font-1);
+          &.w-cell--sticky {
+            background-color: var(--w-sheet-thead-background-color);
+            box-shadow: 1px 1px var(--w-sheet-thead-th-border-color);
+          }
+          &.w-cell--not-bold {
+            font-weight: normal;
+          }
+        }
+      }
+    }
+
+    & .w-sheet-tfoot {
+      position: sticky;
+      bottom: 0;
+      background-color: var(--w-sheet-tfoot-background-color);
+      min-width: min-content;
+      width: 100%;
+      z-index: 2;
+      margin-top: -1px;
+      & tfoot {
+        background-color: var(--w-sheet-tfoot-background-color);
+        & .w-cell {
+          border-color: var(--w-sheet-tfoot-th-border-color);
+          color: var(--w-color-font-1);
+          &.w-cell--sticky {
+            background-color: var(--w-sheet-tfoot-background-color);
+            box-shadow: 1px 1px var(--w-sheet-tfoot-th-border-color);
+          }
+          &.w-cell--not-bold {
+            font-weight: normal;
+          }
+        }
+      }
+    }
+
+    &.w-sheet--min-content {
+      & .w-sheet-tbody {
+        width: min-content;
+      }
+      & .w-sheet {
+        width: min-content;
+        table-layout: fixed;
+      }
+    }
+
+    /* 以下布局方式，对于列宽调整不友好 ,故弃之。采用js动态计算，并按照宽度占比分配宽度*/
+    /* &.w-sheet--auto {
+      & .w-sheet-tbody {
+        width: 100%;
+        min-width: min-content;
+      }
+      & .w-sheet {
+        width: 100%;
+        table-layout: fixed;
+      }
+    } */
+
+    &.w-sheet--nowrap {
+      & .w-sheet {
+        white-space: nowrap;
+      }
+      & .w-cell {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    &.w-sheet--stripe {
+      & .w-sheet-tbody {
+        & .w-sheet {
+          & tr {
+            & td {
+              &.w-cell {
+                background-color: var(--w-sheet-tr-background-color);
+              }
+            }
+            &:nth-child(2n) {
+              & td {
+                &.w-cell {
+                  background-color: var(--w-sheet-tr-stripe-color);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    & .w-sheet-tbody {
+      margin-top: -1px;
+      & .w-sheet {
+        & tr {
+          &.w-sheet-tr--highlight {
+            & td {
+              &.w-cell {
+                background-color: var(--w-sheet-tr-highlight-background-color);
+              }
+            }
+          }
+          &.w-sheet-tr--checked {
+            & td {
+              &.w-cell {
+                background-color: var(--w-sheet-tr-checked-background-color);
+              }
+            }
+          }
+          &:nth-child(2n) {
+            &.w-sheet-tr--highlight {
+              & td {
+                &.w-cell {
+                  background-color: var(
+                    --w-sheet-tr-highlight-background-color
+                  );
+                }
+              }
+            }
+            &.w-sheet-tr--checked {
+              & td {
+                &.w-cell {
+                  background-color: var(--w-sheet-tr-checked-background-color);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    &.w-sheet--hover {
+      & .w-sheet-tbody {
+        & .w-sheet {
+          & tr {
+            transition: var(--w-transition-quick-time);
+            &:hover {
+              & td {
+                &.w-cell {
+                  background-color: var(--w-sheet-tr-hover-color);
+                }
+                /* &.w-cell--sticky {
+                  background-color: var(--w-sheet-tr-hover-color);
+                } */
+              }
+            }
+          }
+        }
+      }
+    }
+    &.w-sheet--has-action {
+      & .w-sheet-tbody {
+        & .w-sheet {
+          & tr {
+            &:hover {
+              & .w-cell {
+                & .w-cell-index {
+                  transform: translateX(-100%);
+                }
+                & .w-cell-action {
+                  transform: translateX(0);
+                  visibility: visible;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    &.w-sheet--has-top-shadow {
+      & .w-sheet-thead {
+        box-shadow: inset 0 -1px rgba(0, 0, 0, 0.05),
+          0 3px 7px rgba(0, 0, 0, 0.1);
+      }
+    }
+    &.w-sheet--has-bottom-shadow {
+      & .w-sheet-tfoot {
+        box-shadow: inset 0 1px rgba(0, 0, 0, 0.05),
+          0 -1px 5px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  & .w-sheet-resize-line,
+  & .w-sheet-left-fixed-shadow-line,
+  & .w-sheet-right-fixed-shadow-line {
+    position: absolute;
+    height: 100%;
+    left: -10000px;
+    top: 0;
+    z-index: 2;
+  }
+  & .w-sheet-resize-line {
+    width: 1px;
+    background-color: var(--w-color-danger-5);
+    box-shadow: 0 1px 1px 2px rgba(0, 0, 0, 0.03);
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 7px;
+      height: 1px;
+      left: -3px;
+      z-index: 3;
+      background-color: var(--w-color-danger-5);
+    }
+    &:after {
+      bottom: 0;
+    }
+    &:before {
+      top: 0;
+    }
+  }
+  & .w-sheet-left-fixed-shadow-line,
+  & .w-sheet-right-fixed-shadow-line {
+    width: 15px;
+    pointer-events: none;
+    left: -10000px;
+    z-index: 2;
+  }
+  & .w-sheet-left-fixed-shadow-line {
+    background-image: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.07) 5%,
+      transparent 70%
+    );
+  }
+  & .w-sheet-right-fixed-shadow-line {
+    transform: translateX(-15px);
+    background-image: linear-gradient(
+      -90deg,
+      rgba(0, 0, 0, 0.07) 5%,
+      transparent 70%
+    );
+  }
+}
+
+.w-sheet-check-icon {
+  font-size: 12px;
+  color: var(--w-color-font-4);
+  transform: scale(1.3, 1.3);
+  display: inline-flex;
+  &.w-sheet-check-icon--checked {
+    color: var(--w-color-primary);
+  }
+  &.w-sheet-check-icon--disabled {
+    cursor: not-allowed;
+    opacity: 0.35;
+  }
+}
+
+/* //火狐下的hack写法 */
+@-moz-document url-prefix() {
+  .w-cell--sticky {
+    box-shadow: -1px -1px var(--w-sheet-td-border-color) !important;
+  }
+  th.w-cell--sticky {
+    box-shadow: -1px -1px var(--w-sheet-thead-th-border-color) !important;
+  }
+  .w-cell-sorter-up {
+    left: 0.8px !important;
+  }
+}

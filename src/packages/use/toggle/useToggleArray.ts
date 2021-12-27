@@ -39,9 +39,20 @@ export default function useToggleArray<T>(
       item.value = computedData.value[nextIndex]
       index.value = nextIndex
     }
+    return {
+      item: item.value,
+      index: index.value
+    }
   }
   function set(current: InitType<T>) {
     _set(current)
+  }
+  function get() {
+    const index = computedData.value.findIndex((v) => v === item.value)
+    return {
+      item: item.value,
+      index
+    }
   }
   _init()
   watch([() => current?.index, () => current?.item, computedData], _init)
@@ -50,6 +61,7 @@ export default function useToggleArray<T>(
     toggle,
     item,
     index,
-    set
+    set,
+    get
   }
 }

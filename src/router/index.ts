@@ -166,6 +166,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Tree',
         component: () => import('../views/will/Tree.vue'),
         meta: { title: '树 Tree' }
+      },
+      {
+        path: 'sheet',
+        name: 'Sheet',
+        component: () => import('../views/will/Sheet.vue'),
+        meta: { title: '表格 Sheet' }
       }
     ],
     meta: {
