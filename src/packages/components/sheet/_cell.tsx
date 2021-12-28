@@ -43,13 +43,9 @@ export default defineComponent({
             'w-cell--center': props.align === 'center',
             'w-cell--right': props.align === 'right',
             'w-cell--narrow': props.isNarrow,
-            'w-cell--not-bold': props.notBold,
-            'w-cursor-pointer': props.sorter !== undefined
+            'w-cell--not-bold': props.notBold
           }
         ]
-      }
-      if (props.sorter !== undefined) {
-        o.onClick = toSort
       }
       return o
     })
@@ -81,6 +77,9 @@ export default defineComponent({
 
             document.addEventListener('mousemove', toResize)
             document.addEventListener('mouseup', handleMouseup)
+          },
+          onClick: (e: MouseEvent) => {
+            e.preventDefault()
           }
         }
         line = <span {...lineProps}></span>
@@ -91,6 +90,7 @@ export default defineComponent({
             class="w-cell-sorter"
             onClick={(e) => {
               toSort()
+              e.preventDefault()
               e.stopPropagation()
             }}>
             <Icon
