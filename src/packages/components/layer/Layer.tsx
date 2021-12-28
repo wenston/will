@@ -69,6 +69,11 @@ export const LayerProps = {
     type: Object as PropType<{ x: number; y: number }>,
     default: () => ({ x: 0, y: 0 })
   },
+  //箭头偏移
+  arrowOffset: {
+    type: Object as PropType<{ x: number; y: number }>,
+    default: () => ({ x: 0, y: 0 })
+  },
   //触发弹出层出现的动作（事件）方式
   trigger: { type: String as PropType<TriggerType>, default: 'click' },
   //弹出层插入的位置是否紧挨着“触发者trigger”
@@ -219,6 +224,7 @@ export default defineComponent({
           placement: props.placement,
           gap: props.gap,
           offset: props.offset,
+          arrowOffset: props.arrowOffset,
           layer: defaultRoot
         })
         Object.assign(placementInfo, p)
