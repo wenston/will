@@ -294,7 +294,7 @@ export function useFixed(
               let leftPosition = 0
               leftOffset.value = firstRowLeftTds.map(
                 (td: HTMLElement, i: number, arr) => {
-                  const l = td.offsetLeft + 1
+                  const l = td.offsetLeft - 1
                   if (i === arr.length - 1) {
                     leftPosition = l + parseInt(getStyle(td, 'width'))
                   }
@@ -341,14 +341,14 @@ export function useFixed(
               .map((td: HTMLElement, i: number, arr) => {
                 if (i === 0) {
                   t += getBoundingClientRect(td).width
-                  return 1
+                  return 0
                 } else {
                   // if (i === arr.length - 1) {
                   //   rightPosition = td.offsetLeft - scrollRight.value
                   // }
                   let right = t
                   t += getBoundingClientRect(td).width
-                  return right + 1
+                  return right
                 }
               })
               .reverse()

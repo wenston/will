@@ -73,7 +73,7 @@
         height: 100%;
         width: 8px;
         cursor: w-resize;
-        z-index: 1;
+        z-index: 0;
       }
 
       & .w-cell-sorter {
