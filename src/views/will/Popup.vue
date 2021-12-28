@@ -18,8 +18,9 @@
       <p>这是里边的内容</p>
       <p>内容随意定义</p>
     </template>
-    <template #trigger="{toggle}">
-      <Btn @click="toggle">从组件内部也可以触发弹窗出现，这种方式可以节约变量的定义数量</Btn>
+    <!-- 需要注意的是：trigger插槽内容本身就有了事件，无需再手动显示Popup -->
+    <template #trigger>
+      <Btn>从组件内部也可以触发弹窗出现，这种方式可以节约变量的定义数量</Btn>
     </template>
   </Popup>
   <!-- <p>
