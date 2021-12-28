@@ -4,6 +4,7 @@ import Icon from '../icon/index'
 import { IS_PRESET, IS_CHECKBOX, IS_INDEX, IS_RADIO } from './_use'
 import { getAlign, getSelectedKey } from './_util'
 export default defineComponent({
+  name: 'SheetTbody',
   components: { Cell, Icon },
   props: {
     columns: Array,

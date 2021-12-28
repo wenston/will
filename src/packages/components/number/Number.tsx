@@ -3,6 +3,7 @@ import Write from '../write/index'
 import Tooltip from '../layer/index'
 import Icon from '../icon/index'
 import useCount from '../../use/useCount'
+import { filterListeners } from '../../util'
 
 export default defineComponent({
   inheritAttrs: false,
@@ -16,6 +17,7 @@ export default defineComponent({
     readonly: Boolean,
     disabled: Boolean,
     maxlength: [String, Number],
+    width: String,
     max: Number,
     min: Number,
     step: { type: Number, default: 1 }
@@ -32,11 +34,12 @@ export default defineComponent({
         readonly: props.readonly,
         disabled: props.disabled,
         modelValue: props.modelValue,
+        width: props.width,
         'onUpdate:modelValue': (
           v: number | string | undefined,
           elem: HTMLInputElement
         ) => {
-          console.log(elem)
+          // console.log(elem)
           setTimeout(() => {
             toValidate(elem)
           })
@@ -63,7 +66,8 @@ export default defineComponent({
           setTimeout(() => {
             toValidate(elem)
           })
-        }
+        },
+        ...filterListeners(ctx.attrs)
       }
     })
 
