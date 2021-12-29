@@ -10,7 +10,7 @@
   --w-color-font-3: #999;
   --w-color-font-4: #ccc;
   --w-color-font-5: #eee;
-  --w-color-disabled: var(--w-color-font-5);
+  --w-color-disabled: var(--w-color-font-4);
   --w-color-font: var(--w-color-font-1);
 
   --w-color-border: #e1e1e1;
@@ -63,6 +63,7 @@
   --w-notice-cubic-bezier: cubic-bezier(0.01, 0.7, 0.1, 1.2);
 
   --w-form-item-width: 180px;
+  --w-form-item-disabled-color: var(--w-color-font-5);
   --w-form-item-border-color: var(--w-color-border);
   --w-form-item-border-color-focus: var(--w-color-primary-3);
 
