@@ -19,6 +19,9 @@
       flex: 1;
       width: 0;
       background-color: transparent;
+      &::placeholder {
+        color: var(--w-color-font-4);
+      }
     }
     &:focus-within {
       border-color: var(--w-form-item-border-color-focus);

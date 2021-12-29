@@ -12,6 +12,7 @@ export default defineComponent({
   },
   props: {
     modelValue: { type: [Number, String] },
+    placeholder: { type: String },
     clearable: Boolean,
     block: Boolean,
     readonly: Boolean,
@@ -40,6 +41,7 @@ export default defineComponent({
       return {
         ref: input,
         class: ['w-write-input'],
+        placeholder: props.placeholder,
         readonly: props.readonly,
         disabled: props.disabled,
         value: props.modelValue,
@@ -73,6 +75,16 @@ export default defineComponent({
         manual: true
       }
     })
+    function focus() {
+      input.value?.focus()
+    }
+    function select() {
+      input.value?.select()
+    }
+    ctx.expose({
+      focus,
+      select
+    })
     return () => {
       const inputEl = <input {...inputOptions.value} />
       const inputWithLayer = (
@@ -103,7 +115,9 @@ export default defineComponent({
                     }}
                   />
                 )}
-                {ctx.slots.default?.()}
+                {ctx.slots.default?.({
+                  focus
+                })}
               </div>
             ),
             default: () => '输入无效'

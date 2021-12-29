@@ -154,6 +154,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'match',
+        name: 'Match',
+        component: () => import('../views/will/Match.vue'),
+        meta: {
+          title: '搜索匹配 Match'
+        }
+      },
+      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),
