@@ -154,6 +154,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'list',
+        name: 'List',
+        component: () => import('../views/will/List.vue'),
+        meta: {
+          title: '列表 List'
+        }
+      },
+      {
         path: 'match',
         name: 'Match',
         component: () => import('../views/will/Match.vue'),

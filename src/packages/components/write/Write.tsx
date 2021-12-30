@@ -2,13 +2,15 @@ import { defineComponent, ref, computed, readonly, normalizeClass } from 'vue'
 import { filterListeners, isValidValue } from '../../util'
 import Close from '../close/index'
 import Layer from '../layer/index'
+import useDelay from '../../use/useDelay'
 
 export default defineComponent({
   inheritAttrs: false,
   components: { Close, Layer },
   emits: {
     'update:modelValue': null,
-    clear: null
+    clear: null,
+    search: null
   },
   props: {
     modelValue: { type: [Number, String] },
@@ -31,6 +33,8 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
+    const { delay } = useDelay(400)
+    const lastSearchText = ref('')
     const input = ref<HTMLInputElement>()
     const isZH = ref(false) //是否在输入中文
     const showCloseBtn = computed(() => {
@@ -53,12 +57,14 @@ export default defineComponent({
           const val = (e.target as HTMLInputElement).value
           if (!isZH.value) {
             ctx.emit('update:modelValue', val, input.value)
+            toSearch(val)
           }
         },
         onCompositionend: (e: CompositionEvent) => {
           setTimeout(() => {
             const val = (e.target as HTMLInputElement).value
             ctx.emit('update:modelValue', val, input.value)
+            toSearch(val)
             isZH.value = false
           })
         },
@@ -80,6 +86,14 @@ export default defineComponent({
     }
     function select() {
       input.value?.select()
+    }
+    function toSearch(val: string) {
+      delay(() => {
+        if (val !== lastSearchText.value) {
+          ctx.emit('search', val, input.value)
+          lastSearchText.value = val
+        }
+      })
     }
     ctx.expose({
       focus,

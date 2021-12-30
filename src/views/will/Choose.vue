@@ -72,7 +72,7 @@ function onChange({ label, value }: any) {
 async function toLoad() {
   return new Promise((res, rej) => {
     setTimeout(() => {
-      res([])
+      res(supplierData)
     }, 1000)
   })
 }

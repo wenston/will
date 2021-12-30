@@ -205,9 +205,18 @@ export default defineComponent({
     return () => {
       const layerSlots = {
         default: () => {
+          let isEmpty = false
+          if (!data.value) {
+            isEmpty = true
+          } else {
+            if (isArray(data.value) && data.value.length === 0) {
+              isEmpty = true
+            }
+          }
           const fallback = (
             <Fallback
               loading={loading.value}
+              empty={isEmpty}
               class="w-choose-fallback"
               loadingProps={{
                 text: '加载数据中'
@@ -223,13 +232,17 @@ export default defineComponent({
             loading: loading.value
           })
           if (props.lazyLoad) {
-            if (data.value) {
-              if (isArray(data.value) && data.value.length === 0) {
-                return fallback
-              }
-              return content
+            if (loading.value || isEmpty) {
+              return fallback
             }
-            return fallback
+            return content
+            // if (data.value) {
+            //   if (isArray(data.value) && data.value.length === 0) {
+            //     return fallback
+            //   }
+            //   return content
+            // }
+            // return fallback
           } else {
             const cont = ctx.slots.default?.()
             return cont
