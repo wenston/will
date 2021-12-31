@@ -73,8 +73,8 @@ export default function useSearch<T>(
     }
   }
   watch(
-    searchText,
-    (t) => {
+    [searchText, sourceData],
+    ([t, d]) => {
       toSearch(t)
     },
     { immediate: true }

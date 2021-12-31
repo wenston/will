@@ -20,15 +20,15 @@
 
   </section>
   </p>
-  <!-- <section>
+  <section>
 
     <h3>每次都从后台数据搜索，适用于大数据量的情况</h3>
     <p>
       <Match :request="getSupplier"
-        v-model="search.supplierId"
+        v-model="search.supplierId3"
         placeholder="输入关键字从后台搜索" />
     </p>
-  </section> -->
+  </section>
 
 </template>
 
@@ -40,14 +40,16 @@ import Btn from 'will-ui/components/btn/index'
 const { currentRoute } = useRouter()
 
 import supplier from '../../mock-data/supplier'
-const lazyData = ref([])
+const lazyData = ref<Record<string, any>>([])
 const supplierId2 = ref()
 const search = reactive<{
   supplierId: number | undefined
   supplierName: string
+  supplierId3: string
 }>({
   supplierId: 781,
-  supplierName: ''
+  supplierName: '',
+  supplierId3: ''
 })
 function checkable(item: Record<string, any>, index: number) {
   return item.Name.indexOf('北京') === -1
@@ -55,22 +57,14 @@ function checkable(item: Record<string, any>, index: number) {
 function getSupplier(e: any) {
   return new Promise((res, rej) => {
     setTimeout(() => {
-      console.log('参数：', e)
-      const random = Math.random()
-
-      if (random > 0.5) {
-        console.log('有数据了')
-        res(supplier)
-      } else {
-        res([])
-        console.warn('暂无数据哦')
-      }
+      res(supplier)
     }, 1500)
   })
 }
 function lazyLoad() {
   return new Promise((res, rej) => {
     setTimeout(() => {
+      lazyData.value = supplier
       res(supplier)
     }, 1500)
   })

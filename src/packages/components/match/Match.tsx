@@ -58,8 +58,14 @@ export default defineComponent({
       empty,
       get: getData
     } = useRequest(props.request, searchText, true)
-    const isLoading = ref(false)
-    const isEmpty = computed(() => filterData.value.length === 0)
+    const {
+      loading: isLoading,
+      empty: lazyEmpty,
+      get: lazyGet
+    } = useRequest(props.lazyLoad, ref(''), true)
+    const isEmpty = computed(() => {
+      return filterData.value.length === 0 || lazyEmpty.value
+    })
     const triggerRect = ref<RectType>()
     const visible = ref(props.show)
 
@@ -115,6 +121,7 @@ export default defineComponent({
       },
       { immediate: true }
     )
+
     //当数据是延迟加载、且需要数据回显时
     const stopWatchText = watch(
       () => props.text,
@@ -173,6 +180,11 @@ export default defineComponent({
         index
       })
     }
+    function toLoad() {
+      if (props.lazyLoad && props.data?.length === 0) {
+        lazyGet()
+      }
+    }
     function renderTrigger() {
       const writeOptions = {
         class: ['w-match', { 'w-match-block': props.block }],
@@ -196,6 +208,7 @@ export default defineComponent({
               visible.value = false
             }
           } else {
+            toLoad()
             dontSearch.value = false
           }
         },
@@ -217,6 +230,7 @@ export default defineComponent({
               class: 'w-cursor-pointer',
               rotate: visible.value,
               onClick: (e: MouseEvent) => {
+                toLoad()
                 visible.value = !visible.value
                 if (visible.value) {
                   focus()
