@@ -14,7 +14,7 @@ export default defineComponent({
       default: '24px'
     },
     show: { type: Boolean, default: false },
-    text: { type: String, default: '' },
+    text: { type: String, default: '暂无相关数据' },
     hasTransition: { type: Boolean, default: true },
     transitionName: { type: String, default: 'w-scale' }
   },

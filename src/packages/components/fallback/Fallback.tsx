@@ -25,14 +25,16 @@ export default defineComponent({
       return {
         ...props.loadingProps,
         hasTransition: false,
-        show: true
+        show: true,
+        class: 'w-fallback'
       }
     })
     const emptyOptions = computed(() => {
       return {
         ...props.emptyProps,
         hasTransition: false,
-        show: true
+        show: true,
+        class: 'w-fallback'
       }
     })
     return () => {

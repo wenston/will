@@ -15,7 +15,7 @@ export default defineComponent({
       default: '15px'
     },
     show: { type: Boolean, default: false },
-    text: { type: String, default: '' },
+    text: { type: String, default: '努力加载中...' },
     hasTransition: { type: Boolean, default: true },
     transitionName: { type: String, default: 'w-scale' }
   },

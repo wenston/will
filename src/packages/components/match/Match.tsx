@@ -5,36 +5,45 @@ import Layer, { LayerProps } from '../layer/index'
 import Write from '../write/index'
 import Arrow from '../arrow/index'
 import Close from '../close/index'
-import Fallback from '../fallback/index'
-import Virtual from '../virtual/index'
 import List from '../list/index'
 import useSearch from '../../use/useSearch'
+import useRequest from '../../use/useRequest'
+import { getItemValue, isArray, isValidValue } from '../../util'
 type DataItemType = string | number | Record<string, any>
 export default defineComponent({
   name: 'Match',
   inheritAttrs: false,
-  components: { Write, Layer, Arrow, Close, Fallback, Virtual, List },
+  components: { Write, Layer, Arrow, Close, List },
   props: {
     data: { type: Array as PropType<DataItemType[]>, default: () => [] },
     placement: {
       ...LayerProps.placement,
       default: 'bottom-start'
     },
-    gap: { type: LayerProps.gap.type, default: 2 },
+    gap: { ...LayerProps.gap, default: 2 },
     show: { type: Boolean, default: false },
     modelValue: { type: [String, Number], default: undefined },
+    //text用在数据延迟加载时，无数据匹配的情况
+    text: { type: String, default: '' },
     placeholder: { type: String, default: '请输入关键字' },
     readonly: { type: Boolean },
     disabled: { type: Boolean },
     block: { type: Boolean },
+    //当props.data为json数组时，如何用类型系统将keyField和textField规范成必传项？
     keyField: { type: String, default: 'Id' },
     textField: { type: String, default: 'Name' },
-    checkable: Function
+    checkable: Function as PropType<
+      (item: DataItemType, index: number) => boolean
+    >,
+    //所要匹配的数据是固定的，但数据会懒加载，加载时机：输入关键字匹配时，或者下拉框出现时
+    lazyLoad: Function as PropType<() => Promise<DataItemType[]>>,
+    //异步函数，有此函数的话，搜索结果一直从后台匹配
+    request: Function as PropType<() => Promise<DataItemType[]>>
   },
-  emits: ['update:show', 'update:modelValue', 'change'],
+  emits: ['update:show', 'update:modelValue', 'update:text', 'change'],
   setup(props, ctx) {
     const transitionName = 'w-slide-y'
-    const searchText = ref<string | undefined>('')
+    const searchText = ref<string>('')
     const dontSearch = ref(false)
     const filterData = useSearch(
       computed(() => props.data || []),
@@ -43,7 +52,14 @@ export default defineComponent({
       props.textField,
       afterSearch
     )
-    const currentText = ref('')
+    const {
+      data: reqData,
+      loading,
+      empty,
+      get: getData
+    } = useRequest(props.request, searchText, true)
+    const isLoading = ref(false)
+    const isEmpty = computed(() => filterData.value.length === 0)
     const triggerRect = ref<RectType>()
     const visible = ref(props.show)
 
@@ -81,41 +97,77 @@ export default defineComponent({
     watch(visible, (v) => {
       ctx.emit('update:show', v)
     })
+    watch(
+      [() => props.data, () => props.modelValue],
+      ([d, v]) => {
+        if (d && d.length && isValidValue(v)) {
+          const item = d.filter((_d) => {
+            return getItemValue(_d, props.keyField) === v
+          })[0]
+          if (item) {
+            const _text = getItemValue(item, props.textField)
+            if (searchText.value === '' || searchText.value !== _text) {
+              dontSearch.value = true
+              searchText.value = _text
+            }
+          }
+        }
+      },
+      { immediate: true }
+    )
+    //当数据是延迟加载、且需要数据回显时
+    const stopWatchText = watch(
+      () => props.text,
+      (t) => {
+        if (props.lazyLoad) {
+          if (!props.data || (isArray(props.data) && props.data.length === 0)) {
+            searchText.value = t
+          } else {
+            stopWatchText()
+          }
+        }
+      },
+      { immediate: true }
+    )
+
+    function _clear() {
+      ctx.emit('update:modelValue', undefined)
+      ctx.emit('update:text', '')
+      ctx.emit('change', {
+        item: undefined,
+        index: undefined
+      })
+    }
     //在输入框内输入或者粘贴搜索后，根据搜索结果来进行下一步
     //如果全匹配则自动选中，如果没有匹配到，则提示无匹配数据
     //如果有多个匹配结果，则展示出来匹配的数据列表
+    // 注意： 当有props.request时，afterSearch不会触发
     function afterSearch(
       resultLength: number,
-      isEqual: boolean,
-      index: number
+      isFullData: boolean, //是否是全量数据
+      isEqual?: boolean,
+      index?: number
     ) {
-      if (resultLength > 0) {
-        visible.value = true
-        if (isEqual) {
-          const item = filterData.value[0]!
-          toEmit(item, index)
+      if (!isFullData) {
+        if (resultLength > 0) {
+          if (isEqual) {
+            const item = filterData.value[0]!
+            toEmit(item, index!)
+          } else {
+            _clear()
+          }
         } else {
-          ctx.emit('update:modelValue', undefined)
-          ctx.emit('change', {
-            item: undefined,
-            index: undefined
-          })
         }
       }
+
+      visible.value = true
     }
     function toEmit(item: DataItemType, index: number) {
-      let v: number | string | undefined
-      if (typeof item === 'number' || typeof item === 'string') {
-        v = item
-      } else {
-        if (!props.textField || !props.keyField) {
-          console.warn('textField、keyField传入错误')
-          return
-        }
-      }
-      currentText.value = (item as Record<any, any>)[props.textField]
-      searchText.value = currentText.value
-      ctx.emit('update:modelValue', (item as Record<any, any>)[props.keyField])
+      const _key = getItemValue(item, props.keyField)
+      const _text = getItemValue(item, props.textField)
+      searchText.value = _text
+      ctx.emit('update:text', _text)
+      ctx.emit('update:modelValue', _key)
       ctx.emit('change', {
         item,
         index
@@ -133,34 +185,47 @@ export default defineComponent({
           // searchText.value = v
         },
         onSearch: (val: string) => {
-          dontSearch.value = false
           searchText.value = val
+          if (props.request) {
+            dontSearch.value = true
+            if (val !== '') {
+              visible.value = true
+              getData()
+            } else {
+              //空字符串不搜索
+              visible.value = false
+            }
+          } else {
+            dontSearch.value = false
+          }
         },
         onClear: () => {
-          currentText.value = ''
+          if (props.request) {
+            dontSearch.value = true
+            visible.value = false
+          } else {
+            dontSearch.value = false
+          }
           searchText.value = ''
-          dontSearch.value = false
-          ctx.emit('update:modelValue', undefined)
-          ctx.emit('change', {
-            item: undefined,
-            index: undefined
-          })
+          _clear()
         }
       }
       const writeSlots = {
         default: ({ focus }: { focus: () => void }) => {
-          const arrowOptions = {
-            class: 'w-cursor-pointer',
-            rotate: visible.value,
-            onClick: (e: MouseEvent) => {
-              visible.value = !visible.value
-              if (visible.value) {
-                focus()
+          if (!props.request) {
+            const arrowOptions = {
+              class: 'w-cursor-pointer',
+              rotate: visible.value,
+              onClick: (e: MouseEvent) => {
+                visible.value = !visible.value
+                if (visible.value) {
+                  focus()
+                }
+                e.stopPropagation()
               }
-              e.stopPropagation()
             }
+            return <Arrow {...arrowOptions} />
           }
-          return <Arrow {...arrowOptions} />
         }
       }
       return <Write {...writeOptions} v-slots={writeSlots}></Write>
@@ -170,19 +235,20 @@ export default defineComponent({
         trigger: renderTrigger,
         default: () => {
           const listOptions = {
-            data: filterData.value,
+            data: props.request ? reqData.value : filterData.value,
             keyField: props.keyField,
             textField: props.textField,
+            loading: props.request ? loading.value : isLoading.value,
+            empty: props.request ? empty.value : isEmpty.value,
+            checkable: props.checkable,
             activable: (item: any, index: number) => {
-              const k = item[props.keyField]
-              if (k === props.modelValue) {
-                return true
-              }
-              return false
+              return getItemValue(item, props.keyField) === props.modelValue
+              // return item[props.keyField] === props.modelValue
             },
             onToggle: (item: any, index: number) => {
-              const key = item[props.keyField]
+              const key = getItemValue(item, props.keyField)
               if (key !== props.modelValue) {
+                //不进行useSearch里的匹配，不会触发afterSearch
                 dontSearch.value = true
                 toEmit(item, index)
               }

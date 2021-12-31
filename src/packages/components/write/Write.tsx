@@ -33,7 +33,7 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const { delay } = useDelay(400)
+    const { delay } = useDelay(300)
     const lastSearchText = ref('')
     const input = ref<HTMLInputElement>()
     const isZH = ref(false) //是否在输入中文

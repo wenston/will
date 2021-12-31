@@ -16,7 +16,12 @@ export default function useSearch<T>(
   searchText: Ref<T>,
   dontSearch: Ref<boolean>,
   textField?: string,
-  afterSearch?: (resultLength: number, isEqual: boolean, index: number) => void
+  afterSearch?: (
+    resultLength: number,
+    isFullData: boolean,
+    isEqual?: boolean,
+    index?: number
+  ) => void
 ) {
   const filterData = ref<T[]>([]) as Ref<T[]>
   function toSearch(t: T | undefined) {
@@ -25,6 +30,7 @@ export default function useSearch<T>(
     }
     if (typeof t === undefined || (typeof t === 'string' && t === '')) {
       filterData.value = sourceData.value
+      // afterSearch && afterSearch(filterData.value.length, true)
     } else {
       let isEqual = false
       let i = 0
@@ -63,7 +69,7 @@ export default function useSearch<T>(
         }
         i++
       }
-      afterSearch && afterSearch(filterData.value.length, isEqual, i)
+      afterSearch && afterSearch(filterData.value.length, false, isEqual, i)
     }
   }
   watch(

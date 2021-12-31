@@ -217,7 +217,6 @@ export default defineComponent({
             <Fallback
               loading={loading.value}
               empty={isEmpty}
-              class="w-choose-fallback"
               loadingProps={{
                 text: '加载数据中'
               }}

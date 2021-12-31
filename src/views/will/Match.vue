@@ -1,32 +1,88 @@
 <template>
   <h1>{{currentRoute.meta.title}}</h1>
+  <section>
+    <h3>从已有数据中搜索</h3>
+    <p>
+      <Match :data="supplier"
+        v-model="search.supplierId"
+        :checkable="checkable" />
+    </p>
+
+  </section>
   <p>
-    <Match :data="supplier"
-      v-model="search.supplierId" />
+  <section>
+    <h3>数据懒加载</h3>
+    <p>
+      <Match :data="lazyData"
+        v-model="supplierId2"
+        :lazy-load="lazyLoad" />
+    </p>
+
+  </section>
   </p>
+  <!-- <section>
+
+    <h3>每次都从后台数据搜索，适用于大数据量的情况</h3>
+    <p>
+      <Match :request="getSupplier"
+        v-model="search.supplierId"
+        placeholder="输入关键字从后台搜索" />
+    </p>
+  </section> -->
+
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Match from 'will-ui/components/match/index'
 import Btn from 'will-ui/components/btn/index'
 const { currentRoute } = useRouter()
 
 import supplier from '../../mock-data/supplier'
+const lazyData = ref([])
+const supplierId2 = ref()
 const search = reactive<{
   supplierId: number | undefined
   supplierName: string
 }>({
-  supplierId: undefined,
+  supplierId: 781,
   supplierName: ''
 })
-watch(
-  () => search.supplierId,
-  (id) => {
-    console.log(id)
-  }
-)
+function checkable(item: Record<string, any>, index: number) {
+  return item.Name.indexOf('北京') === -1
+}
+function getSupplier(e: any) {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      console.log('参数：', e)
+      const random = Math.random()
+
+      if (random > 0.5) {
+        console.log('有数据了')
+        res(supplier)
+      } else {
+        res([])
+        console.warn('暂无数据哦')
+      }
+    }, 1500)
+  })
+}
+function lazyLoad() {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      res(supplier)
+    }, 1500)
+  })
+}
+watch([() => search.supplierId, () => search.supplierName], ([id, name]) => {
+  console.log(id, name)
+})
+onMounted(() => {
+  setTimeout(() => {
+    search.supplierId = 790
+  }, 1500)
+})
 </script>
 
 <style module="css" lang="postcss">

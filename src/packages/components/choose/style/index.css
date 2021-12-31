@@ -54,10 +54,6 @@
   overflow: hidden auto;
   white-space: nowrap;
   text-overflow: ellipsis;
-  & .w-choose-fallback {
-    min-height: 70px;
-    overflow: hidden;
-  }
 }
 /* 给以下class加overflow:hidden会导致抖动！ */
 .w-choose-item {
