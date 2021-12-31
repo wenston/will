@@ -15,7 +15,8 @@
     <p>
       <Match :data="lazyData"
         v-model="supplierId2"
-        :lazy-load="lazyLoad" />
+        :lazy-load="lazyLoad"
+        @search="toSearch2" />
     </p>
 
   </section>
@@ -58,7 +59,7 @@ function getSupplier(e: any) {
   return new Promise((res, rej) => {
     setTimeout(() => {
       res(supplier)
-    }, 1500)
+    }, 500)
   })
 }
 function lazyLoad() {
@@ -69,8 +70,11 @@ function lazyLoad() {
     }, 1500)
   })
 }
-watch([() => search.supplierId, () => search.supplierName], ([id, name]) => {
-  console.log(id, name)
+function toSearch2({ val, clear }: any) {
+  console.log('搜索的是：', val)
+}
+watch([supplierId2, () => search.supplierName], ([id, name]) => {
+  console.log('每次都从后台拿数据：', id)
 })
 onMounted(() => {
   setTimeout(() => {

@@ -40,24 +40,35 @@ export default defineComponent({
     //异步函数，有此函数的话，搜索结果一直从后台匹配
     request: Function as PropType<() => Promise<DataItemType[]>>
   },
-  emits: ['update:show', 'update:modelValue', 'update:text', 'change'],
+  emits: [
+    'update:show',
+    'update:modelValue',
+    'update:text',
+    'change',
+    'search'
+  ],
   setup(props, ctx) {
     const transitionName = 'w-slide-y'
     const searchText = ref<string>('')
     const dontSearch = ref(false)
-    const filterData = useSearch(
-      computed(() => props.data || []),
-      searchText,
-      dontSearch,
-      props.textField,
-      afterSearch
-    )
     const {
       data: reqData,
       loading,
       empty,
       get: getData
     } = useRequest(props.request, searchText, true)
+    const filterData = useSearch(
+      computed(() => {
+        if (props.request) {
+          return reqData.value || []
+        }
+        return props.data || []
+      }),
+      searchText,
+      dontSearch,
+      props.textField,
+      afterSearch
+    )
     const {
       loading: isLoading,
       empty: lazyEmpty,
@@ -198,8 +209,8 @@ export default defineComponent({
         },
         onSearch: (val: string) => {
           searchText.value = val
+          dontSearch.value = false
           if (props.request) {
-            dontSearch.value = true
             if (val !== '') {
               visible.value = true
               getData()
@@ -209,15 +220,19 @@ export default defineComponent({
             }
           } else {
             toLoad()
-            dontSearch.value = false
           }
+          ctx.emit('search', {
+            val,
+            clear: () => {
+              searchText.value = ''
+              _clear()
+            }
+          })
         },
         onClear: () => {
+          dontSearch.value = false
           if (props.request) {
-            dontSearch.value = true
             visible.value = false
-          } else {
-            dontSearch.value = false
           }
           searchText.value = ''
           _clear()
@@ -249,11 +264,11 @@ export default defineComponent({
         trigger: renderTrigger,
         default: () => {
           const listOptions = {
-            data: props.request ? reqData.value : filterData.value,
+            data: filterData.value,
             keyField: props.keyField,
             textField: props.textField,
             loading: props.request ? loading.value : isLoading.value,
-            empty: props.request ? empty.value : isEmpty.value,
+            empty: isEmpty.value,
             checkable: props.checkable,
             activable: (item: any, index: number) => {
               return getItemValue(item, props.keyField) === props.modelValue
