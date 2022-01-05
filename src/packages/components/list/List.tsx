@@ -24,6 +24,7 @@ export default defineComponent({
             ? !props.checkable(item, index)
             : false
           const itemOptions = {
+            // key: item[props.keyField],
             class: [
               'w-list-item',
               {
@@ -41,7 +42,12 @@ export default defineComponent({
             }
           }
           return (
-            <div {...itemOptions}>{getItemValue(item, props.textField)}</div>
+            <div {...itemOptions}>
+              {ctx.slots.default?.({
+                item,
+                index
+              }) ?? getItemValue(item, props.textField)}
+            </div>
           )
         })
         return items

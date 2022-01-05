@@ -284,7 +284,9 @@ export default defineComponent({
               visible.value = false
             }
           }
-          return <List {...listOptions} />
+          return (
+            <List {...listOptions} v-slots={{ default: ctx.slots.default }} />
+          )
         }
       }
       return <Layer {...layerOptions.value} v-slots={layerSlots} />

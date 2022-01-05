@@ -5,7 +5,11 @@
     <p>
       <Match :data="supplier"
         v-model="search.supplierId"
-        :checkable="checkable" />
+        :checkable="checkable">
+        <template #default="{item,index}">
+          {{index}}，{{item.Id}}--{{item.Name}}
+        </template>
+      </Match>
     </p>
 
   </section>
