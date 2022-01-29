@@ -25,6 +25,12 @@ const testChildrenRoutes: Array<RouteRecordRaw> = [
     path: 'vue-api-list',
     component: () => import('../views/test/children/vueApiList.vue'),
     meta: { title: 'vue-api-list' }
+  },
+  {
+    path: 'promise',
+    name: 'Promise',
+    component: () => import('../views/test/children/Promise.vue'),
+    meta: { title: 'Promise' }
   }
 ]
 const routes: Array<RouteRecordRaw> = [
