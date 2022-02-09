@@ -1,12 +1,12 @@
 import type { PropType } from 'vue'
 import { defineComponent, ref, computed, watch } from 'vue'
-import Num from '../../number'
+// import Num from '../../number'
 import { Choose } from '../../choose/index'
 import Tooltip from '../../tooltip/index'
 import Btn from '../../btn'
 export default defineComponent({
   name: 'Pagination',
-  components: { Choose, Btn, Tooltip, Num },
+  components: { Choose, Btn, Tooltip },
   props: {
     total: {
       type: Number,
@@ -38,7 +38,7 @@ export default defineComponent({
     const max2 = ref(7)
     const pi = ref(props.pageIndex)
     const ps = ref(props.pageSize)
-    const p_number = ref<number>()
+    const p_number = ref()
     const lout = computed(() => props.layout.toLocaleLowerCase().split(','))
     const totalPages = computed(() => Math.ceil(props.total / ps.value))
     const pagers = computed(() => {
@@ -92,14 +92,25 @@ export default defineComponent({
       return o
     })
     const numProps = computed(() => ({
-      min: 1,
+      placement: 'top',
+      validate: {
+        when: 'input',
+        reg: /\d+/
+      },
+      showTip: false,
       modelValue: p_number.value,
-      'onUpdate:modelValue': (p: number | string | undefined) => {
-        if (p !== undefined) {
-          p_number.value = Number(p)
+      'onUpdate:modelValue': (p: any) => {
+        p_number.value = p
+      },
+      onChange: (e: any) => {
+        // const target = e.target
+        let v = parseInt(p_number.value)
+        if (isNaN(v)) {
+          p_number.value = ''
+        } else {
+          p_number.value = v
         }
       },
-
       onKeyup: (e: KeyboardEvent) => {
         if (e.key.toLowerCase() === 'enter') {
           toJump()
@@ -108,7 +119,7 @@ export default defineComponent({
       // 'onChange':(p:any)=>{
       //     console.log(p)
       // },
-      width: '60px'
+      style: { width: '54px' }
     }))
 
     watch(
@@ -126,7 +137,7 @@ export default defineComponent({
     })
 
     function toJump() {
-      const p = Number(p_number.value)
+      const p = p_number.value - 0
       if (isNaN(p)) {
         return
       }
@@ -265,9 +276,9 @@ export default defineComponent({
           )}
           {showItem('jumper') && [
             <li style={{ order: setOrder('jumper') }}>
-              <span>前往&#8194;</span>
-              <Num {...numProps.value} />
-              <span>&#8194;页</span>
+              <span>前往 </span>
+              <span {...numProps.value} />
+              <span> 页</span>
             </li>,
             <li class="w-pagination-go" style={{ order: setOrder('jumper') }}>
               {btn}

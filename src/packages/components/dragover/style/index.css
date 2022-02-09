@@ -1,0 +1,15 @@
+.DragoverItem{
+    cursor: move;
+}
+.k-flex{
+    width:100%;
+    display:flex;
+    flex-wrap: wrap;
+}
+.k-direction-column{
+    flex-direction: column;
+    flex-wrap:none
+}
+.k-align-items-center {
+    align-items: center;
+}

@@ -4,6 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import postcssPresetEnv from 'postcss-preset-env'
 import autoprefixer from 'autoprefixer'
 import postcssNesting from 'postcss-nesting'
+import precss from 'precss';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,7 +21,8 @@ export default defineConfig({
       plugins: [
         // @ts-ignore
         autoprefixer,
-        postcssNesting
+        postcssNesting,
+        precss
         // @ts-ignore
 
         // postcssPresetEnv({

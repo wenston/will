@@ -1,0 +1,11 @@
+.is-pointer-events {
+    pointer-events:none;
+    color:var(--w-color-disabled)
+}
+a{
+    font-size:12px;
+    cursor: pointer;
+}
+.k-link-primary{
+    color:var(--w-color-primary)
+}

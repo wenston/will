@@ -1,0 +1,33 @@
+.k-col{
+  
+   min-height:10px;
+   flex-shrink:0;
+}
+
+  
+  .k-col-0 {
+    display: none;
+
+  }
+  
+  @for $i from 0 through 24 {
+    .k-col-$i {
+      max-width: calc(1 / 24 * $i * 100 * 1%);
+      flex:0 0 calc(1 / 24* $i * 100 * 1%);
+    }
+  
+    .k-col-offset-$i {
+      margin-left: calc(1/ 24 * $i * 100 * 1%);
+    }
+  
+    .k-col-pull-$i {
+      position: relative;
+      right:  calc(1/ 24 * $i * 100 * 1%);
+    }
+  
+    .k-col-push-$i {
+      position: relative;
+      left: calc( 1/ 24 * $i * 100 * 1%);
+    }
+  }
+  

@@ -1,26 +1,41 @@
 <template>
   <h3>基础组件</h3>
   <div :class="css.base_components">
-    <div :class="css.item"
-      v-for="item in pseudoCcomponents"
-      :key="item.componentId"
-      @click="toadd(item)">
-      <Icon :name="item.icon"
-        :class="css.icon" />
-      <span>{{item.name}}</span>
-    </div>
+    <Dragover clone
+      :sort='false'
+      :put='false'>
+      <DragoverItem v-for="item in pseudoCcomponents"
+        :dataId='item.componentId'
+        :oldClass='"old"'
+        :key="item.componentId">
+        <div :class="css.item"
+          :key="item.componentId">
+          <Icon :name="item.icon"
+            :class="css.icon" />
+          <span>{{item.name}}</span>
+        </div>
+      </DragoverItem>
+    </Dragover>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Icon from 'will-ui/components/icon/index'
+import Dragover from 'will-ui/components/dragover/index'
+import DragoverItem from 'will-ui/components/dragoverItem/index'
 import type { ComponentDescription } from 'decoration-types'
 const emit = defineEmits(['toAddComponent'])
 const pseudoCcomponents = ref<ComponentDescription[]>([])
 function toadd(item: ComponentDescription) {
   emit('toAddComponent', JSON.parse(JSON.stringify(item)))
 }
+// const props = defineProps({
+//   pseudoCcomponent: []
+// })
+// const pseudoCcomponent = computed(() => {
+//   return props.pseudoCcomponent
+// })
 onMounted(() => {
   //   console.log('ComponentPanel组件挂载')
   pseudoCcomponents.value = [
@@ -33,15 +48,15 @@ onMounted(() => {
       options: {},
       data: []
     },
-    {
-      uid: '',
-      componentId: '2',
-      componentName: 'p-swiper',
-      icon: 'w-icon-add',
-      name: '图片轮播',
-      options: {},
-      data: []
-    },
+    // {
+    //   uid: '',
+    //   componentId: '2',
+    //   componentName: 'p-swiper',
+    //   icon: 'w-icon-add',
+    //   name: '图片轮播',
+    //   options: {},
+    //   data: []
+    // },
     {
       uid: '',
       componentId: '3',
@@ -50,16 +65,16 @@ onMounted(() => {
       name: '标题',
       options: {},
       data: []
-    },
-    {
-      uid: '',
-      componentId: '4',
-      componentName: 'p-goods',
-      icon: 'w-icon-add',
-      name: '商品',
-      options: {},
-      data: []
     }
+    // {
+    //   uid: '',
+    //   componentId: '4',
+    //   componentName: 'p-goods',
+    //   icon: 'w-icon-add',
+    //   name: '商品',
+    //   options: {},
+    //   data: []
+    // }
   ]
 })
 </script>
@@ -74,6 +89,7 @@ onMounted(() => {
     --size: 80px;
     width: var(--size);
     height: var(--size);
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,7 +100,7 @@ onMounted(() => {
     cursor: pointer;
     user-select: none;
     flex-shrink: 0;
-    margin: 5px 0;
+    margin: 5px;
 
     & .icon {
       font-size: 18px;

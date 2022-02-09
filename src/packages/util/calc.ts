@@ -16,7 +16,6 @@ interface PlacementOptions {
   placement?: PlacementType
   gap?: number
   offset?: { x: number; y: number }
-  arrowOffset?: { x: number; y: number }
   layer?: any
 }
 //双盒定位，包含了位置的自动调整功能
@@ -26,7 +25,6 @@ export function getPlacement({
   placement = 'bottom',
   gap = 0,
   offset = { x: 0, y: 0 },
-  arrowOffset = { x: 0, y: 0 },
   layer
 }: PlacementOptions) {
   //自动调整
@@ -225,8 +223,6 @@ export function getPlacement({
 
     place.top += offset.y
     place.left += offset.x
-    place.x += arrowOffset.x
-    place.y += arrowOffset.y
 
     //检测是否超出可视区，并返回调整后的位置信息
     const rect = { top: place.top, left: place.left, ...l }

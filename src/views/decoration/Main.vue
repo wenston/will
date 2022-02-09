@@ -4,28 +4,42 @@
       <ComponentPanel @to-add-component="onAddComponent" />
     </div>
     <div :class="css.preview_container">
-      <div>
-        <Btn type="primary"
-          @click="onSave">保存</Btn>
-      </div>
-      <div :class="css.preview_box">
+      <!-- <div > -->
+      <Dragover @onAdd='onAdd'
+        type='ce'
+        @onEnd='onEnd'
+        @onMove='onMove'
+        :dragoverClass='"dragover2"'
+        id='dragover2'
+        :class="css.preview_box">
         <template v-for="com in pageComponents"
           :key="com.uid">
-          <component :is="com.componentName"
-            :uid="com.uid"
-            v-bind=com.options></component>
+
+          <DragoverItem :dataId='com.uid'>
+            <Scale :options=com.options
+              :uid="com.uid"
+              @resize='resize'>
+              <component :is="com.componentName"
+                :uid="com.uid"
+                v-bind=com.options></component>
+            </Scale>
+          </DragoverItem>
+
         </template>
-      </div>
+      </Dragover>
+      <!-- </div> -->
     </div>
+
     <div :class="css.options_container">
       <ComponentOptions :page-components="pageComponents" />
     </div>
   </div>
+
 </template>
-<script lang="tsx" setup>
-import Btn from 'will-ui/components/btn/index'
-import Notice from 'will-ui/components/notice/index'
-import Icon from 'will-ui/components/icon/index'
+<script lang="ts" setup>
+import Dragover from 'will-ui/components/dragover/index'
+import DragoverItem from 'will-ui/components/dragoverItem/index'
+import Scale from 'will-ui/components/Scale/index'
 import type { ComponentDescription } from 'decoration-types'
 import {
   ComponentDescriptionKey,
@@ -34,14 +48,115 @@ import {
   UpdateComponentKey
 } from 'decoration-symbols'
 import { createUid } from 'decoration-modules'
-import { ref, computed, provide, onMounted, readonly, useCssModule } from 'vue'
+import { ref, computed, provide, onMounted, readonly } from 'vue'
 import ComponentPanel from './components/ComponentPanel.vue'
 import ComponentOptions from './components/ComponentOptions.vue'
-const css = useCssModule('css')
+import link from '../../packages/components/link'
+import col from '../../packages/components/col'
 
+const pseudoCcomponents = [
+  {
+    uid: '',
+    componentId: '1',
+    componentName: 'p-search',
+    icon: 'w-icon-add',
+    name: '搜索',
+    options: {
+      width: '375px',
+      height: '50px'
+    },
+    data: []
+  },
+  // {
+  //   uid: '',
+  //   componentId: '2',
+  //   componentName: 'p-swiper',
+  //   icon: 'w-icon-add',
+  //   name: '图片轮播',
+  //   options: {},
+  //   data: []
+  // },
+  {
+    uid: '',
+    componentId: '3',
+    componentName: 'p-headline',
+    icon: 'w-icon-add',
+    name: '标题',
+    options: {},
+    data: []
+  }
+  // {
+  //   uid: '',
+  //   componentId: '4',
+  //   componentName: 'p-goods',
+  //   icon: 'w-icon-add',
+  //   name: '商品',
+  //   options: {},
+  //   data: []
+  // }
+]
+function resize({ width, height, uid }) {
+  console.log(document.documentElement.clientWidth, document.body.clientWidth)
+
+  pageComponents.value[0].options.width = width
+  pageComponents.value[0].options.height = height
+}
 /**
  * 当前装修页面中的组件列表
  */
+function onEnd(e, arr) {
+  console.log(arr, pageComponents.value)
+  // let it = pageComponents.value.splice(e.oldIndex, 1)
+  // pageComponents.value.splice(e.newIndex, 0, it)
+}
+function onMove(e) {
+  // console.log(document.querySelectorAll('.sortable-ghost'))
+  // let el = document.querySelectorAll('.sortable-ghost')
+  // el.forEach((item) => {
+  //   item.style.opacity = 0
+  // })
+  // .setAttribute('background', 'transparent')
+}
+function onAdd(e) {
+  // console.log(e, '12')
+
+  // console.log(pageComponents.value)
+
+  let list = document.querySelector('#dragover2').querySelectorAll('.old')
+  if (list) {
+    list.forEach((element) => {
+      document.querySelector('#dragover2').removeChild(element)
+    })
+  }
+  let it = JSON.parse(JSON.stringify(pseudoCcomponents[e.oldIndex]))
+  if (pageComponents.value.length) {
+    let i = 0
+    // pageComponents.value.forEach((item, index) => {
+
+    //   if (item.uid == e.newIndex) {
+    //     i = index
+    //   }
+    // })
+
+    if (pageComponents.value.length === e.newIndex) {
+      pageComponents.value.push({
+        ...it,
+        uid: createUid()
+      })
+    } else {
+      pageComponents.value.splice(e.newIndex, 0, {
+        ...it,
+        uid: createUid()
+      })
+    }
+  } else {
+    // let it = JSON.parse(JSON.stringify(pseudoCcomponents[e.oldIndex]))
+    pageComponents.value.push({
+      ...it,
+      uid: createUid()
+    })
+  }
+}
 const pageComponents = ref<ComponentDescription[]>([])
 function onAddComponent(item: ComponentDescription) {
   pageComponents.value.push({
@@ -81,30 +196,11 @@ provide(DeleteComponentKey, (uid) => {
 
 onMounted(() => {
   // console.log('Main组件挂载')
-})
 
-function onSave() {
-  if(pageComponents.value.length===0) {
-    Notice.open({
-      content:()=> {
-        return <div class={css.notice}>
-          <Icon name="w-icon-warning" />
-          <span>还没有选择任何组件！</span>
-        </div>
-      }
-    })
-  } else {
-    console.log(JSON.parse(JSON.stringify(pageComponents.value)))
-  }
-}
+  console.log()
+})
 </script>
 <style lang="postcss" module="css">
-.notice {
-  padding: 20px;
-  background-color: rgb(80, 80, 80);
-  color: white;
-  border-radius: var(--w-radius);
-}
 .decoration {
   display: flex;
   height: 100%;
@@ -120,7 +216,6 @@ function onSave() {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     flex: 1;
     height: 100%;
     padding: var(--w-padding-x);
@@ -129,7 +224,6 @@ function onSave() {
       width: 375px;
       height: 667px;
       background-color: white;
-      margin-top: var(--w-gap);
       overflow: auto;
     }
   }

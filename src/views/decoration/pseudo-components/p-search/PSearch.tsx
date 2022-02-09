@@ -3,10 +3,11 @@ import Wrapper from '../base/ItemWrapper.vue'
 import props from './props'
 import css from './index.module.css'
 import Icon from 'will-ui/components/icon/index'
-import Write from 'will-ui/components/write/index'
+import Dragover from 'will-ui/components/dragover/index'
+import DragoverItem from 'will-ui/components/dragoverItem/index'
 export default defineComponent({
   name: 'p-search',
-  components: { Wrapper },
+  components: { Wrapper, Dragover, DragoverItem },
   props: {
     ...Wrapper.props,
     ...props
@@ -15,7 +16,7 @@ export default defineComponent({
     const containerOptions = computed(() => {
       return {
         uid: props.uid,
-        class: [css['p-search']],
+        class: [css['p-search'], ' w-cursor-pointer'],
         style: {
           background: props.background
         }

@@ -15,8 +15,6 @@ ol.w-pagination {
     justify-content: center;
   }
   & li {
-    display: inline-flex;
-    align-items: center;
     flex-shrink: 0;
     /* &.w-pagination-total {
       margin-right: var(--w-gap);
@@ -25,7 +23,7 @@ ol.w-pagination {
       /* margin: 0 var(--w-gap); */
     }
     &.w-pagination-pager {
-      /* display: flex; */
+      display: flex;
 
       & > span {
         /* background-color: white; */

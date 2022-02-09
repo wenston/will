@@ -1,0 +1,43 @@
+.scale {
+  position: relative;
+  /* min-height: 100px; */
+}
+
+.dots {
+  border: 1px solid #409eff;
+  position: absolute;
+  z-index: 9999;
+  z-index: 9999;
+}
+
+.e-resize {
+  cursor: e-resize;
+}
+
+.ne-resize {
+  cursor: ne-resize, nw-resize;
+}
+
+.nw-resize {
+  cursor: nw-resize;
+}
+
+.n-resize {
+  cursor: n-resize;
+}
+
+.se-resize {
+  cursor: se-resize;
+}
+
+.sw-resize {
+  cursor: sw-resize;
+}
+
+.s-resize {
+  cursor: s-resize;
+}
+
+.w-resize {
+  cursor: w-resize;
+}

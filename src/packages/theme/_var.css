@@ -3,14 +3,12 @@
   --w-color-primary-3: #80bfff;
   --w-color-primary-5: #e6f2ff;
   --w-color-warning-2: #ffda54;
-  --w-color-danger: rgb(255, 112, 112);
-  --w-color-danger-5: rgb(255, 112, 112, 0.5);
   --w-color-font-1: #333;
   --w-color-font-2: #666;
   --w-color-font-3: #999;
   --w-color-font-4: #ccc;
   --w-color-font-5: #eee;
-  --w-color-disabled: var(--w-color-font-4);
+  --w-color-disabled: var(--w-color-font-5);
   --w-color-font: var(--w-color-font-1);
 
   --w-color-border: #e1e1e1;
@@ -63,7 +61,6 @@
   --w-notice-cubic-bezier: cubic-bezier(0.01, 0.7, 0.1, 1.2);
 
   --w-form-item-width: 180px;
-  --w-form-item-disabled-color: var(--w-color-font-5);
   --w-form-item-border-color: var(--w-color-border);
   --w-form-item-border-color-focus: var(--w-color-primary-3);
 
@@ -72,18 +69,4 @@
 
   --w-fade-white-background-color: rgba(255, 255, 255, 0.7);
   --w-fade-black-background-color: rgba(0, 0, 0, 0.45);
-
-  --w-sheet-container-border-color: var(--w-color-border);
-  --w-sheet-thead-background-color: var(--w-color-font-5);
-  --w-sheet-tr-background-color: white;
-  --w-sheet-tr-checked-background-color: #fffcda;
-  --w-sheet-tr-highlight-background-color: var(--w-color-primary-5);
-  --w-sheet-tr-stripe-color: #f9f9f9;
-  --w-sheet-tr-hover-color: var(--w-color-primary-5);
-  --w-sheet-thead-th-border-color: var(--w-color-border);
-  --w-sheet-td-border-color: var(--w-color-font-5);
-  --w-sheet-td-padding: 5px var(--w-gap);
-  --w-sheet-td-narrow-padding: 3px;
-  --w-sheet-tfoot-background-color: white;
-  --w-sheet-tfoot-th-border-color: var(--w-color-font-5);
 }

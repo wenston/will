@@ -25,12 +25,6 @@ const testChildrenRoutes: Array<RouteRecordRaw> = [
     path: 'vue-api-list',
     component: () => import('../views/test/children/vueApiList.vue'),
     meta: { title: 'vue-api-list' }
-  },
-  {
-    path: 'promise',
-    name: 'Promise',
-    component: () => import('../views/test/children/Promise.vue'),
-    meta: { title: 'Promise' }
   }
 ]
 const routes: Array<RouteRecordRaw> = [
@@ -160,22 +154,6 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: 'list',
-        name: 'List',
-        component: () => import('../views/will/List.vue'),
-        meta: {
-          title: '列表 List'
-        }
-      },
-      {
-        path: 'match',
-        name: 'Match',
-        component: () => import('../views/will/Match.vue'),
-        meta: {
-          title: '搜索匹配 Match'
-        }
-      },
-      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),
@@ -190,11 +168,11 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '树 Tree' }
       },
       {
-        path: 'sheet',
-        name: 'Sheet',
-        component: () => import('../views/will/Sheet.vue'),
-        meta: { title: '表格 Sheet' }
-      }
+        path: 'layout',
+        name: 'layout',
+        component: () => import('../views/will/layout.vue'),
+        meta: { title: 'layout' }
+      },
     ],
     meta: {
       title: 'PC端基础组件库'
@@ -217,6 +195,7 @@ const routes: Array<RouteRecordRaw> = [
       title: '店铺装修'
     }
   },
+
   {
     path: '/test',
     name: 'test',

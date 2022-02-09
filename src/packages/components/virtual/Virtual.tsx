@@ -1,12 +1,11 @@
 import type { PropType } from 'vue'
-import { defineComponent, ref, watch, computed, renderSlot, inject } from 'vue'
+import { defineComponent, ref, computed, renderSlot, inject } from 'vue'
 import useBoundingClientRect from '../../use/useBoundingClientRect'
 import useScroll from '../../use/useScroll'
 import useElement from '../../use/useElement'
 import { EmptyObject } from '../../config/types'
 export type TreeDataType = any[]
-export interface DataListOptions extends EmptyObject {
-  elem: HTMLElement | undefined
+export interface TreeDefaultSlotOptions extends EmptyObject {
   data: TreeDataType
   index: {
     from: number
@@ -56,13 +55,10 @@ export default defineComponent({
     })
 
     function handleScroll(e: any) {
-      // console.log(e.scrollTop)
       fromIndex.value = Math.floor(scrollTop.value / props.itemHeight)
     }
-
     return () => {
-      const d: DataListOptions = {
-        elem: root.value,
+      const d: TreeDefaultSlotOptions = {
         data: visibleData.value,
         index: {
           from: fromIndex.value,

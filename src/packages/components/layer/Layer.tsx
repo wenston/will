@@ -32,7 +32,7 @@ import useSlot from '../../use/useSlot'
 import useGlobalZIndex from '../../use/useGlobalZIndex'
 import useToggleArray from '../../use/toggle/useToggleArray'
 import useEvent from '../../use/useEvent'
-import useDelay from '../../use/useDelay'
+import useDelay from '../../use/useDealy'
 import clickOutside from '../../directives/clickOutside'
 import Mask from '../mask/'
 import {
@@ -66,11 +66,6 @@ export const LayerProps = {
   gap: { type: Number, default: 6 },
   //弹出层相对于自身的偏移量
   offset: {
-    type: Object as PropType<{ x: number; y: number }>,
-    default: () => ({ x: 0, y: 0 })
-  },
-  //箭头偏移
-  arrowOffset: {
     type: Object as PropType<{ x: number; y: number }>,
     default: () => ({ x: 0, y: 0 })
   },
@@ -224,7 +219,6 @@ export default defineComponent({
           placement: props.placement,
           gap: props.gap,
           offset: props.offset,
-          arrowOffset: props.arrowOffset,
           layer: defaultRoot
         })
         Object.assign(placementInfo, p)

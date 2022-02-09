@@ -1,11 +1,5 @@
 import type { Ref, ComputedRef } from 'vue'
-import {
-  watch,
-  onMounted,
-  onBeforeUnmount,
-  onUpdated,
-  getCurrentInstance
-} from 'vue'
+import { onMounted, onUnmounted, onUpdated, getCurrentInstance } from 'vue'
 import { getElement } from '../util'
 import useElement from './useElement'
 type ElemType = Window | Document | HTMLElement | Ref | ComputedRef
@@ -36,32 +30,17 @@ export default function useEvent(
     }
     // console.log("remove")
   }
-  // if (ins) {
-  //   onMounted(() => {
-  //     elem && add()
-  //   })
-  //   onUpdated(() => {
-  //     // TODO: 这里不能一股脑的remove在add，应当判断elem是否发生了变化
-  //     // remove()
-  //     add()
-  //   })
+  if (ins) {
+    onMounted(() => {
+      elem && add()
+    })
+    onUpdated(() => {
+      remove()
+      add()
+    })
 
-  //   onBeforeUnmount(remove)
-  // }
-
-  watch(
-    el,
-    (v) => {
-      if (v) {
-        // console.log(v)
-        add()
-      }
-    },
-    { immediate: true }
-  )
-  onBeforeUnmount(() => {
-    remove()
-  })
+    onUnmounted(remove)
+  }
 
   return {
     add,

@@ -1,0 +1,18 @@
+.dragover{
+    width:100%;
+    
+}
+.k-flex{
+    display:flex;
+    /* flex-wrap: wrap; */
+}
+.k-direction-column{
+    flex-direction: column;
+    flex-wrap:none
+}
+.k-align-items-center {
+    align-items: center;
+}
+.sort-move {
+    transition: transform 1s;
+}

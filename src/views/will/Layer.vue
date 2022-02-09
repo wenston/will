@@ -79,8 +79,7 @@
       <tr>
 
         <td>
-          <Layer placement="left-start"
-            :arrow-offset="{x:0,y:5}">
+          <Layer placement="left-start">
             <template #trigger>
               <Btn>左边顶部对齐</Btn>
             </template>
@@ -196,8 +195,7 @@
       <tr>
         <td></td>
         <td>
-          <Layer placement="bottom-start"
-            :arrow-offset="{x: -8,y:0}">
+          <Layer placement="bottom-start">
             <template #trigger>
               <Btn>底部左边对齐</Btn>
             </template>
@@ -213,8 +211,7 @@
           </Layer>
         </td>
         <td>
-          <Layer placement="bottom-end"
-            :arrow-offset="{x: -5,y:0}">
+          <Layer placement="bottom-end">
             <template #trigger>
               <Btn>底部右侧对齐</Btn>
             </template>

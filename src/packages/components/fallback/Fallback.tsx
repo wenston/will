@@ -6,9 +6,8 @@ import type { EmptyComponentProps } from '../empty/type'
 import type { LoadingComponentProps } from '../loading/type'
 export default defineComponent({
   props: {
-    //是否在加载数据中
+    //是否咋加载数据中
     loading: { type: Boolean, default: false },
-    empty: { type: Boolean, default: false },
     //loading组件的相关props
     loadingProps: {
       type: Object as PropType<LoadingComponentProps>,
@@ -25,16 +24,14 @@ export default defineComponent({
       return {
         ...props.loadingProps,
         hasTransition: false,
-        show: true,
-        class: 'w-fallback'
+        show: true
       }
     })
     const emptyOptions = computed(() => {
       return {
         ...props.emptyProps,
         hasTransition: false,
-        show: true,
-        class: 'w-fallback'
+        show: true
       }
     })
     return () => {
@@ -49,7 +46,7 @@ export default defineComponent({
       )
       return (
         <Transition name="w-scale" mode="out-in">
-          {props.loading ? loadingComp : props.empty ? emptyComp : null}
+          {props.loading ? loadingComp : emptyComp}
         </Transition>
       )
     }

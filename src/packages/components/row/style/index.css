@@ -1,0 +1,32 @@
+.k-row{
+    width:100%;
+    min-height:30px;
+    display:flex;
+    overflow: hidden;
+    /* flex-wrap: wrap; */
+    /* align-items: center; */
+}
+.justify-center{
+    justify-content:center ;
+}
+.justify-flex-end{
+    justify-content: flex-end;
+}
+.justify-flex-start{
+    justify-content: flex-start;
+}
+.justify-space-around{
+    justify-content: space-around;
+}
+.justify-space-between{
+    justify-content: space-between;
+}
+.align-end{
+    align-items: flex-end;
+}
+.align-center{
+    align-items: center;
+}
+.align-start{
+    align-items: flex-start;
+}

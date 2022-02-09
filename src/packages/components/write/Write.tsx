@@ -2,19 +2,16 @@ import { defineComponent, ref, computed, readonly, normalizeClass } from 'vue'
 import { filterListeners, isValidValue } from '../../util'
 import Close from '../close/index'
 import Layer from '../layer/index'
-import useDelay from '../../use/useDelay'
 
 export default defineComponent({
   inheritAttrs: false,
   components: { Close, Layer },
   emits: {
     'update:modelValue': null,
-    clear: null,
-    search: null
+    clear: null
   },
   props: {
     modelValue: { type: [Number, String] },
-    placeholder: { type: String },
     clearable: Boolean,
     block: Boolean,
     readonly: Boolean,
@@ -33,8 +30,6 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const { delay } = useDelay(300)
-    const lastSearchText = ref('')
     const input = ref<HTMLInputElement>()
     const isZH = ref(false) //是否在输入中文
     const showCloseBtn = computed(() => {
@@ -45,7 +40,6 @@ export default defineComponent({
       return {
         ref: input,
         class: ['w-write-input'],
-        placeholder: props.placeholder,
         readonly: props.readonly,
         disabled: props.disabled,
         value: props.modelValue,
@@ -57,14 +51,12 @@ export default defineComponent({
           const val = (e.target as HTMLInputElement).value
           if (!isZH.value) {
             ctx.emit('update:modelValue', val, input.value)
-            toSearch(val)
           }
         },
         onCompositionend: (e: CompositionEvent) => {
           setTimeout(() => {
             const val = (e.target as HTMLInputElement).value
             ctx.emit('update:modelValue', val, input.value)
-            toSearch(val)
             isZH.value = false
           })
         },
@@ -80,24 +72,6 @@ export default defineComponent({
       return {
         manual: true
       }
-    })
-    function focus() {
-      input.value?.focus()
-    }
-    function select() {
-      input.value?.select()
-    }
-    function toSearch(val: string) {
-      delay(() => {
-        if (val !== lastSearchText.value) {
-          ctx.emit('search', val, input.value)
-          lastSearchText.value = val
-        }
-      })
-    }
-    ctx.expose({
-      focus,
-      select
     })
     return () => {
       const inputEl = <input {...inputOptions.value} />
@@ -129,9 +103,7 @@ export default defineComponent({
                     }}
                   />
                 )}
-                {ctx.slots.default?.({
-                  focus
-                })}
+                {ctx.slots.default?.()}
               </div>
             ),
             default: () => '输入无效'
