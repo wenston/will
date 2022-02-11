@@ -4,7 +4,7 @@ import router from './router'
 
 import 'will-ui/theme/index.css'
 import './assets/style/index.css'
-
+import './assets/font/iconfont.css'
 // 问题点：如何用d.ts里定义的类型，如何全局引入？
 // import type { ComponentDescription } from './views/decoration/config/type'
 

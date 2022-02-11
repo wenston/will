@@ -12,8 +12,7 @@
       </Col>
     </Row>
     <div>
-      <Link>
-
+      <Link @click="imgViewers">
       </Link>
     </div>
     <div>
@@ -65,6 +64,10 @@
       </CarouselItem>
     </Carousel>
     <!-- </div> -->
+    <ImgViewer :list="imgList"
+      :src='src'
+      v-model:show='show'></ImgViewer>
+
   </div>
 </template>
 
@@ -74,10 +77,12 @@ import Col from '../../packages/components/col'
 import Link from '../../packages/components/link'
 import Dragover from '../../packages/components/dragover'
 import DragoverItem from '../../packages/components/dragoverItem'
-import { Carousel, CarouselItem } from '../../packages/components/carousel'
-// import { watch } from '@vue/runtime-core'
-import { watch, ref, defineComponent } from 'vue'
-// const DragoverItem = Dragover.item
+import { Carousel, CarouselItem } from 'carousel-q'
+import 'carousel-q/dist/style.css'
+import ImgViewer from '../../packages/components/imgViewer'
+// import ImgViewer from 'img-viewer-q'
+import 'img-viewer-q/dist/style.css'
+import { watch, ref, defineComponent, getCurrentInstance } from 'vue'
 export default defineComponent({
   components: {
     Row,
@@ -86,11 +91,13 @@ export default defineComponent({
     Dragover,
     DragoverItem,
     Carousel,
-    CarouselItem
+    CarouselItem,
+    ImgViewer
   },
 
   setup(props, ctx) {
-    console.log(CarouselItem)
+    // console.log(imgViewer)
+
     const data = ref([
       { id: '1', name: '测试111111' },
       { id: '2', name: '测试222222' },
@@ -102,6 +109,10 @@ export default defineComponent({
       { id: '22', name: '测试222222' },
       { id: '33', name: '测试333333' },
       { id: '44', name: '测试444444' }
+    ])
+    const imgList = ref([
+      'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1113%2F032120114622%2F200321114622-4-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647142450&t=ae3467450148171d766da827a54a7a3b',
+      'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp08%2F01042323313046.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647142451&t=f6d3be2baecabfe96481bec50487522d'
     ])
     watch(data2, (v) => {
       console.log(v)
@@ -115,54 +126,37 @@ export default defineComponent({
     })
     const index = ref(null)
 
-    function move2(v) {
-      let it = data.value[v]
-      data2.value.splice(addIndex.value, 0, it)
-    }
-    // function afterDrop(data) {
-    //   if (data2.value.length) {
-    //     if (index.value != null) {
-    //       data2.value.splice(index.value, 0, data)
-    //       index.value = null
-    //     } else {
-    //       data2.value.push(data)
-    //     }
-    //   } else {
-    //     data2.value.push(data)
-    //   }
-    // }
-
-    function update1({ to, from }) {
-      console.log(to, from)
-
-      let it = data.value.splice(to, 1)[0]
-      data.value.splice(from, 0, it)
-    }
-    function update({ to, from }) {
-      let it = data2.value.splice(to, 1)[0]
-      data2.value.splice(from, 0, it)
-      console.log(data2.value, 'data2')
-    }
     const addIndex = ref(0)
-    function add(index) {
-      addIndex.value = index
-      console.log(index, 'index')
+
+    const instance: any = getCurrentInstance()
+    const imgViewer = ref(null)
+    const src = ref('')
+    const show = ref(false)
+    function imgViewers() {
+      console.log(imgViewer.value)
+      src.value =
+        'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1113%2F032120114622%2F200321114622-4-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647142450&t=ae3467450148171d766da827a54a7a3b'
+      show.value = true
+      // instance.refs.imgViewer.setShow(
+      // 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1113%2F032120114622%2F200321114622-4-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647142450&t=ae3467450148171d766da827a54a7a3b'
+      // )
     }
     return {
       data,
       data2,
       // afterDrop,
-      move2,
-      add,
-      update1,
-      update,
-      options
+      options,
+      imgList,
+      imgViewer,
+      imgViewers,
+      src,
+      show
     }
   }
 })
 </script>
 
-<style>
+<style lang="postcss" scoped>
 .k-row {
   background: #eeeeee;
 }

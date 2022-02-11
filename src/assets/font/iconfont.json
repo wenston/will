@@ -1,0 +1,93 @@
+{
+  "id": "3178139",
+  "name": "ui",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4777232",
+      "name": "全屏",
+      "font_class": "quanping",
+      "unicode": "ec15",
+      "unicode_decimal": 60437
+    },
+    {
+      "icon_id": "4777227",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "ec13",
+      "unicode_decimal": 60435
+    },
+    {
+      "icon_id": "4777229",
+      "name": "放大",
+      "font_class": "fangda",
+      "unicode": "ec14",
+      "unicode_decimal": 60436
+    },
+    {
+      "icon_id": "7339836",
+      "name": "刷新",
+      "font_class": "shuaxin",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "8229196",
+      "name": "向右旋转",
+      "font_class": "xiangyouxuanzhuan",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "8229197",
+      "name": "向左旋转",
+      "font_class": "xiangzuoxuanzhuan",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "15838424",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "15838514",
+      "name": "minus",
+      "font_class": "minus",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "15838518",
+      "name": "move",
+      "font_class": "move",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "15838561",
+      "name": "arrow-left-bold",
+      "font_class": "arrow-left-bold",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "15838563",
+      "name": "close-bold",
+      "font_class": "close-bold",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "15838566",
+      "name": "arrow-right-bold",
+      "font_class": "arrow-right-bold",
+      "unicode": "e687",
+      "unicode_decimal": 59015
+    }
+  ]
+}

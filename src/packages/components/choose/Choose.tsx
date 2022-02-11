@@ -154,7 +154,7 @@ export default defineComponent({
         class: 'w-choose-close-btn',
         name: 'w-icon-close-fill',
         onClick: (e: MouseEvent) => {
-          ctx.('update:modelValue', undefined)
+          ctx.emit('update:modelValue', undefined)
           txt.value = undefined
           ctx.emit(
             'change',

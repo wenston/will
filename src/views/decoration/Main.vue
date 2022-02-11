@@ -104,12 +104,12 @@ function resize({ width, height, uid }) {
 /**
  * 当前装修页面中的组件列表
  */
-function onEnd(e, arr) {
+function onEnd(e: any, arr: any) {
   console.log(arr, pageComponents.value)
   // let it = pageComponents.value.splice(e.oldIndex, 1)
   // pageComponents.value.splice(e.newIndex, 0, it)
 }
-function onMove(e) {
+function onMove(e: any) {
   // console.log(document.querySelectorAll('.sortable-ghost'))
   // let el = document.querySelectorAll('.sortable-ghost')
   // el.forEach((item) => {
@@ -117,7 +117,7 @@ function onMove(e) {
   // })
   // .setAttribute('background', 'transparent')
 }
-function onAdd(e) {
+function onAdd(e: any) {
   // console.log(e, '12')
 
   // console.log(pageComponents.value)

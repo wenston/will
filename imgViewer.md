@@ -1,4 +1,4 @@
-## vue3简单的图片预览器
+## 简单的图片预览器
 ## 使用
     先引入
     import imgViewer from 'img-viewer-q'

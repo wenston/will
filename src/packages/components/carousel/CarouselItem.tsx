@@ -1,4 +1,5 @@
 import { computed, defineComponent, h, provide, renderSlot, ref, getCurrentInstance, inject, onMounted } from 'vue'
+import './style/index.css'
 export default defineComponent({
     name: 'CarouselItem',
     props: {

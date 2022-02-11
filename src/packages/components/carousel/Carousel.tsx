@@ -1,5 +1,7 @@
 import { computed, defineComponent, h, provide, renderSlot, ref, getCurrentInstance, onMounted, CSSProperties, PropType, watch, onUnmounted } from 'vue'
 import IndicatorItem from './indicator'
+import './style/index.css'
+import Icon from '../icon'
 interface Props {
     count: number;
     style: CSSProperties;
@@ -8,7 +10,7 @@ interface Props {
 
 export default defineComponent({
     name: 'Carousel',
-    // components: { IndicatorItem },
+    components: { Icon },
     props: {
         options: {
             type: Object,
@@ -60,21 +62,6 @@ export default defineComponent({
                 t = setInterval(() => {
                     if (uid.value.length - 1 > index.value) {
                         index.value++
-                        // if (index.value == uid.value.length - 1) {
-
-                        //     index.value++
-                        //     if (props.options.type == 'column') {
-                        //         isP.value = 'w-carousel-p_c_active'
-                        //     } else {
-                        //         isP.value = 'w-carousel-p_r_active'
-                        //     }
-
-
-                        // } else {
-                        //     index.value++
-                        //     setTr()
-
-                        // }
                     } else {
                         index.value = 0
                     }
@@ -98,14 +85,7 @@ export default defineComponent({
         }
         // 监听
         watch(index, (v) => {
-            // if (v < 0) {
-            //     if (props.options.type == 'row') {
-            //         style.value = `transform: translate3d(0px, 0px, 0px)`
-            //     } else {
-            //         style.value = `transform: translate3d(0px, 0px, 0px)`
-            //     }
-            //     // index.value = 0
-            // } else {
+
             if (props.options.type == 'row') {
                 style.value = `transform: translate3d(-${instance?.refs.carousel.clientWidth * (v >= 0 ? v : 0)}px, 0px, 0px);transition-duration: ${props.options.moveTime || 1000}ms`
             } else {
@@ -191,7 +171,7 @@ export default defineComponent({
         })
         const indicatorContent: any = ref('')
         function indicatorItem() {
-            return uid.value.map((item, i: Number) => {
+            return uid.value.map((item: any, i: Number) => {
                 return <IndicatorItem item={i} ></IndicatorItem>
             })
         }
@@ -305,8 +285,8 @@ export default defineComponent({
                 </div>
                 {ctx.slots.flip?.(PageUp, PageDown) ?? (
                     <>
-                        <div class={right.value} style={{ display: isFlipUp.value }} onClick={PageUp}>&gt;</div>
-                        <div class={left.value} style={{ display: isFlipDown.value }} onClick={PageDown}>&lt;</div>
+                        <div class={right.value} style={{ display: isFlipUp.value }} onClick={PageUp}> <Icon name="icon-arrow-right-bold"></Icon></div>
+                        <div class={left.value} style={{ display: isFlipDown.value }} onClick={PageDown}> <Icon name="icon-arrow-left-bold"></Icon></div>
                     </>)
                 }
                 {ctx.slots.indicator?.(indicator) ?? indicatorContent.value}
