@@ -25,7 +25,11 @@ promise
     console.log(error)
   })
 
-console.log(promise)
+let arr = [1, 2, 3, 4]
+let num = arr.reduce((prev, curr, curIndex, a) => {
+  return prev + curr
+}, -1)
+console.log(num)
 /**
  * 以下的打印顺序是为什么？
  * https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_DOM_API/Microtask_guide

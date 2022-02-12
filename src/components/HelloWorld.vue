@@ -1,16 +1,17 @@
-<script setup lang="ts">
-defineProps<{ msg: string }>()
-import { ref } from "vue"
-import useCount from "../packages/use/useCount"
-const { count, add } = useCount()
-</script>
 
 <template>
   <h1>{{ msg }}</h1>
   <div>
-    <button @click="add">{{count}}</button>
+    <button @click="add(1)">{{count}}</button>
   </div>
 </template>
+<script setup lang="ts">
+import { ref } from 'vue'
+import useCount from '../packages/use/useCount'
+defineProps<{ msg: string }>()
+const { count, add } = useCount()
+</script>
+
 
 <style module="css" lang="postcss" >
 a.link {

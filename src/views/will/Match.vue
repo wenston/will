@@ -1,40 +1,42 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <section>
     <h3>从已有数据中搜索</h3>
     <p>
-      <Match :data="supplier"
+      <Match
+        :data="supplier"
         v-model="search.supplierId"
-        :checkable="checkable">
-        <template #default="{item,index}">
-          {{index}}，{{item.Id}}--{{item.Name}}
+        :checkable="checkable"
+      >
+        <template #default="{ item, index }">
+          {{ index }}，{{ item.Id }}--{{ item.Name }}
         </template>
       </Match>
     </p>
-
   </section>
-  <p>
+
   <section>
     <h3>数据懒加载</h3>
     <p>
-      <Match :data="lazyData"
+      <Match
+        :data="lazyData"
         v-model="supplierId2"
         :lazy-load="lazyLoad"
-        @search="toSearch2" />
+        @search="toSearch2"
+      />
     </p>
-
   </section>
-  </p>
-  <section>
 
+  <section>
     <h3>每次都从后台数据搜索，适用于大数据量的情况</h3>
     <p>
-      <Match :request="getSupplier"
+      <Match
+        :request="getSupplier"
         v-model="search.supplierId3"
-        placeholder="输入关键字从后台搜索" />
+        placeholder="输入关键字从后台搜索"
+      />
     </p>
   </section>
-
 </template>
 
 <script lang="ts" setup>
@@ -42,9 +44,9 @@ import { onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import Match from 'will-ui/components/match/index'
 import Btn from 'will-ui/components/btn/index'
-const { currentRoute } = useRouter()
 
 import supplier from '../../mock-data/supplier'
+const { currentRoute } = useRouter()
 const lazyData = ref<Record<string, any>>([])
 const supplierId2 = ref()
 const search = reactive<{
@@ -87,5 +89,4 @@ onMounted(() => {
 })
 </script>
 
-<style module="css" lang="postcss">
-</style>
+<style module="css" lang="postcss"></style>

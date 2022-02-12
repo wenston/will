@@ -1,11 +1,13 @@
 <template>
   <div :class="css.container">
-    <div :class="css.item"
+    <div
+      :class="css.item"
       class="w-cursor-pointer"
       v-for="route in routes"
       :key="route.name"
-      @click="navigateTo(route)">
-      {{route.meta?.title}}
+      @click="navigateTo(route)"
+    >
+      {{ route.meta?.title }}
     </div>
   </div>
 </template>

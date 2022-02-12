@@ -1,15 +1,11 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <p>
-    <Write :class="css.write"
-      @clear="onClear"
-      clearable
-      v-model="txt1"></Write>
+    <Write :class="css.write" 
+@clear="onClear" clearable v-model="txt1"></Write>
   </p>
   <p>
-    <Write :class="css.write"
-      clearable
-      v-model="txt1">
+    <Write :class="css.write" clearable v-model="txt1">
       <template #prepend>
         <Icon name="w-icon-radio" />
       </template>
@@ -25,8 +21,7 @@
       </template>
       <template #after>
         <span>&#12288;</span>
-        <Btn mode="line"
-          type="primary">提交</Btn>
+        <Btn mode="line" type="primary">提交</Btn>
       </template>
     </Write>
   </p>
@@ -35,7 +30,7 @@
     <Btn @click="beforeShow('right')">右侧</Btn>
     <Btn @click="beforeShow('top')">上侧</Btn>
     <Btn @click="beforeShow('bottom')">下侧</Btn>
-  </p> -->
+  </p>-->
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +44,7 @@ const txt1 = ref('')
 function onFocus() {
   console.log('focus了')
 }
-function onClear({ input }) {
+function onClear({ input }: { input: HTMLInputElement }) {
   console.log(input)
   input?.focus()
 }

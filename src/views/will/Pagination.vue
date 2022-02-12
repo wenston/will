@@ -1,10 +1,11 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <div style="margin-top: calc(100vh - 100px)">
-    <Pagination :total="64210"
+    <Pagination
+      :total="64210"
       v-model:page-index="pager.pageIndex"
-      v-model:page-size="pager.pageSize"></Pagination>
-
+      v-model:page-size="pager.pageSize"
+    ></Pagination>
   </div>
 </template>
 <script lang="ts" setup>

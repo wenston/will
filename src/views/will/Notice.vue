@@ -1,5 +1,5 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <p>
     <Btn @click="toShowNotice">展示一个通知</Btn>
     <Btn @click="toCloseNotice">关闭一个通知</Btn>

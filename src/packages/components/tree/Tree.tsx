@@ -16,13 +16,13 @@ import Virtual from '../../components/virtual'
 import Icon from '../../components/icon'
 import Checkbox from '../../components/checkbox'
 
-import type { IconType } from '../../components/icon/Icon'
-import { TreeDefaultSlotOptions } from '../../components/virtual/Virtual'
+import type { IconComponentProps } from '../../components/icon/type'
+import { DataListOptions } from '../../components/virtual/Virtual'
 import type { TreeDataType } from '../../components/virtual/Virtual'
 import usePlatData from './_use/platTreeData'
 import useTreeState from './_use/treeState'
 
-export type TreeIconsType = IconType[]
+export type TreeIconsType = IconComponentProps[]
 
 export const TreeProps = {
   data: {
@@ -66,7 +66,7 @@ export const TreeProps = {
   },
   //复选相关参数
   hasCheckbox: { type: Boolean, default: true },
-  
+
   rows: Array,
   keys: { type: Array, default: () => [] },
   rule: {
@@ -87,18 +87,19 @@ export default defineComponent({
       index: number
     }>({ item: null, index: -1 })
     const { stateMap, setState, getState } = useTreeState(props.onlyOne)
-    const { filterPlattenData, toggle,toSelectParent,toSelectChildren } = usePlatData(
-      computed(() => props.data),
-      props.keyField,
-      props.childField,
-      props.levelField,
-      stateMap,
-      getState,
-      setState,
-      props.rule,
-      props.onlyOne,
-      computed(()=>props.keys)
-    )
+    const { filterPlattenData, toggle, toSelectParent, toSelectChildren } =
+      usePlatData(
+        computed(() => props.data),
+        props.keyField,
+        props.childField,
+        props.levelField,
+        stateMap,
+        getState,
+        setState,
+        props.rule,
+        props.onlyOne,
+        computed(() => props.keys)
+      )
     function renderIndent(item: Record<any, any>) {
       let space = []
       let i = 0
@@ -150,7 +151,7 @@ export default defineComponent({
           onChange: (b: boolean) => {
             // console.log(b)
             //选择时，要处理树形数据中当前数据的上下级，做同步选择
-            onSelectParentAndChildren(b, item,index)
+            onSelectParentAndChildren(b, item, index)
           },
           onClick: (e: MouseEvent) => {
             e.stopPropagation()
@@ -161,17 +162,17 @@ export default defineComponent({
     }
 
     //同步选择当前数据的上下级
-    function onSelectParentAndChildren(b:boolean,item:Record<any,any>,index:number) {
-      const keys = toSelectChildren(b,props.keys,item,index)
-      const finnalKeys = toSelectParent(b,keys,item,index)
-      ctx.emit('update:keys',finnalKeys)
-
+    function onSelectParentAndChildren(
+      b: boolean,
+      item: Record<any, any>,
+      index: number
+    ) {
+      const keys = toSelectChildren(b, props.keys, item, index)
+      const finnalKeys = toSelectParent(b, keys, item, index)
+      ctx.emit('update:keys', finnalKeys)
     }
 
-    function getRows() {
-      
-    }
-
+    function getRows() {}
 
     return () => {
       const treeSlots = {
@@ -179,7 +180,7 @@ export default defineComponent({
           data: visibleData,
           index: { from, to },
           scrollTo
-        }: TreeDefaultSlotOptions) => {
+        }: DataListOptions) => {
           return visibleData.map((item: EmptyObject, i: number) => {
             const realIndex: number = from + i
             const key = item[props.keyField]

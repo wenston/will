@@ -1,13 +1,14 @@
 <template>
   <h3>基础组件</h3>
   <div :class="css.base_components">
-    <div :class="css.item"
+    <div
+      :class="css.item"
       v-for="item in pseudoCcomponents"
       :key="item.componentId"
-      @click="toadd(item)">
-      <Icon :name="item.icon"
-        :class="css.icon" />
-      <span>{{item.name}}</span>
+      @click="toadd(item)"
+    >
+      <Icon :name="item.icon" :class="css.icon" />
+      <span>{{ item.name }}</span>
     </div>
   </div>
 </template>

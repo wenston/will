@@ -1,5 +1,5 @@
 import { defineComponent, computed } from 'vue'
-import './p-search.css'
+import './m-search.css'
 export default defineComponent({
   props: {
     placeholder: {

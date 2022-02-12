@@ -1,15 +1,18 @@
 <template>
   <div :class="css.ui">
     <div :class="css.nav">
-      <router-link v-for="r in uiViews"
-        :to=" '/will-ui/'+ r.path"
+      <router-link
+        v-for="r in uiViews"
+        :to="'/will-ui/' + r.path"
         :active-class="css.active"
-        :key="r.name">{{r.meta?.title}}</router-link>
+        :key="r.name"
+      >
+        {{ r.meta?.title }}
+      </router-link>
     </div>
     <div :class="css.view">
       <router-view />
     </div>
-
   </div>
 </template>
 

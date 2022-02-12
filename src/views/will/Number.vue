@@ -52,7 +52,7 @@ const txt1 = ref<number | string>(3)
 function onFocus() {
   console.log('focus了')
 }
-function onClear({ input }) {
+function onClear({ input }: {input:HTMLInputElement}) {
   console.log(input)
   input?.focus()
 }

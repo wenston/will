@@ -1,3 +1,3 @@
 import { useAttrs, normalizeClass, watch, ref } from 'vue'
 
-export default function useComponentClass(as) {}
+export default function useComponentClass() {}

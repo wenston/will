@@ -1,32 +1,24 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <p>
     <Btn @click="toAdd">添加一项</Btn>
     <Btn @click="toDel">删除一项</Btn>
   </p>
   <transition-group name="list">
-    <div class="list-item"
-      v-for="(el,i) in listData"
-      :key="el">
+    <div class="list-item" v-for="(el, i) in listData" :key="el">
       <div class="item-box">
-        <p>
-          这里是内容哦，这里是第&#12288;{{i}}&#12288;项
-
-        </p>
-        <p>
-          一些测试用的内容
-        </p>
+        <p>这里是内容哦，这里是第&#12288;{{ i }}&#12288;项</p>
+        <p>一些测试用的内容</p>
       </div>
-
     </div>
   </transition-group>
 </template>
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-const { currentRoute } = useRouter()
 import { ref } from 'vue'
 import Btn from '../../../packages/components/btn/index'
 import useCount from '../../../packages/use/useCount'
+const { currentRoute } = useRouter()
 const listData = ref([1])
 const { count, add } = useCount({ init: 2, step: 1 })
 function getRandom() {

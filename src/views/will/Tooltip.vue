@@ -5,19 +5,16 @@
   </div>
   <div>
     <p>
-      <Tooltip placement="left"
-        v-model:show="showTooltip">
+      <Tooltip placement="left" v-model:show="showTooltip">
         <template #trigger>
-          <template v-if="count%2==0">
-            <span>left{{count}}</span>
+          <template v-if="count % 2 == 0">
+            <span>left{{ count }}</span>
           </template>
           <template v-else>
-            <i>left{{count}}</i>
+            <i>left{{ count }}</i>
           </template>
         </template>
-        <div>
-          这是要展示的一些东西
-        </div>
+        <div>这是要展示的一些东西</div>
       </Tooltip>
     </p>
     <p>
@@ -40,9 +37,7 @@
         <div>在底部出现的提示</div>
       </Tooltip>
     </p>
-
   </div>
-
 </template>
 <script lang="ts" setup>
 import { ref, watch } from 'vue'

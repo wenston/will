@@ -1,28 +1,22 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <p>
     <btn @click="toAdd">加点数据看看</btn>
   </p>
-  <div :id="css.info"
-    ref="info"></div>
-  <div :class="css.tree_box"
-    :item-height="15">
-    <Tree :data="bigDataList"
-      :class="css.tree"
-      v-model:keys="keys">
-      <template #use="{current}">
-        <Teleport v-if="info"
-          :to="info">
+  <div :id="css.info" ref="info"></div>
+  <div :class="css.tree_box" :item-height="15">
+    <Tree :data="bigDataList" :class="css.tree" v-model:keys="keys">
+      <template #use="{ current }">
+        <Teleport v-if="info" :to="info">
           <div>
-            <div>{{current.index}}；{{current.item?.Name}}</div>
+            <div>{{ current.index }}；{{ current.item?.Name }}</div>
           </div>
         </Teleport>
       </template>
     </Tree>
-
   </div>
-  <div style="word-break:break-word">
-    {{JSON.stringify(keys)}}
+  <div style="word-break: break-word">
+    {{ JSON.stringify(keys) }}
   </div>
   <!-- <p>
     <Btn type="primary">给树数据添加点东西测试一下</Btn>
@@ -31,7 +25,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import Tree from 'will-ui/components/tree/index'
-const { currentRoute } = useRouter()
 
 import { onMounted, ref, Teleport, watch } from 'vue'
 import Btn from 'will-ui/components/btn/index'
@@ -39,6 +32,7 @@ import { plattenTreeData } from 'will-ui/util'
 import treeData from '../../mock-data/3c'
 const { filterPlattenData: plat } = plattenTreeData(treeData, 'Childs')
 
+const { currentRoute } = useRouter()
 const bigDataList = ref<any[]>([])
 const keys = ref([])
 const info = ref(null)

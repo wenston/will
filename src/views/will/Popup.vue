@@ -1,20 +1,21 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <p>
     <Btn @click="toShowPopup">弹出</Btn>
   </p>
-  <Popup v-model:show="show"
+  <Popup
+    v-model:show="show"
     title="弹框的标题"
     @after-ok="afterOk"
-    :loading="{text:'正在保存，请稍等...'}">
+    :loading="{ text: '正在保存，请稍等...' }"
+  >
     <Tooltip placement="left">
       <template #trigger>
         <span>备注</span>
       </template>
       备注一些东西看看
     </Tooltip>
-    <template v-for="n in 10"
-      :key="n">
+    <template v-for="n in 10" :key="n">
       <p>这是里边的内容</p>
       <p>内容随意定义</p>
     </template>
@@ -28,7 +29,7 @@
     <Btn @click="beforeShow('right')">右侧</Btn>
     <Btn @click="beforeShow('top')">上侧</Btn>
     <Btn @click="beforeShow('bottom')">下侧</Btn>
-  </p> -->
+  </p>-->
 </template>
 
 <script lang="tsx" setup>
@@ -46,7 +47,7 @@ const btnClass = ref('')
 function toShowPopup() {
   show.value = true
 }
-function afterOk(e: { setLoading: (v: boolean) => void, hide: () => void }) {
+function afterOk(e: { setLoading: (v: boolean) => void; hide: () => void }) {
   // setLoading(true)
   console.log(e)
   e.setLoading(true)
@@ -60,6 +61,9 @@ function afterOk(e: { setLoading: (v: boolean) => void, hide: () => void }) {
         return (
           <div class={css.notice}>
             <div>保存成功了</div>
+            <div>
+              <span>!!!</span>
+            </div>
             <Btn onClick={close}>我知道了</Btn>
           </div>
         )

@@ -3,10 +3,9 @@
   <div>
     <h2>你想吃什么水果？只能选一个哦</h2>
     <div>
-      <Radio v-for="item in fruits"
-        v-model="f"
-        :key="item"
-        :value="item">{{item}}</Radio>
+      <Radio v-for="item in fruits" v-model="f" :key="item" :value="item">
+        {{ item }}
+      </Radio>
     </div>
   </div>
 </template>

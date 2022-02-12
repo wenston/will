@@ -1,9 +1,8 @@
 <template>
-  <h1>{{currentRoute.meta.title}}</h1>
+  <h1>{{ currentRoute.meta.title }}</h1>
   <p>
     <Btn @click="toShowNotice">弹出</Btn>
   </p>
-
 </template>
 
 <script lang="tsx" setup>

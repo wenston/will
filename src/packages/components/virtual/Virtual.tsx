@@ -6,12 +6,13 @@ import useElement from '../../use/useElement'
 import { EmptyObject } from '../../config/types'
 export type TreeDataType = any[]
 export interface DataListOptions extends EmptyObject {
-  elem: HTMLElement | undefined
+  // elem: HTMLElement | undefined
   data: TreeDataType
   index: {
     from: number
     to: number
   }
+  elem?: HTMLElement
 }
 export default defineComponent({
   props: {

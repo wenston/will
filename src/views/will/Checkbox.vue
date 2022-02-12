@@ -2,22 +2,22 @@
   <section>
     <h1>checkbox</h1>
     <div>
-      <Checkbox v-model="isChecked"
-        @change="onChange">是否吃饭了呢</Checkbox>
-
+      <Checkbox v-model="isChecked" @change="onChange">是否吃饭了呢</Checkbox>
     </div>
     <div>
       <h3>你喜欢哪个城市？</h3>
-      <Checkbox v-for="c in citys"
+      <Checkbox
+        v-for="c in citys"
         :key="c"
         :text="c"
         :value="c"
-        :disabled="c==='上海'"
-        v-model="checkedCitys" />
+        :disabled="c === '上海'"
+        v-model="checkedCitys"
+      />
     </div>
   </section>
 </template>
-<script  setup lang="ts">
+<script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import Btn from 'will-ui/components/btn/index'
 import Checkbox from 'will-ui/components/checkbox/index'

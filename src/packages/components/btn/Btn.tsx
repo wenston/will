@@ -1,8 +1,9 @@
-import { computed, defineComponent, h } from 'vue'
+import { computed, defineComponent, h, resolveComponent } from 'vue'
 import type { VNode, PropType } from 'vue'
 import type { BtnType, BtnMode } from '../../config/types'
 
 export default defineComponent({
+  name: 'Btn',
   props: {
     tag: { type: String, default: 'button' },
     type: { type: String as PropType<BtnType>, default: 'default' },
@@ -42,6 +43,17 @@ export default defineComponent({
         slots.default?.()
       )
       return mainBtn
+      // return (
+      //   <button
+      //     class={klass.value}
+      //     onClick={(e: MouseEvent) => {
+      //       if (props.disabled) {
+      //         e.stopImmediatePropagation()
+      //       }
+      //     }}>
+      //     {slots.default?.()}
+      //   </button>
+      // )
     }
   }
 })
