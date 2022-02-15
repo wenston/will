@@ -1,6 +1,4 @@
-<template>
-
-</template>
+<template></template>
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
@@ -25,11 +23,28 @@ promise
     console.log(error)
   })
 
-let arr = [1, 2, 3, 4]
-let num = arr.reduce((prev, curr, curIndex, a) => {
-  return prev + curr
-}, -1)
-console.log(num)
+const fn = (key: string) =>
+  key.split('.').reduce(
+    (o: Record<any, any>, i) => {
+      console.log(i)
+      if (o) {
+        return o[i]
+      }
+    },
+    {
+      greetings: {
+        hello: 'Bonjour'
+      }
+    }
+  )
+
+console.log(fn('greetings.hello'))
+
+// let arr = [1, 2, 3, 4]
+// let num = arr.reduce((prev, curr, curIndex, a) => {
+//   return prev + curr
+// }, -1)
+// console.log(num)
 /**
  * 以下的打印顺序是为什么？
  * https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_DOM_API/Microtask_guide
