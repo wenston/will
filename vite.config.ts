@@ -20,7 +20,8 @@ export default defineConfig({
       plugins: [
         // @ts-ignore
         autoprefixer,
-        postcssNesting
+        postcssNesting,
+        postcssPresetEnv
         // @ts-ignore
 
         // postcssPresetEnv({

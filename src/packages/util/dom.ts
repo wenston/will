@@ -58,6 +58,14 @@ export function getStyle(elem: HTMLElement, prop: any) {
   return win.getComputedStyle(elem, null)[prop]
 }
 
+export function setStyle(elem: HTMLElement) {
+  const set = (prop: string, value: string | null) => {
+    elem.style.setProperty(prop, value)
+    return set
+  }
+  return set
+}
+
 export function isDisplayNone(elem: HTMLElement) {
   return getStyle(elem, 'display') === 'none'
 }
