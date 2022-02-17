@@ -31,6 +31,18 @@ const testChildrenRoutes: Array<RouteRecordRaw> = [
     name: 'Promise',
     component: () => import('../views/test/children/Promise.vue'),
     meta: { title: 'Promise' }
+  },
+  {
+    path: 'curry',
+    name: 'curry',
+    component: () => import('../views/test/children/curry.vue'),
+    meta: { title: 'curry' }
+  },
+  {
+    path: 'BFC',
+    name: 'BFC',
+    component: () => import('../views/test/children/BFC.vue'),
+    meta: { title: 'BFC' }
   }
 ]
 const routes: Array<RouteRecordRaw> = [

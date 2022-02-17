@@ -7,6 +7,7 @@
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
+    "noImplicitThis": false,//隐式声明this。为true时，必须显式声明this
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
