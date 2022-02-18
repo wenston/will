@@ -148,6 +148,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'choose2',
+        name: 'Choose2',
+        component: () => import('../views/will/Choose2.vue'),
+        meta: {
+          title: '多选 Choose2'
+        }
+      },
+      {
         path: 'pagination',
         name: 'Pagination',
         component: () => import('../views/will/Pagination.vue'),

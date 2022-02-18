@@ -1,0 +1,28 @@
+.w-choose2-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--w-size);
+  padding: 0 var(--w-padding-x);
+  outline: 0;
+  width: var(--w-form-item-width);
+  border: 1px solid var(--w-form-item-border-color);
+  border-radius: var(--w-radius);
+  background-color: var(--w-choose-background);
+  & .w-choose2-text {
+    color: var(--w-color-font-2);
+    flex: 1;
+  }
+  & .w-choose2-icon {
+    flex-shrink: 0;
+  }
+  &.w-choose2-placeholder {
+    color: var(--w-color-font-3);
+  }
+}
+
+.w-choose2-layer {
+  max-height: 300px;
+  overflow: auto;
+}

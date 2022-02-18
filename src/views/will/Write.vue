@@ -1,8 +1,13 @@
 <template>
   <h1>{{ currentRoute.meta.title }}</h1>
   <p>
-    <Write :class="css.write" 
-@clear="onClear" clearable v-model="txt1"></Write>
+    <Write
+      :class="css.write"
+      placeholder="请输入"
+      @clear="onClear"
+      clearable
+      v-model="txt1"
+    ></Write>
   </p>
   <p>
     <Write :class="css.write" clearable v-model="txt1">
