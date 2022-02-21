@@ -6,7 +6,7 @@
   <p>
     <Choose2 v-model="supplierIds" :data="supplierData" :checkable="checkable">
       <template #default="{ item, index }">
-        {{ item.CreatedDate }} -- {{ item.Name }}
+        {{ item.Name }}
       </template>
     </Choose2>
   </p>

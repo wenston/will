@@ -4,8 +4,10 @@ import Close from '../close/index'
 import Arrow from '../arrow/index'
 import Write from '../write/index'
 import List from '../list/index'
+import type { ListItemType } from '../list/List'
 import Checkbox from '../checkbox/index'
-const { hasCheckbox, keys, ...listProps } = List.props
+import useSearch from '../../use/useSearch'
+const { hasCheckbox, keys, data, ...listProps } = List.props
 export default defineComponent({
   inheritAttrs: false,
   name: 'Choose2',
@@ -21,6 +23,13 @@ export default defineComponent({
   setup(props, { emit, slots }) {
     const visible = ref(props.show)
     const searchText = ref('')
+    const isCheckAll = ref(false)
+    const filterData = useSearch<ListItemType>(
+      computed(() => props.data),
+      searchText,
+      ref(false),
+      props.textField
+    )
     const layerOptions = computed<Record<any, any>>(() => {
       return {
         show: visible.value,
@@ -42,6 +51,7 @@ export default defineComponent({
         },
         {
           class: 'w-choose2-layer',
+          data: filterData.value,
           hasCheckbox: true,
           onToggle: (item: Record<any, any>, index: number, arr: any[]) => {
             console.log(item, index, arr)
@@ -70,6 +80,7 @@ export default defineComponent({
       const writeOptions = {
         modelValue: searchText.value,
         placeholder: props.searchPlaceholder,
+        block: true,
         'onUpdate:modelValue': (v: string) => {
           searchText.value = v
         }
@@ -80,12 +91,20 @@ export default defineComponent({
         default: ({ item, index }: { item: Record<any, any>; index: number }) =>
           slots.default?.({ item, index })
       }
-      return (
-        <>
-          <div>{write}</div>
-          <List {...dataListOptions.value} v-slots={listSlots} />
-        </>
-      )
+      const checkOptions = {
+        text: '全选',
+        modelValue: isCheckAll.value,
+        'onUpdate:modelValue': (b: boolean) => {
+          isCheckAll.value = b
+        }
+      }
+      return [
+        <div class="w-choose2-search">{write}</div>,
+        <List {...dataListOptions.value} v-slots={listSlots} />,
+        <div class="w-choose2-checkall">
+          <Checkbox text="全选" />
+        </div>
+      ]
     }
     return () => {
       const layerSlots = {

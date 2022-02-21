@@ -13,7 +13,7 @@ import { isObject } from '../util'
  */
 export default function useSearch<T>(
   sourceData: Ref<T[]> | ComputedRef<T[]>,
-  searchText: Ref<T>,
+  searchText: Ref<string>,
   dontSearch: Ref<boolean>,
   textField?: string,
   afterSearch?: (
@@ -24,7 +24,7 @@ export default function useSearch<T>(
   ) => void
 ) {
   const filterData = ref<T[]>([]) as Ref<T[]>
-  function toSearch(t: T | undefined) {
+  function toSearch(t: string | undefined) {
     if (dontSearch.value === true) {
       return
     }

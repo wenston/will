@@ -1,12 +1,13 @@
+import type { PropType } from 'vue'
 import { defineComponent, ref, computed, watch, onMounted } from 'vue'
 import { isArray, isObject, getItemValue } from '../../util'
 import Fallback from '../fallback/index'
 import Checkbox from '../checkbox/index'
-
+export type ListItemType = string | number | Record<string, any>
 export default defineComponent({
   components: { Fallback, Checkbox },
   props: {
-    data: [Array, Object],
+    data: [Array, Object] as PropType<ListItemType>,
     disabled: Boolean,
     checkable: Function,
     activable: Function,
