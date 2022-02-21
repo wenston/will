@@ -10,6 +10,8 @@
   border: 1px solid var(--w-form-item-border-color);
   border-radius: var(--w-radius);
   background-color: var(--w-choose-background);
+  cursor: pointer;
+  transition: var(--w-transition-time);
   & .w-choose2-text {
     color: var(--w-color-font-2);
     flex: 1;
@@ -19,6 +21,24 @@
   }
   &.w-choose2-placeholder {
     color: var(--w-color-font-3);
+  }
+  &.w-choose2-trigger-block {
+    display: flex;
+    flex: 1;
+    width: auto;
+  }
+  &:hover {
+    &:not(.w-choose2-trigger-disabled) {
+      border-color: var(--w-form-item-border-color-focus);
+    }
+  }
+  &.w-choose2-trigger-disabled {
+    color: var(--w-color-disabled);
+    background-color: var(--w-form-item-disabled-color);
+    cursor: not-allowed;
+  }
+  &.w-choose2-trigger-active {
+    border-color: var(--w-form-item-border-color-focus);
   }
 }
 .w-choose2-search {

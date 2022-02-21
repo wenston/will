@@ -60,6 +60,7 @@ export const LayerProps = {
   //是否显示
   show: { type: Boolean, default: false },
   manual: { type: Boolean, default: false },
+  disabled: { type: Boolean },
   //弹出层相对于“trigger”的位置
   placement: { type: String as PropType<PlacementType>, default: 'bottom' },
   //“触发者trigger”和弹出层之间的间距
@@ -198,6 +199,9 @@ export default defineComponent({
     }
 
     function handleTriggerEvent(e: MouseEvent) {
+      if (props.disabled) {
+        return
+      }
       if (props.trigger === 'hover') {
         if (e.type === eventLeave) {
           delay(hide)
@@ -344,7 +348,8 @@ export default defineComponent({
           onAfterEnter={(el) => {
             justNow.value = false
             emit('after-enter', el)
-          }}>
+          }}
+        >
           {renderDefaultContent()}
         </Transition>
       )
@@ -382,7 +387,7 @@ export default defineComponent({
               }}
             />
           )}
-          {default_content}
+          {!props.disabled && default_content}
         </>
       )
     }

@@ -20,7 +20,7 @@
       width: 0;
       background-color: transparent;
       &::placeholder {
-        color: var(--w-color-font-4);
+        color: var(--w-color-font-placeholder);
       }
     }
     &:focus-within {
@@ -37,6 +37,13 @@
         background-color: transparent;
         cursor: not-allowed;
       }
+    }
+
+    &.w-write-input-simple {
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-radius: 0;
     }
   }
 

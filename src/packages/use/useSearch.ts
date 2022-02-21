@@ -32,6 +32,7 @@ export default function useSearch<T>(
       filterData.value = sourceData.value
       // afterSearch && afterSearch(filterData.value.length, true)
     } else {
+      t = t?.trim()
       let isEqual = false
       let i = 0
       const len = sourceData.value.length

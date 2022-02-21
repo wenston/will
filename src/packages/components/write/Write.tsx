@@ -14,6 +14,7 @@ export default defineComponent({
   },
   props: {
     modelValue: { type: [Number, String] },
+    simple: Boolean,
     placeholder: { type: String },
     clearable: Boolean,
     block: Boolean,
@@ -113,7 +114,8 @@ export default defineComponent({
                   normalizeClass(props.inputClass),
                   {
                     'w-write-input-block': props.block,
-                    'w-write-input-disabled': props.disabled
+                    'w-write-input-disabled': props.disabled,
+                    'w-write-input-simple': props.simple
                   }
                 ]}
               >

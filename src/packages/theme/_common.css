@@ -9,3 +9,10 @@
 .w-no-select {
   user-select: none;
 }
+
+.w-text-placeholder {
+  color: var(--w-color-font-placeholder);
+}
+.w-text-1 {
+  color: var(--w-color-font-1);
+}

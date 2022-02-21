@@ -1,85 +1,175 @@
 import type { PropType } from 'vue'
-import { defineComponent, ref, computed, watch, onMounted } from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  watch,
+  onMounted,
+  normalizeClass
+} from 'vue'
 import { isArray, isObject, getItemValue } from '../../util'
 import Fallback from '../fallback/index'
 import Checkbox from '../checkbox/index'
-export type ListItemType = string | number | Record<string, any>
+import useSearch from '../../use/useSearch'
+export type ListItemType = Record<string, any>
 export default defineComponent({
+  inheritAttrs: false,
   components: { Fallback, Checkbox },
   props: {
-    data: [Array, Object] as PropType<ListItemType>,
+    data: [Array, Object] as PropType<ListItemType[]>,
     disabled: Boolean,
     checkable: Function,
     activable: Function,
+    searchText: String,
+    all: Boolean,
     keys: { type: Array, default: () => [] }, //用来初始化本组件内已选的数据，会传给checkedKeys
     keyField: { type: String, default: 'Id' },
     textField: { type: String, default: 'Name' },
     hasCheckbox: { type: Boolean, default: false },
     ...Fallback.props
   },
-  emits: ['toggle', 'update:keys'],
+  emits: ['toggle', 'update:keys', 'update:all' /* 'update:searchText' */],
   setup(props, ctx) {
     const checkedKeys = ref<any[]>(props.keys)
-    function renderItems() {
-      const d = props.data
+    const _st = ref<string>(props.searchText || '')
+    const _isAll = ref<boolean>(props.all)
+    const dontSearch = ref(false)
+    const filterData = useSearch<ListItemType>(
+      computed(() => props.data),
+      _st,
+      dontSearch,
+      props.textField
+    )
+    function search(text: string) {
+      _st.value = text
+      setTimeout(toCheckAll)
+      // 由于本组件内部没有输入框，故text一直都是从外部传入，所以以下可以不要
+      // ctx.emit('update:searchText', text)
+    }
+    function checkAll(checked: boolean) {
+      const d = filterData.value
       if (d && isArray(d)) {
-        const items = d.map((item: any, index: number) => {
-          const isActive = props.activable && props.activable(item, index)
-          const isChecked =
-            props.hasCheckbox &&
-            checkedKeys.value.some((k) => k == item[props.keyField])
-          const isDisabled = props.checkable
-            ? !props.checkable(item, index)
-            : false
-          const itemOptions = {
-            // key: item[props.keyField],
-            class: [
-              'w-list-item',
-              {
-                'w-list-item-active': isActive,
-                'w-list-item-disabled': isDisabled
-              }
-            ],
-            onClick: (e: MouseEvent) => {
-              if (isDisabled) {
-                return
-              }
-              //   if (!isActive) {
-              ctx.emit('toggle', item, index)
-              //   }
-            }
-          }
-          const cont =
-            ctx.slots.default?.({
-              item,
-              index
-            }) ?? getItemValue(item, props.textField)
-          if (props.hasCheckbox) {
-            const checkboxOptions = {
-              class: [
-                'w-list-item',
-                {
-                  'w-list-item-disabled': isDisabled,
-                  'w-list-item-active': isChecked
-                }
-              ],
-              modelValue: checkedKeys.value,
-              value: item[props.keyField],
-              disabled: isDisabled,
-              'onUpdate:modelValue': (arr: any[]) => {
-                checkedKeys.value = arr
-
-                ctx.emit('toggle', item, index, [...checkedKeys.value])
-                ctx.emit('update:keys', [...checkedKeys.value])
-              }
-            }
-            return <Checkbox {...checkboxOptions}>{cont}</Checkbox>
-          }
-          return <div {...itemOptions}>{cont}</div>
-        })
-        return items
-      } else if (isObject(d)) {
+        if (checked) {
+          checkedKeys.value = d.filter(is_d).map((item) => item[props.keyField])
+        } else {
+          checkedKeys.value = []
+        }
+        ctx.emit('update:keys', [...checkedKeys.value])
       }
+      _isAll.value = checked
+    }
+    function renderItem(
+      item: ListItemType,
+      index: number,
+      {
+        isActive,
+        isDisabled,
+        isChecked
+      }: { isActive: boolean; isDisabled: boolean; isChecked: boolean }
+    ) {
+      const itemOptions = {
+        // key: item[props.keyField],
+        class: [
+          'w-list-item',
+          {
+            'w-list-item-active': isActive,
+            'w-list-item-disabled': isDisabled
+          }
+        ],
+        onClick: () => {
+          if (isDisabled) {
+            return
+          }
+          ctx.emit('toggle', item, index)
+        }
+      }
+      const cont =
+        ctx.slots.default?.({
+          item,
+          index
+        }) ?? getItemValue(item, props.textField)
+      if (props.hasCheckbox) {
+        const checkboxOptions = {
+          class: [
+            'w-list-item',
+            {
+              'w-list-item-disabled': isDisabled,
+              'w-list-item-active': isChecked
+            }
+          ],
+          modelValue: checkedKeys.value,
+          value: item[props.keyField],
+          disabled: isDisabled,
+          'onUpdate:modelValue': (arr: any[]) => {
+            checkedKeys.value = arr
+
+            ctx.emit(
+              'toggle',
+              item,
+              index,
+              filterData.value.filter((item) =>
+                checkedKeys.value.some((k) => k == item[props.keyField])
+              )
+            )
+            ctx.emit('update:keys', [...checkedKeys.value])
+          },
+          onChange: (b: boolean) => {
+            if (b) {
+              toCheckAll()
+            } else {
+              _isAll.value = false
+            }
+            ctx.emit('update:all', _isAll.value)
+          }
+        }
+        return <Checkbox {...checkboxOptions}>{cont}</Checkbox>
+      }
+      return <div {...itemOptions}>{cont}</div>
+    }
+    function renderList() {
+      const d = filterData.value
+      let b = true
+      if (d && isArray(d)) {
+        const items = d.map((item: ListItemType, index: number) => {
+          const isActive = props.activable && props.activable(item, index)
+          const isChecked = is_c(item)
+          const isDisabled = !is_d(item, index)
+
+          if (!isChecked) {
+            b = false
+          }
+          return renderItem(item, index, { isActive, isChecked, isDisabled })
+        })
+        if (items.length) {
+          _isAll.value = b
+        }
+        return items
+      }
+    }
+    function is_c(item: ListItemType) {
+      return (
+        props.hasCheckbox &&
+        checkedKeys.value.some((k) => k == item[props.keyField])
+      )
+    }
+    function is_d(item: ListItemType, index: number) {
+      return props.checkable ? props.checkable(item, index) : true
+    }
+    function toCheckAll() {
+      const keys = checkedKeys.value
+      const filters = filterData.value.filter(is_d)
+      let b = false
+      if (keys.length > 0 && filters.length > 0) {
+        if (filters.length > keys.length) {
+          b = false
+        } else {
+          b = filters.every((item) =>
+            keys.some((_k) => _k == item[props.keyField])
+          )
+        }
+      }
+      _isAll.value = b
+      ctx.emit('update:all', b)
     }
     onMounted(() => {})
     watch(
@@ -88,12 +178,24 @@ export default defineComponent({
         checkedKeys.value = arr
       }
     )
+    watch(
+      () => props.searchText,
+      (t: string) => {
+        _st.value = t
+      }
+    )
     return () => {
       const fallback = <Fallback loading={props.loading} empty={props.empty} />
       return props.loading || props.empty ? (
         fallback
       ) : (
-        <div class="w-list">{renderItems()}</div>
+        <>
+          {ctx.slots.search?.({ search })}
+          <div class={['w-list', normalizeClass(ctx.attrs.class)]}>
+            {renderList()}
+          </div>
+          {ctx.slots.checkAll?.({ checkAll })}
+        </>
       )
     }
   }
