@@ -1,22 +1,22 @@
 {
-  "name": "carousel-q",
+  "name": "img-viewer-q",
   "files": [
     "dist"
   ],
-  "main": "./dist/carousel-q.umd.ts",
-  "module": "./dist/carousel-q.es.ts",
+  "main": "./dist/imgViewer-q.umd.ts",
+  "module": "./dist/imgViewer-q.es.ts",
  
   "exports": {
     ".": {
-      "import": "./dist/carousel-q.es.ts",
-      "require": "./dist/carousel-q.umd.ts"
+      "import": "./dist/imgViewer-q.es.ts",
+      "require": "./dist/imgViewer-q.umd.ts"
     },
     "./dist/style.css": {
       "import": "./dist/style.css",
       "require": "./dist/style.css"
     }
   },
-  "version": "0.0.20",
+  "version": "0.0.7",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -32,12 +32,12 @@ export default defineComponent({
                 if (options?.img) {
                     img = `<img src='${item.img}' />`
                 }
-                let price:String = ''
-                if(options?.price){
+                let price: String = ''
+                if (options?.price) {
                     price = `<span>${item.price}</span>`
                 }
-                let salesVolume:String = ''
-                if(options?.salesVolume){
+                let salesVolume: String = ''
+                if (options?.salesVolume) {
                     salesVolume = `<span>${item.salesVolume}</span>`
                 }
                 // let OPrice:String =''
@@ -50,18 +50,19 @@ export default defineComponent({
                     price,
                     salesVolume
                 }
-            }else{
+            } else {
                 return {}
             }
         })
-        return(
+        return (
             <div {...cls.value}>
-            {content.value?.img}
-            {content.value?.name}
-            <div>{content.value?.price}
-            {content.value?.salesVolume}
-            </div>
-          
+                <div class='list-item_content'>
+                    {content.value?.img}
+                    {content.value?.name}
+                    <div>{content.value?.price}
+                        {content.value?.salesVolume}
+                    </div>
+                </div>
             </div>
         )
     }

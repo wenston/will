@@ -15,9 +15,9 @@ export default defineConfig({
   plugins: [vue(), vueJsx()],
   build: {
     lib: {
-      entry: path.resolve('./', 'src/packages/components/carousel/index.ts'),
-      name: 'carousel-q',
-      fileName: (format) => `carousel-q.${format}.ts`
+      entry: path.resolve('./', 'src/packages/components/imgViewer/index.ts'),
+      name: 'imgViewer-q',
+      fileName: (format) => `imgViewer-q.${format}.ts`
     },
     // cssCodeSplit:true,
     rollupOptions: {

@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, provide, renderSlot, ref, getCurrentInstance, onMounted, CSSProperties, PropType, watch, onUnmounted } from 'vue'
+import { computed, defineComponent, provide, ref, getCurrentInstance, onMounted, CSSProperties, watch, onUnmounted } from 'vue'
 import IndicatorItem from './indicator'
 import './style/index.css'
 import Icon from '../icon'
@@ -7,14 +7,21 @@ interface Props {
     style: CSSProperties;
     options: object;
 }
-
+interface options {
+    duration: number | string,
+    autoPlay: Boolean,
+    type: string,
+    indicator: Boolean,
+    moveTime: number | string,
+    flip: Boolean
+}
 export default defineComponent({
     name: 'Carousel',
     components: { Icon },
     props: {
         options: {
             type: Object,
-            default: () => ({
+            default: (): options => ({
                 "duration": 2000,
                 'autoPlay': true,
                 "type": 'row',
@@ -83,7 +90,7 @@ export default defineComponent({
                 index.value = i
             }
         }
-        // 监听
+        // 监听当前显示那一页
         watch(index, (v) => {
 
             if (props.options.type == 'row') {
@@ -160,8 +167,6 @@ export default defineComponent({
             }
         }
         onMounted(() => {
-            // let firstElementChild = instance.refs.carouselBox.firstElementChild.cloneNode(true)
-            // instance.refs.carouselP.appendChild(firstElementChild)
             clearInterval(t)
             cancelAnimationFrame(ts)
             start()
@@ -178,14 +183,11 @@ export default defineComponent({
 
         function indicatorS() {
             if (props.options.indicator) {
-                // console.log(indicatorItem());
-
                 indicatorContent.value = <div class={props.options.type == 'row' ? 'w-indicator w-indicator_r' : 'w-indicator w-indicator_c'}>{indicatorItem()}</div>
             } else {
                 indicatorContent.value = ''
             }
         }
-
 
         // 鼠标按下
         function startFn(e: any) {
@@ -254,7 +256,7 @@ export default defineComponent({
             document.onmousemove = null
             e.preventDefault()
         }
-
+        // 上一页
         function PageUp() {
             setTr()
             if (index.value < uid.value.length - 1) {
@@ -265,6 +267,7 @@ export default defineComponent({
             // setTransform(index.value)
             return index.value
         }
+        // 下一页
         function PageDown() {
             setTr()
             if (index.value > 0) {

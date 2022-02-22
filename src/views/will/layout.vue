@@ -66,7 +66,7 @@
     <!-- </div> -->
     <ImgViewer :list="imgList"
       :src='src'
-      v-model:show='show'></ImgViewer>
+      v-model="show"></ImgViewer>
 
   </div>
 </template>
@@ -81,7 +81,7 @@ import { Carousel, CarouselItem } from 'carousel-q'
 import 'carousel-q/dist/style.css'
 import ImgViewer from '../../packages/components/imgViewer'
 // import ImgViewer from 'img-viewer-q'
-import 'img-viewer-q/dist/style.css'
+// import 'img-viewer-q/dist/style.css'
 import { watch, ref, defineComponent, getCurrentInstance } from 'vue'
 export default defineComponent({
   components: {
@@ -118,7 +118,7 @@ export default defineComponent({
       console.log(v)
     })
     const options = ref({
-      duration: 2000,
+      duration: 10000,
       autoPlay: true,
       type: 'column',
       indicator: true,
@@ -133,10 +133,11 @@ export default defineComponent({
     const src = ref('')
     const show = ref(false)
     function imgViewers() {
-      console.log(imgViewer.value)
       src.value =
         'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1113%2F032120114622%2F200321114622-4-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647142450&t=ae3467450148171d766da827a54a7a3b'
       show.value = true
+      console.log(show.value)
+
       // instance.refs.imgViewer.setShow(
       // 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2F1113%2F032120114622%2F200321114622-4-1200.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1647142450&t=ae3467450148171d766da827a54a7a3b'
       // )

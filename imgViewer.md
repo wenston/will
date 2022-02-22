@@ -5,7 +5,7 @@
     import 'img-viewer-q/dist/style.css'
      <ImgViewer :list="list"
       :src='src'
-      v-model:show='show'></ImgViewer>
+      v-model='show'></ImgViewer>
 
 ## 参数
   list 当前图片列表

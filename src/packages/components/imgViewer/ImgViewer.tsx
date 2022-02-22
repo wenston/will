@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref, getCurrentInstance, defineExpose, watch } from 'vue'
+import { computed, defineComponent, ref, getCurrentInstance, defineExpose, watch, onUnmounted } from 'vue'
 import Icon from '../icon/index'
 export default defineComponent({
   inheritAttrs: false,
@@ -11,15 +11,20 @@ export default defineComponent({
       type: String,
       default: ""
     },
-    show: {
+    modelValue: {
       type: Boolean,
       default: false
     }
   },
-  emits: ['update:show'],
+  model: {
+    prop: 'modelValue',
+    event: "update:modelValue"
+  },
+  emits: ['update:modelValue'],
   components: {
     Icon
   },
+
   setup(props, ctx) {
     const show = ref(false)
     const cSrc: any = ref("") //当前显示的图
@@ -53,7 +58,7 @@ export default defineComponent({
     //   缩小
     function narrow() {
       if (enlargeStyle.value > 1) {
-        enlargeStyle.value--
+        enlargeStyle.value -= 1
       } else if (enlargeStyle.value > 0) {
         enlargeStyle.value -= 0.2
       }
@@ -76,24 +81,24 @@ export default defineComponent({
       }
       if (delta) handle(delta, event)
     }
-    // 设置当前显示图片 和 弹出
-    function setShow(v: any) {
-      cSrc.value = v
-      show.value = true
-      if (window.addEventListener) {
-        // FF,火狐浏览器会识别该方法
-        window.addEventListener("DOMMouseScroll", wheel, false)
-        window.onwheel = document.onwheel = wheel //W3C
-        // 统一处理滚轮滚动事件
+    function getClose(e: any) {
+      if (e.key == "Escape") {
+        close()
       }
+      e.stopPropagation()
     }
+    // 设置当前显示图片 和 弹出
+
 
     // 关闭
     function close() {
+      console.log(ctx);
+
       window.removeEventListener("DOMMouseScroll", wheel, false)
-      window.onwheel = document.onwheel = null //W3C
+      document.body.removeEventListener("keyup", getClose, false)
+      // window.onwheel = document.onwheel = null //W3C
       show.value = false
-      ctx.emit('update:show', false)
+      ctx.emit('update:modelValue', false);
     }
 
     function selImg(item: any): void {
@@ -186,8 +191,6 @@ export default defineComponent({
         enlargeStyle.value = 0.5
         setStyle()
         //向下滚动
-        console.log(instance?.refs.contentImg.offsetLeft, ev.clientX);
-
         // let disX = ev.clientX - instance?.refs.contentImg.offsetLeft
         // let disY = ev.clientY - instance?.refs.contentImg.offsetTop
         // instance.refs.contentImg.style.left = disX + "px"
@@ -215,17 +218,31 @@ export default defineComponent({
         return []
       }
     })
-    watch(() => props.show, (v) => {
-      if (v) {
-        show.value = true
-        cSrc.value = props.src
-        if (window.addEventListener) {
-          // FF,火狐浏览器会识别该方法
-          window.addEventListener("DOMMouseScroll", wheel, false)
-          window.onwheel = document.onwheel = wheel //W3C
-          // 统一处理滚轮滚动事件
+    watch(() => props.modelValue, (v) => {
+      console.log(v);
+
+      try {
+        if (v) {
+          show.value = true
+          cSrc.value = props.src
+          if (window.addEventListener) {
+            // FF,火狐浏览器会识别该方法
+            window.addEventListener("DOMMouseScroll", wheel, false)
+            // window.onwheel = document.onwheel = wheel //W3C
+
+            document.body.addEventListener("keyup", getClose)
+            // 统一处理滚轮滚动事件
+          }
         }
+        // else {
+        //   ctx.emit('update:modelValue', false)
+        // }
+      } catch (error) {
+        console.error(error);
+
       }
+
+
     })
     const content = computed(() => {
       if (show.value) {
@@ -254,18 +271,18 @@ export default defineComponent({
                     onClick={narrow}>
                     <Icon name="icon-suoxiao"></Icon>
                   </div>
-
                   <div class="toolbar-item"
                     onClick={pageUp}>
                     <Icon name="icon-arrow-left-bold"></Icon>
+                  </div>
+                  <div class="toolbar-item">
+                    {props.list.indexOf(cSrc.value) + 1}/{props.list.length}
                   </div>
                   <div class="toolbar-item"
                     onClick={pageDow}>
                     <Icon name="icon-arrow-right-bold"></Icon>
                   </div>
-                  <div class="toolbar-item">
-                    {props.list.indexOf(cSrc.value) + 1}/{props.list.length}
-                  </div>
+
                   <div onClick={launchFullscreen}
                     class="toolbar-item toolbar-item2">
                     <Icon name="icon-quanping"></Icon>
@@ -295,7 +312,10 @@ export default defineComponent({
       } else {
         return ''
       }
-    });
+    })
+    onUnmounted(() => {
+      ctx.emit('update:modelValue', false);
+    })
     return () => (
       // <transition>
       content.value

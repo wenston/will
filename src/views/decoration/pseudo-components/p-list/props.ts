@@ -1,5 +1,4 @@
 import type { PropType } from 'vue'
-import number from 'will-ui/components/number'
 
 export default {
     type: {
@@ -17,9 +16,9 @@ export default {
             salesVolume: true // 是否显示销量
         })
     },
-    itemType: { // 列表内显示的样式 1：样式1，2：样式2，3：样式3
+    itemType: { // 列表内显示的样式 t1：样式1，t2：样式2，t3：样式3
         type: String,
-        default: '1'
+        default: 't1'
     },
     style: {
         style: { type: Object as PropType<Record<string, any> | undefined | null> }
