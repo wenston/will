@@ -67,15 +67,15 @@ const pseudoCcomponents = [
     },
     data: []
   },
-  // {
-  //   uid: '',
-  //   componentId: '2',
-  //   componentName: 'p-swiper',
-  //   icon: 'w-icon-add',
-  //   name: '图片轮播',
-  //   options: {},
-  //   data: []
-  // },
+  {
+    uid: '',
+    componentId: '2',
+    componentName: 'p-list',
+    icon: 'w-icon-add',
+    name: '列表',
+    options: {},
+    data: []
+  },
   {
     uid: '',
     componentId: '3',
@@ -159,6 +159,8 @@ function onAdd(e: any) {
 }
 const pageComponents = ref<ComponentDescription[]>([])
 function onAddComponent(item: ComponentDescription) {
+  console.log(item)
+
   pageComponents.value.push({
     ...item,
     uid: createUid()

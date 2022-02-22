@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref, getCurrentInstance, defineExpose, watch, onUnmounted } from 'vue'
+import { computed, defineComponent, ref, getCurrentInstance, defineExpose, watch, onUnmounted, Transition } from 'vue'
 import Icon from '../icon/index'
 export default defineComponent({
   inheritAttrs: false,
@@ -92,7 +92,6 @@ export default defineComponent({
 
     // 关闭
     function close() {
-      console.log(ctx);
 
       window.removeEventListener("DOMMouseScroll", wheel, false)
       document.body.removeEventListener("keyup", getClose, false)
@@ -105,7 +104,7 @@ export default defineComponent({
       cSrc.value = item
     }
     // 拖动
-    function startFn(ev: any) {
+    function startFn(ev: any): void {
       ev.preventDefault()
       let disX = ev.clientX - instance?.refs.contentImg.offsetLeft
       let disY = ev.clientY - instance?.refs.contentImg.offsetTop
@@ -125,7 +124,7 @@ export default defineComponent({
       document.onmousemove = null
     }
     // 全屏 判断各种浏览器，找到正确的方法
-    function launchFullscreen() {
+    function launchFullscreen(): void {
       let element = instance?.refs.viewer
       if (element.requestFullscreen) {
         element.requestFullscreen()
@@ -138,7 +137,7 @@ export default defineComponent({
       }
     }
     // 上一个
-    function pageUp() {
+    function pageUp(): void {
       let i = props.list.indexOf(cSrc.value)
       if (i > 0) {
         i--
@@ -146,7 +145,7 @@ export default defineComponent({
       }
     }
     // 下一个
-    function pageDow() {
+    function pageDow(): void {
       let i = props.list.indexOf(cSrc.value)
       if (i < props.list.length - 1) {
         i++
@@ -154,7 +153,7 @@ export default defineComponent({
       }
     }
     // 刷新
-    function refresh() {
+    function refresh(): void {
       style.value = ""
       instance.refs.contentImg.style.left = "50%"
       instance.refs.contentImg.style.top = "50%"
@@ -186,7 +185,7 @@ export default defineComponent({
     //判断鼠标滚轮滚动方向
 
     //上下滚动时的具体处理函数
-    function handle(delta: any, ev: any) {
+    function handle(delta: any, ev: any): void {
       if (delta < 0) {
         enlargeStyle.value = 0.5
         setStyle()
@@ -245,81 +244,82 @@ export default defineComponent({
 
     })
     const content = computed(() => {
-      if (show.value) {
-        return (
-          <div class='imgViewer' onMouseup={end} ref="viewer">
-            <div class="viewer-close" onClick={close}>
-              <Icon class="close"
-                size="30px"
-                name="icon-close-bold"></Icon>
-            </div>
-            <div class="viewer-mask"></div>
-            <div class="imgBox">
-              <div class="content">
-                <img ref="contentImg"
-                  src={cSrc.value}
-                  draggable={false}
-                  onMousedown={startFn}
-                  style={style.value}
-                  alt="" />
-                <div class="toolbar">
-                  <div class="toolbar-item"
-                    onClick={enlarge}>
-                    <Icon name="icon-fangda"></Icon>
-                  </div>
-                  <div class="toolbar-item"
-                    onClick={narrow}>
-                    <Icon name="icon-suoxiao"></Icon>
-                  </div>
-                  <div class="toolbar-item"
-                    onClick={pageUp}>
-                    <Icon name="icon-arrow-left-bold"></Icon>
-                  </div>
-                  <div class="toolbar-item">
-                    {props.list.indexOf(cSrc.value) + 1}/{props.list.length}
-                  </div>
-                  <div class="toolbar-item"
-                    onClick={pageDow}>
-                    <Icon name="icon-arrow-right-bold"></Icon>
-                  </div>
+      // if (show.value) {
+      return (
+        <div class='imgViewer' onMouseup={end} ref="viewer">
+          <div class="viewer-close" onClick={close}>
+            <Icon class="close"
+              size="30px"
+              name="icon-close-bold"></Icon>
+          </div>
+          <div class="viewer-mask"></div>
+          <div class="imgBox">
+            <div class="content">
+              <img ref="contentImg"
+                src={cSrc.value}
+                draggable={false}
+                onMousedown={startFn}
+                style={style.value}
+                alt="" />
+              <div class="toolbar">
+                <div class="toolbar-item"
+                  onClick={enlarge}>
+                  <Icon name="icon-fangda"></Icon>
+                </div>
+                <div class="toolbar-item"
+                  onClick={narrow}>
+                  <Icon name="icon-suoxiao"></Icon>
+                </div>
+                <div class="toolbar-item"
+                  onClick={pageUp}>
+                  <Icon name="icon-arrow-left-bold"></Icon>
+                </div>
+                <div class="toolbar-item">
+                  {props.list.indexOf(cSrc.value) + 1}/{props.list.length}
+                </div>
+                <div class="toolbar-item"
+                  onClick={pageDow}>
+                  <Icon name="icon-arrow-right-bold"></Icon>
+                </div>
 
-                  <div onClick={launchFullscreen}
-                    class="toolbar-item toolbar-item2">
-                    <Icon name="icon-quanping"></Icon>
-                  </div>
-                  <div class="toolbar-item"
-                    onClick={refresh}>
-                    <Icon name="icon-shuaxin"></Icon>
-                  </div>
-                  <div class="toolbar-item"
-                    onClick={() => rotate(1)}>
-                    <Icon name="icon-xiangyouxuanzhuan"></Icon>
-                  </div>
+                <div onClick={launchFullscreen}
+                  class="toolbar-item toolbar-item2">
+                  <Icon name="icon-quanping"></Icon>
+                </div>
+                <div class="toolbar-item"
+                  onClick={refresh}>
+                  <Icon name="icon-shuaxin"></Icon>
+                </div>
+                <div class="toolbar-item"
+                  onClick={() => rotate(1)}>
+                  <Icon name="icon-xiangyouxuanzhuan"></Icon>
+                </div>
 
-                  <div class="toolbar-item toolbar-item_right"
-                    onClick={() => rotate(2)}>
-                    <Icon name="icon-xiangzuoxuanzhuan"></Icon>
-                  </div>
+                <div class="toolbar-item toolbar-item_right"
+                  onClick={() => rotate(2)}>
+                  <Icon name="icon-xiangzuoxuanzhuan"></Icon>
                 </div>
               </div>
+            </div>
 
-              <div class="foot">
-                {foot.value}
-              </div>
+            <div class="foot">
+              {foot.value}
             </div>
           </div>
-        )
-      } else {
-        return ''
-      }
+        </div>
+      )
+      // } else {
+      //   return ''
+      // }
     })
     onUnmounted(() => {
-      ctx.emit('update:modelValue', false);
+      close()
+
     })
     return () => (
-      // <transition>
-      content.value
-      // </transition>
+      <Transition name='fade'>
+        {show.value ? content.value : ''}
+      </Transition>
     )
   }
 })

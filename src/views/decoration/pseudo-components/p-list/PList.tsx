@@ -1,14 +1,17 @@
 import { defineComponent, computed, inject, provide } from 'vue'
 import Wrapper from '../base/ItemWrapper.vue'
 import props from './props'
+import PListItem from './PListItem'
 export default defineComponent({
     name: "p-list",
-    components: { Wrapper },
+    components: { Wrapper, PListItem },
     props: {
         ...Wrapper.props,
         ...props
     },
     setup(props, ctx) {
+        console.log('p-list');
+
         provide('itemOptions', props.itemOptions)
         provide('type', props.type)
         const containerOptions = computed(() => {
@@ -21,11 +24,21 @@ export default defineComponent({
             }
         })
         const data = computed(() => {
-            if (props.list) {
-                return []
-            } else {
-                return []
+            // if (props.list) {
+            //     return []
+            // } else {
+            //     return []
+            // }
+            let a = [1, 2]
+            let obj = {
+                name: '',
+                img: '',
+                price: '',
+                salesVolume: ''
             }
+            return a.map(item => {
+                return <PListItem item={obj}></PListItem>
+            })
         })
         const listOptions = computed(() => {
             if (props.type == 'row') {
@@ -40,7 +53,9 @@ export default defineComponent({
         })
         return (
             <Wrapper {...containerOptions.value}>
-                <div {...listOptions.value} ></div>
+                <div {...listOptions.value} >
+                    {data.value}
+                </div>
             </Wrapper>
         )
     }
