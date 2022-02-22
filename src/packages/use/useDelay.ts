@@ -9,9 +9,14 @@ export default function useDelay(msTime = 200) {
   function stop() {
     clearTimeout(timer.value)
   }
-  function delay(handler: Function, delayTime?: number) {
+  async function delay(handler?: Function, delayTime?: number) {
     stop()
-    timer.value = setTimeout(handler, delayTime ?? msTime)
+    await new Promise((res) => {
+      timer.value = setTimeout(() => {
+        handler?.()
+        res(timer.value)
+      }, delayTime ?? msTime)
+    })
   }
   onUnmounted(clear)
   return { clear, delay, stop }

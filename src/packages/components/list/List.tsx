@@ -33,6 +33,14 @@ export default defineComponent({
     const checkedKeys = ref<any[]>(props.keys)
     const _st = ref<string>(props.searchText || '')
     const _isAll = ref<boolean>(props.all)
+    const hasResult = computed(() => {
+      const d = filterData.value
+      const sd = props.data
+      if (sd.length) {
+        return d.length > 0
+      }
+      return props.loading || props.empty
+    })
     const dontSearch = ref(false)
     const filterData = useSearch<ListItemType>(
       computed(() => props.data),
@@ -171,6 +179,15 @@ export default defineComponent({
       _isAll.value = b
       ctx.emit('update:all', b)
     }
+    function wrapper(cont: any) {
+      return (
+        <>
+          {ctx.slots.search?.({ search })}
+          {cont}
+          {ctx.slots.checkAll?.({ checkAll })}
+        </>
+      )
+    }
     onMounted(() => {})
     watch(
       () => props.keys,
@@ -186,17 +203,20 @@ export default defineComponent({
     )
     return () => {
       const fallback = <Fallback loading={props.loading} empty={props.empty} />
-      return props.loading || props.empty ? (
-        fallback
-      ) : (
-        <>
-          {ctx.slots.search?.({ search })}
-          <div class={['w-list', normalizeClass(ctx.attrs.class)]}>
-            {renderList()}
-          </div>
-          {ctx.slots.checkAll?.({ checkAll })}
-        </>
-      )
+      return props.loading || props.empty
+        ? wrapper(fallback)
+        : hasResult.value
+        ? wrapper(
+            <div class={['w-list', normalizeClass(ctx.attrs.class)]}>
+              {renderList()}
+            </div>
+          )
+        : wrapper(
+            <Fallback
+              empty={true}
+              emptyProps={{ text: '没有匹配到相关数据' }}
+            />
+          )
     }
   }
 })

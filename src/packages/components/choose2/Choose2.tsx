@@ -1,11 +1,15 @@
-import { computed, ref, defineComponent } from 'vue'
+import type { PropType } from 'vue'
+import type { ListItemType } from '../list/List'
+import { computed, ref, watch, defineComponent } from 'vue'
 import Layer from '../layer/index'
 import Close from '../close/index'
 import Arrow from '../arrow/index'
 import Write from '../write/index'
 import List from '../list/index'
 import Checkbox from '../checkbox/index'
-const { hasCheckbox, keys, searchText, all, ...listProps } = List.props
+import useRequest from '../../use/useRequest'
+const { hasCheckbox, keys, searchText, all, loading, empty, ...listProps } =
+  List.props
 export default defineComponent({
   inheritAttrs: false,
   name: 'Choose2',
@@ -19,6 +23,7 @@ export default defineComponent({
     placeholder: { type: String },
     searchPlaceholder: { type: String, default: '关键字搜索' },
     modelValue: { type: Array, default: () => [] },
+    lazyLoad: Function as PropType<() => Promise<ListItemType[]>>,
     ...listProps
   },
   emits: ['update:show', 'update:modelValue', 'clear'],
@@ -52,6 +57,11 @@ export default defineComponent({
         }
       }
     })
+    const {
+      loading: _loading,
+      empty: _empty,
+      get: _getData
+    } = useRequest(props.lazyLoad, undefined, true)
     const dataListOptions = computed(() => {
       const listPropsKeys = Object.keys(listProps)
       return listPropsKeys.reduce(
@@ -61,6 +71,8 @@ export default defineComponent({
         },
         {
           class: 'w-choose2-layer',
+          loading: _loading.value,
+          empty: _empty.value,
           hasCheckbox: true,
           all: isCheckAll.value,
           searchText: searchText.value,
@@ -157,6 +169,20 @@ export default defineComponent({
       emit('update:modelValue', [])
       emit('clear')
     }
+
+    const stopLoadData = watch(
+      visible,
+      (v: boolean) => {
+        if (v) {
+          if (props.data && props.data.length) {
+            stopLoadData()
+          } else {
+            _getData()
+          }
+        }
+      },
+      { immediate: true }
+    )
     return () => {
       const layerSlots = {
         trigger: renderTrigger,

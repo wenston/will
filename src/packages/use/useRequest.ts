@@ -17,11 +17,10 @@ export default function useRequest<T>(
       }
       loading.value = true
       data.value = await requestFn?.(para?.value)
-      //   console.log(data.value)
-      if (!data.value || (isArray(data.value) && data.value.length > 0)) {
-        empty.value = false
+      if (isArray(data.value)) {
+        empty.value = data.value.length === 0
       } else {
-        empty.value = true
+        empty.value = !data.value
       }
       loading.value = false
     } catch (err) {
