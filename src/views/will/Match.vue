@@ -15,9 +15,9 @@
     </p>
   </section>
 
-  <section>
+  <section style="margin-top: 20px">
     <h3>数据懒加载</h3>
-    <p>
+    <p style="margin-top: 10px">
       <Match
         :data="lazyData"
         v-model="supplierId2"
@@ -27,7 +27,7 @@
     </p>
   </section>
 
-  <section>
+  <section style="margin: 20px 0 0 0">
     <h3>每次都从后台数据搜索，适用于大数据量的情况</h3>
     <p>
       <Match

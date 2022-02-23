@@ -1,0 +1,41 @@
+.w-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--w-size);
+  padding: 0 var(--w-padding-x);
+  outline: 0;
+  width: var(--w-form-item-width);
+  border: 1px solid var(--w-form-item-border-color);
+  border-radius: var(--w-radius);
+  background-color: var(--w-choose-background);
+  cursor: pointer;
+  transition: var(--w-transition-time);
+  & .w-trigger-text {
+    color: var(--w-color-font-2);
+    flex: 1;
+  }
+  & .w-trigger-icon {
+    flex-shrink: 0;
+  }
+
+  &.w-trigger-block {
+    display: flex;
+    flex: 1;
+    width: auto;
+  }
+  &:hover {
+    &:not(.w-trigger-disabled) {
+      border-color: var(--w-form-item-border-color-focus);
+    }
+  }
+  &.w-trigger-disabled {
+    color: var(--w-color-disabled);
+    background-color: var(--w-form-item-disabled-color);
+    cursor: not-allowed;
+  }
+  &.w-trigger-active {
+    border-color: var(--w-form-item-border-color-focus);
+  }
+}

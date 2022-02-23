@@ -26,6 +26,7 @@ export default defineComponent({
     keyField: { type: String, default: 'Id' },
     textField: { type: String, default: 'Name' },
     hasCheckbox: { type: Boolean, default: false },
+    itemClass: { type: [Array, Object, String] },
     ...Fallback.props
   },
   emits: ['toggle', 'update:keys', 'update:all' /* 'update:searchText' */],
@@ -82,7 +83,8 @@ export default defineComponent({
           {
             'w-list-item-active': isActive,
             'w-list-item-disabled': isDisabled
-          }
+          },
+          normalizeClass(props.itemClass)
         ],
         onClick: () => {
           if (isDisabled) {
@@ -103,7 +105,8 @@ export default defineComponent({
             {
               'w-list-item-disabled': isDisabled,
               'w-list-item-active': isChecked
-            }
+            },
+            normalizeClass(props.itemClass)
           ],
           modelValue: checkedKeys.value,
           value: item[props.keyField],

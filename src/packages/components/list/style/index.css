@@ -16,17 +16,22 @@
   cursor: pointer;
   display: block;
   transition: var(--w-transition-time);
+  &.w-list-item-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   &.w-list-item-disabled {
     color: var(--w-color-disabled);
     cursor: not-allowed;
   }
-  &:hover {
-    &:not(.w-list-item-disabled) {
-      color: var(--w-color-primary);
-    }
-  }
   &.w-list-item-active {
     color: var(--w-color-primary);
     background-color: var(--w-color-primary-5);
+  }
+  &:hover {
+    &:not(.w-list-item-disabled) {
+      background-color: var(--w-color-bg);
+    }
   }
 }

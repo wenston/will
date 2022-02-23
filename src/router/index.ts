@@ -196,6 +196,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'cascade',
+        name: 'Cascade',
+        component: () => import('../views/will/Cascade.vue'),
+        meta: {
+          title: '级联选择 Cascade'
+        }
+      },
+      {
         path: 'virtual',
         name: 'Virtual',
         component: () => import('../views/will/Virtual.vue'),
