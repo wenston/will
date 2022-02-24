@@ -59,10 +59,12 @@ const { currentRoute } = useRouter()
         &:after {
           content: '';
           position: absolute;
-          left: 0;
+          left: 3px;
           top: 0;
           bottom: 0;
           width: 5px;
+          height: 5px;
+          margin: auto;
           box-shadow: inset 10px 0 20px var(--w-color-primary);
         }
       }

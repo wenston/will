@@ -28,9 +28,12 @@
   perspective: 1000px;
 }
 
-.w-scale-enter-from,
+.w-scale-enter-from {
+  transform: scale(0, 0);
+}
 .w-scale-leave-to {
   transform: scale(0, 0);
+  opacity: 0;
 }
 
 .w-slide-y-enter-active,
