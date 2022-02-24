@@ -7,14 +7,24 @@
     <Btn @click="toSet('disabled')">启禁用</Btn>
   </p>
   <p>
-    <Cascade v-bind="cascadeOptions" />
+    一般用法：
+  </p>
+  <p>
+    <Cascade v-model="myArea" v-bind="cascadeOptions" />
+  </p>
+  <p>延迟加载(暂未实现)</p>
+  <p>
+    <Cascade v-model="area2" v-bind="cascadeOptions2" />
   </p>
 </template>
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import Cascade from 'will-ui/components/cascade/index'
 import areaData from '../../mock-data/area'
 import Btn from 'will-ui/components/btn/index'
+const myArea=ref<Record<any,any>[]>([])
+const area2 = ref<Record<any,any>[]>([])
+const lazyData = ref([])
 const ps = reactive({
   block: false,
   disabled: false,
@@ -23,18 +33,26 @@ const ps = reactive({
 
 const cascadeOptions = computed(() => {
   return {
+    ...ps,
     keyField: 'code',
     textField: 'name',
     childField: 'detail',
     data: areaData,
     placeholder: '请选择区域',
-    ...ps
+
   }
+})
+
+const cascadeOptions2 = computed(()=>{
+  return {...cascadeOptions.value, data: lazyData.value}
 })
 
 function toSet(p: 'block' | 'disabled' | 'clearable') {
   ps[p] = !ps[p]
 }
+watch(myArea,(a:Record<any,any>[])=>{
+  console.log('监控到了选择的变化',a)
+})
 </script>
 
 <style lang="postcss" module="css"></style>

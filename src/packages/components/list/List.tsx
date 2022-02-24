@@ -87,7 +87,7 @@ export default defineComponent({
           normalizeClass(props.itemClass)
         ],
         onClick: () => {
-          if (isDisabled) {
+          if (isDisabled || isActive) {
             return
           }
           ctx.emit('toggle', item, index)
@@ -96,7 +96,9 @@ export default defineComponent({
       const cont =
         ctx.slots.default?.({
           item,
-          index
+          index,
+          isActive,
+          isDisabled
         }) ?? getItemValue(item, props.textField)
       if (props.hasCheckbox) {
         const checkboxOptions = {

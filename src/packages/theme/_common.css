@@ -6,6 +6,12 @@
   cursor: pointer;
 }
 
+.w-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .w-no-select {
   user-select: none;
 }
@@ -15,4 +21,7 @@
 }
 .w-text-1 {
   color: var(--w-color-font-1);
+}
+.w-text-primary {
+  color: var(--w-color-primary);
 }

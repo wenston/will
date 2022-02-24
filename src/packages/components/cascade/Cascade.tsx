@@ -22,9 +22,10 @@ export default defineComponent({
     keyField: { type: String, default: 'id' },
     textField: { type: String, default: 'name' },
     childField: { type: String, default: 'children' },
-    checkable: Function as PropType<() => Promise<boolean>>
+    checkable: Function as PropType<() => Promise<boolean>>,
+    sign: { type: String, default: '-' }
   },
-  emits: ['update:show', 'update:modelValue'],
+  emits: ['update:show', 'update:modelValue', 'toggle', 'clear'],
   setup(_, { slots, emit }) {
     const visible = ref(_.show)
     //path里的keyField和textField是一定存在的
@@ -60,12 +61,21 @@ export default defineComponent({
       }
     })
     const triggerOptions = computed(() => {
+      const s = _.sign
+      const text = path.value.reduce((str: string, obj) => {
+        if (str) {
+          return `${str}${s}${obj[_.textField]}`
+        }
+        return obj[_.textField]
+      }, '')
       return {
         active: visible.value,
         block: _.block,
         disabled: _.disabled,
         clearable: _.clearable,
-        placeholder: _.placeholder
+        placeholder: _.placeholder,
+        text,
+        onClear: clear
       }
     })
 
@@ -149,18 +159,33 @@ export default defineComponent({
               path.value.push(_item)
             }
           }
+          const copy = JSON.parse(JSON.stringify(path.value))
+          emit('update:modelValue', copy)
+          emit('toggle', copy)
+          if (
+            !item[_.childField] ||
+            (item[_.childField] && item[_.childField].length === 0)
+          ) {
+            visible.value = false
+          }
         }
       }
       const listSlots = {
-        default: ({ item }: { item: Record<any, any> }) => {
+        default: ({
+          item,
+          isActive
+        }: {
+          item: Record<any, any>
+          isActive: boolean
+        }) => {
           return (
             <>
               <span>{item[_.textField]}</span>
               {item[_.childField] && item[_.childField].length > 0 && (
-                <Icon
+                <icon
                   name="w-icon-arrow-down"
                   rotate={true}
-                  deg={-90}
+                  deg={isActive ? -90 : 90}
                   direction={'z'}
                 />
               )}
@@ -169,6 +194,12 @@ export default defineComponent({
         }
       }
       return <List {...listOptions} v-slots={listSlots} />
+    }
+
+    function clear() {
+      path.value = []
+      emit('update:modelValue', [])
+      emit('clear')
     }
     watch(
       () => _.show,
@@ -185,9 +216,6 @@ export default defineComponent({
         path.value = a
       }
     )
-    watch(path, (a: Record<any, any>[]) => {
-      emit('update:modelValue', a)
-    })
 
     return () => {
       const layerSlots = {
