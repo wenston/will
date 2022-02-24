@@ -6,13 +6,19 @@ import autoprefixer from 'autoprefixer'
 import postcssNesting from 'postcss-nesting'
 import precss from 'precss';
 import path from 'path'
+import AutoImport from 'unplugin-auto-import/vite'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   esbuild: {
     // jsxFactory: 'h',
     // jsxFragment: 'Fragment',
   },
-  plugins: [vue(), vueJsx()],
+  plugins: [vue(), vueJsx(), AutoImport({
+    // 可以自定义文件生成的位置，默认是根目录下，使用ts的建议放src目录下
+    dts: 'src/auto-imports.d.ts',
+    imports: ['vue']
+  })],
   build: {
     lib: {
       entry: path.resolve('./', 'src/packages/components/imgViewer/index.ts'),

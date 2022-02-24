@@ -1,44 +1,58 @@
-import { defineComponent, computed, inject } from 'vue'
+import { defineComponent, computed, inject, VNode } from 'vue'
+import './list.css'
+
 export default defineComponent({
     name: "p-list-item",
     props: {
         item: {
             type: Object,
             default: () => { }
+        },
+        tp: {
+            type: String,
+            default: "row"
+        },
+        itemOptions: {
+            type: Object,
+            default: () => { }
         }
     },
     setup(props, ctx) {
-        const type: any = inject('type')
+        // console.log(css);
+
+        // const type: any = inject('type')
+
         const options: any = inject('itemOptions')
         const cls = computed(() => {
-            if (type == 'row') {
+
+            if (props.tp == 'row') {
                 return {
-                    class: ['list-item', 'list-item-row']
+                    class: ['list-item', 'list-item_row']
                 }
             } else {
                 return {
-                    class: ['list-item', 'list-item-column']
+                    class: ['list-item', 'list-item_column']
                 }
             }
         })
         const content = computed(() => {
             if (props.item) {
                 let item = props.item
-                let name: String = ''
+                let name: any = ''
                 if (options?.name) {
-                    name = `<div>${item.name}</div>`
+                    name = <div class='list-item_name'>{item.name}</div>
                 }
-                let img: String = ''
+                let img: any = ''
                 if (options?.img) {
-                    img = `<img src='${item.img}' />`
+                    img = <img class='list-item_img' src={item.img} />
                 }
-                let price: String = ''
+                let price: any = ''
                 if (options?.price) {
-                    price = `<span>${item.price}</span>`
+                    price = <span>{item.price}</span>
                 }
-                let salesVolume: String = ''
+                let salesVolume: any = ''
                 if (options?.salesVolume) {
-                    salesVolume = `<span>${item.salesVolume}</span>`
+                    salesVolume = <span>{item.salesVolume}</span>
                 }
                 // let OPrice:String =''
                 // if(options?.yPrice){
@@ -54,7 +68,7 @@ export default defineComponent({
                 return {}
             }
         })
-        return (
+        return () => (
             <div {...cls.value}>
                 <div class='list-item_content'>
                     {content.value?.img}

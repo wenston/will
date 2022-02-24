@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 export default {
     type: {
         type: String, // 列表格式 单列和双列
-        default: ''
+        default: 'row'
     },
     itemOptions: { // 列表内显示的内容属性 默认全部显示
         type: Object,
@@ -20,9 +20,12 @@ export default {
         type: String,
         default: 't1'
     },
-    style: {
-        style: { type: Object as PropType<Record<string, any> | undefined | null> }
-    },
+    style: { type: Object as PropType<Record<string, any> | undefined | null> },
+
+    // style: {
+    //     type: { type: Object as PropType<Record<string, any> | undefined | null> },
+    //     default: ''
+    // },
     list: {
         type: Array,
         default: () => [] // 数据来源

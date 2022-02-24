@@ -11,18 +11,19 @@
         @onMove='onMove'
         :dragoverClass='"dragover2"'
         id='dragover2'
-        :class="css.preview_box">
+        :class="[css.preview_box,css.preview_container]">
         <template v-for="com in pageComponents"
           :key="com.uid">
 
-          <DragoverItem :dataId='com.uid'>
-            <Scale :options=com.options
+          <DragoverItem style="width:100%"
+            :dataId='com.uid'>
+            <!-- <Scale :options=com.options
               :uid="com.uid"
-              @resize='resize'>
-              <component :is="com.componentName"
-                :uid="com.uid"
-                v-bind=com.options></component>
-            </Scale>
+              @resize='resize'> -->
+            <component :is="com.componentName"
+              :uid="com.uid"
+              v-bind=com.options></component>
+            <!-- </Scale> -->
           </DragoverItem>
 
         </template>
@@ -217,11 +218,13 @@ onMounted(() => {
   & .preview_container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+    flex-direction: column;
     flex: 1;
     height: 100%;
     padding: var(--w-padding-x);
     overflow: auto;
+    flex-wrap: nowrap;
     & .preview_box {
       width: 375px;
       height: 667px;

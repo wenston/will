@@ -11,5 +11,6 @@ export default {
         'p-list-item',
         defineAsyncComponent(() => import('./PListItem'))
       )
+      .component('p-list-options', defineAsyncComponent(() => import('./pListOptions')))
   }
 }

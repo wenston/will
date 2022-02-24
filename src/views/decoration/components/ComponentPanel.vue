@@ -9,6 +9,7 @@
         :oldClass='"old"'
         :key="item.componentId">
         <div :class="css.item"
+          @click="toadd(item)"
           :key="item.componentId">
           <Icon :name="item.icon"
             :class="css.icon" />
