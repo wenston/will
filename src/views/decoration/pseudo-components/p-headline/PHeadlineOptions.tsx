@@ -1,4 +1,4 @@
-import { inject, defineComponent, computed } from 'vue'
+import { inject, defineComponent, computed, ref } from 'vue'
 import props from './props'
 import css from './index.module.css'
 import { UpdateComponentKey } from 'decoration-symbols'
@@ -12,13 +12,17 @@ export default defineComponent({
     })
     const fontSizeOptions = computed(() => {
       return {
+        type: 'text',
         value: parseInt(props.style && props.style['font-size']) || '',
         onInput: (e: Event) => {
           const val = (e.target as HTMLInputElement).value
-          console.log(props.style)
+          console.log(val, props.style)
           if (props.style) {
-            props.style['font-size'] = val + 'px'
-            updateComponentOptions({ key: 'style', val: props.style })
+            // props.style['font-size'] = val + 'px'
+            updateComponentOptions({
+              key: 'style',
+              val: { 'font-size': val + 'px' }
+            })
           } else {
             const style = {
               'font-size': val + 'px'
@@ -67,8 +71,13 @@ export default defineComponent({
                 'onUpdate:modelValue': (v: string) => {
                   console.log(v)
                   if (props.style) {
-                    props.style['text-align'] = v
-                    updateComponentOptions({ key: 'style', val: props.style })
+                    // props.style['text-align'] = v
+                    updateComponentOptions({
+                      key: 'style',
+                      val: {
+                        'text-align': v
+                      }
+                    })
                   } else {
                     const style = {
                       'text-align': v

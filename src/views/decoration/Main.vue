@@ -13,7 +13,7 @@
           :key="com.uid">
           <component :is="com.componentName"
             :uid="com.uid"
-            v-bind=com.options></component>
+            v-bind="com.options"></component>
         </template>
       </div>
     </div>
