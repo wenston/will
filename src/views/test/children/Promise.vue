@@ -1,20 +1,26 @@
 <template>
-
+<input v-model="v" />
 </template>
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 const { name } = useRoute()
+const v = ref('')
+
+function onInput(e:Event) {
+  const _v = (e.target as HTMLInputElement).value
+  v.value = _v
+  console.log(_v)
+}
+
 
 const k1 = [...new Array(11).keys()]
-const k2 = Array.from('1'.repeat(11),(item,index)=>index)
+const k2 = Array.from({length:11},(item,index)=>index)
 const k3 = Array.apply(null,Array(11)).map((item,index)=>index)
-const k4:number[] = []
 
 console.log('k1:',k1)
 console.log('k2:',k2)
 console.log('k3:',k3)
-console.log('k4:',k4)
 
 const promise = new Promise(function (resolve, reject) {
   // throw new Error('test')
@@ -88,3 +94,11 @@ Promise.resolve()
     console.log(6)
   }) */
 </script>
+
+<style lang="postcss" module="css">
+.text {
+  width: 100px;
+  height: 30px;
+  background:url(data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w… fill='%23664500' rx='2.5' ry='3.5'/%3E%3C/svg%3E);
+}
+</style>
