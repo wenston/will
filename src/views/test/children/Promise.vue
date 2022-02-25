@@ -1,8 +1,21 @@
-<template></template>
+<template>
+
+</template>
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { ref } from 'vue'
 const { name } = useRoute()
+
+const k1 = [...new Array(11).keys()]
+const k2 = Array.from('1'.repeat(11),(item,index)=>index)
+const k3 = Array.apply(null,Array(11)).map((item,index)=>index)
+const k4:number[] = []
+
+console.log('k1:',k1)
+console.log('k2:',k2)
+console.log('k3:',k3)
+console.log('k4:',k4)
+
 const promise = new Promise(function (resolve, reject) {
   // throw new Error('test')
   setTimeout(() => {
