@@ -74,7 +74,17 @@ const pseudoCcomponents = [
     componentName: 'p-list',
     icon: 'w-icon-add',
     name: '列表',
-    options: {},
+    options: {
+      itemOptions: {
+        // 列表内显示的内容属性 默认全部显示
+        img: true, //是否显示图片
+        name: true, // 是否名称或标题
+        CPrice: true, // 是否显示现价
+        OPrice: true, // 是否显示原价
+        introduction: true, // 是否显示简介
+        salesVolume: true // 是否显示销量
+      }
+    },
     data: []
   },
   {
@@ -157,6 +167,7 @@ function onAdd(e: any) {
       uid: createUid()
     })
   }
+  console.log(pageComponents.value)
 }
 const pageComponents = ref<ComponentDescription[]>([])
 function onAddComponent(item: ComponentDescription) {
@@ -181,8 +192,20 @@ provide(UpdateComponentKey, ({ key, val, uid }) => {
   const com = uid
     ? pageComponents.value.filter((p) => p.uid === uid)[0]
     : currentComponent.value
+
   if (com) {
-    com.options[key] = val
+    if (val?.type) {
+      let options = JSON.parse(JSON.stringify(com.options[key]))
+      // com.options[key] = {}
+      for (const keys in val) {
+        if (options[keys]) {
+          options[keys] = val[keys]
+        }
+      }
+      com.options[key] = options
+    } else {
+      com.options[key] = val
+    }
   }
   // console.log(com)
 })
