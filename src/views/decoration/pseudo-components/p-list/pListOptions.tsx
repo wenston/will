@@ -23,7 +23,7 @@ export default defineComponent({
           const options = {
             text: ItemOptionsContent[keys],
             modelValue: props.itemOptions[keys],
-            'onChange': (v: number) => {
+            'onUpdate:modelValue': (v: number) => {
               const vs: any = {}
               vs[keys] = v
               updateComponentOptions({
