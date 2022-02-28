@@ -98,7 +98,5 @@ Promise.resolve()
 <style lang="postcss" module="css">
 .text {
   width: 100px;
-  height: 30px;
-  background:url(data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w… fill='%23664500' rx='2.5' ry='3.5'/%3E%3C/svg%3E);
-}
+  height: 30px;}
 </style>

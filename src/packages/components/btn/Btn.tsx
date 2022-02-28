@@ -5,7 +5,7 @@ import type { BtnType, BtnMode } from '../../config/types'
 export default defineComponent({
   name: 'Btn',
   props: {
-    tag: { type: String, default: 'button' },
+    tag: { type: String as PropType<keyof HTMLElementTagNameMap>, default: 'button' },
     type: { type: String as PropType<BtnType>, default: 'default' },
     mode: String as PropType<BtnMode>,
     block: Boolean,

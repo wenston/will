@@ -12,7 +12,7 @@ import {
 import Layer, { LayerProps } from '../layer/index'
 import Virtual from '../virtual/index'
 import Close from '../close/index'
-import Arrow from '../arrow/index'
+import Icon from '../icon/index'
 import Fallback from '../fallback/index'
 import {
   SetCurrentValueKey,
@@ -47,7 +47,7 @@ const props = {
 export default defineComponent({
   name: 'Choose',
   inheritAttrs: false,
-  components: { Layer, Virtual, Close, Arrow, Fallback },
+  components: { Layer, Virtual, Close, Icon, Fallback },
   props,
   emit: ['update:show', 'update:modelValue', 'change'],
   setup(props, ctx) {
@@ -176,7 +176,7 @@ export default defineComponent({
           {showCloseBtn.value ? (
             <Close {...closeOptions} />
           ) : (
-            <Arrow {...arrowOptions} />
+            <Icon name="w-icon-arrow-down" {...arrowOptions} />
           )}
         </div>
       )

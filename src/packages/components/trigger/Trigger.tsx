@@ -1,12 +1,12 @@
 import { computed, defineComponent } from 'vue'
 import Close from '../close/index'
-import Arrow from '../arrow/index'
+import Icon from '../icon/index'
 import Loading from '../loading/index'
 import Tooltip from '../tooltip/index'
 
 export default defineComponent({
   name: 'Trigger',
-  components: { Close, Arrow, Loading, Tooltip },
+  components: { Close, Icon, Loading, Tooltip },
   props: {
     loading: Boolean,
     active: Boolean,
@@ -64,7 +64,7 @@ export default defineComponent({
             {_.loading ? (
               <Loading text="" show={_.loading} />
             ) : (
-              <Arrow rotate={_.active} />
+              <Icon name="w-icon-arrow-down" rotate={_.active} />
             )}
           </div>
         </div>

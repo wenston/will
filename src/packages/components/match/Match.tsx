@@ -3,7 +3,7 @@ import { computed, ref, defineComponent, watch } from 'vue'
 import type { RectType } from '../../config/types'
 import Layer, { LayerProps } from '../layer/index'
 import Write from '../write/index'
-import Arrow from '../arrow/index'
+import Icon from '../icon/index'
 import Close from '../close/index'
 import List from '../list/index'
 import useSearch from '../../use/useSearch'
@@ -13,7 +13,7 @@ type DataItemType = string | number | Record<string, any>
 export default defineComponent({
   name: 'Match',
   inheritAttrs: false,
-  components: { Write, Layer, Arrow, Close, List },
+  components: { Write, Layer, Icon, Close, List },
   props: {
     data: { type: Array as PropType<DataItemType[]>, default: () => [] },
     placement: {
@@ -243,6 +243,7 @@ export default defineComponent({
           if (!props.request) {
             const arrowOptions = {
               class: 'w-cursor-pointer',
+              name: 'w-icon-arrow-down',
               rotate: visible.value,
               onClick: (e: MouseEvent) => {
                 toLoad()
@@ -253,7 +254,7 @@ export default defineComponent({
                 e.stopPropagation()
               }
             }
-            return <Arrow {...arrowOptions} />
+            return <Icon {...arrowOptions} />
           }
         }
       }

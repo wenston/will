@@ -3,7 +3,7 @@ import type { ListItemType } from '../list/List'
 import { computed, ref, watch, defineComponent } from 'vue'
 import Layer from '../layer/index'
 import Close from '../close/index'
-import Arrow from '../arrow/index'
+import Icon from '../Icon/index'
 import Write from '../write/index'
 import List from '../list/index'
 import Checkbox from '../checkbox/index'
@@ -13,7 +13,7 @@ const { hasCheckbox, keys, searchText, all, loading, empty, ...listProps } =
 export default defineComponent({
   inheritAttrs: false,
   name: 'Choose2',
-  components: { Layer, Close, Arrow, Write, List, Checkbox },
+  components: { Layer, Close, Icon, Write, List, Checkbox },
   props: {
     show: { type: Boolean, default: false },
     disabled: Boolean,
@@ -35,9 +35,8 @@ export default defineComponent({
       const v = props.modelValue
       if (v && v.length) {
         return (
-          <span class="w-no-select">{`已选${v.length}项${
-            props.textPlaceholder ?? ''
-          }`}</span>
+          <span class="w-no-select">{`已选${v.length}项${props.textPlaceholder ?? ''
+            }`}</span>
         )
       }
       return (
@@ -90,12 +89,12 @@ export default defineComponent({
       )
     })
     function renderTrigger() {
-      const arrowBtn = <Arrow rotate={visible.value} />
+      const arrowBtn = <Icon rotate={visible.value} name="w-icon-arrow-down" />
       const closeBtn =
         !props.disabled &&
-        props.clearable &&
-        props.modelValue &&
-        props.modelValue.length ? (
+          props.clearable &&
+          props.modelValue &&
+          props.modelValue.length ? (
           <Close
             name="w-icon-close-fill"
             onClick={(e: MouseEvent) => {
