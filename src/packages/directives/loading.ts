@@ -1,4 +1,8 @@
-import type { DirectiveBinding, ObjectDirective } from 'vue'
+import type {
+  ComponentPublicInstance,
+  DirectiveBinding,
+  ObjectDirective
+} from 'vue'
 import { createApp } from 'vue'
 import { getStyle, setStyle } from '../util'
 import useGlobalZIndex from '../use/useGlobalZIndex'
@@ -6,13 +10,19 @@ import Loading from '../components/loading/index'
 
 const { zIndex, add } = useGlobalZIndex()
 
-const instanceName: string = '@loading'
 const isStatic = (p: string) => p.toLowerCase() === 'static'
 
-function createLoading(
-  el: HTMLElement,
-  { value }: { value: VLoadingDirectiveBinding }
-) {
+type ComType = {
+  setText: (str: string) => void
+  setZIndex: (i: string | null) => void
+  show: () => void
+  hide: () => void
+} & ComponentPublicInstance
+
+interface El extends HTMLElement {
+  '@loading': ComType | null
+}
+function createLoading(el: El, { value }: { value: VLoadingDirectiveBinding }) {
   let div: HTMLDivElement = document.createElement('div')
   const app = createApp(Loading, {
     class: 'w-loading-mask',
@@ -26,28 +36,30 @@ function createLoading(
     setStyle(el)('position', 'relative')
   }
 
-  ;(el as Record<any, any>)[instanceName] = ins
+  el['@loading'] = ins as ComType
   el.appendChild(div)
 }
 
-const loadingDirective: ObjectDirective = {
-  mounted(el: HTMLElement, binding: DirectiveBinding) {
+const loadingDirective: ObjectDirective<El, VLoadingDirectiveBinding> = {
+  mounted(el, binding: DirectiveBinding<VLoadingDirectiveBinding>) {
     createLoading(el, binding)
-    ;(el as Record<any, any>)[instanceName].setZIndex(zIndex)
+    el['@loading']?.setZIndex(zIndex.value + '')
   },
-  updated(el, binding: DirectiveBinding) {
-    if (binding.value.loading) {
-      if (binding.value.text) {
-        el[instanceName].setText(binding.value.text)
+  updated(el, binding: DirectiveBinding<VLoadingDirectiveBinding>) {
+    if (el !== null) {
+      if (binding.value.loading) {
+        if (binding.value.text) {
+          el['@loading']!.setText(binding.value.text)
+        }
+        el['@loading']!.setZIndex(add() + '')
+        el['@loading']!.show()
+      } else {
+        el['@loading']!.hide()
       }
-      el[instanceName].setZIndex(add())
-      el[instanceName].show()
-    } else {
-      el[instanceName].hide()
     }
   },
-  beforeUnmount(el: HTMLElement) {
-    ;(el as Record<any, any>)[instanceName] = null
+  beforeUnmount(el) {
+    el['@loading'] = null
   }
 }
 

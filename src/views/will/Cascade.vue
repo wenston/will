@@ -22,6 +22,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import Cascade from 'will-ui/components/cascade/index'
 import areaData from '../../mock-data/area'
 import Btn from 'will-ui/components/btn/index'
+
 const myArea=ref<Record<any,any>[]>([
   // {code:'21',name:'辽宁省'},
   // {code:'2105',name:'本溪市'},

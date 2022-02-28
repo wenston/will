@@ -3,7 +3,7 @@
   <p>
     <Btn @click="onShowLoading">加载</Btn>
   </p>
-  <p v-loading="{ text, loading }">
+  <p v-loading="{loading}">
     <List :data="supplier" />
   </p>
 </template>
