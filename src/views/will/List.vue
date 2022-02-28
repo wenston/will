@@ -2,8 +2,9 @@
   <h1>{{ currentRoute.meta.title }}</h1>
   <p>
     <Btn @click="onShowLoading">加载</Btn>
+    <Btn mode="line">测试</Btn>
   </p>
-  <p v-loading="{loading}">
+  <p v-loading="{loading,text}">
     <List :data="supplier" />
   </p>
 </template>

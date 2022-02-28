@@ -428,7 +428,8 @@ export default defineComponent({
           <div
             class="w-sheet-resize-line"
             v-show={resizing.value}
-            style={{ left: resizeLineLeft.value + 'px' }}></div>
+            style={{ left: resizeLineLeft.value + 'px' }}
+          ></div>
           <div
             class="w-sheet-left-fixed-shadow-line"
             v-show={!!props.leftFixed && showLeftShadow.value}
@@ -452,7 +453,8 @@ export default defineComponent({
               default: (e: DataListOptions) => {
                 return innerTable(e)
               }
-            }}></Virtual>
+            }}
+          />
         )
       }
 

@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref, Ref, inject, ComputedRef } from 'vue'
+import { computed, defineComponent, ref, inject, ComputedRef } from 'vue'
 import Cell from './_cell'
 import Icon from '../icon/index'
 import { IS_PRESET, IS_CHECKBOX, IS_INDEX, IS_RADIO } from './_use'
@@ -97,7 +97,11 @@ export default defineComponent({
                 name: 'w-icon-add',
                 class: 'w-cell-action-add',
                 onClick: (e: MouseEvent) => {
-                  toEmit('add', row, index)
+                  toEmit(
+                    'add',
+                    row,
+                    props.from === undefined ? index : props.from + index
+                  )
                   e.stopPropagation()
                 }
               }
@@ -105,7 +109,11 @@ export default defineComponent({
                 name: 'w-icon-delete',
                 class: 'w-cell-action-delete',
                 onClick: (e: MouseEvent) => {
-                  toEmit('delete', row, index)
+                  toEmit(
+                    'delete',
+                    row,
+                    props.from === undefined ? index : props.from + index
+                  )
                   e.stopPropagation()
                 }
               }
@@ -205,8 +213,6 @@ export default defineComponent({
         return renderTr(row, i)
       })
     }
-    return () => {
-      return renderBody()
-    }
+    return renderBody
   }
 })

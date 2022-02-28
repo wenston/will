@@ -309,6 +309,7 @@ export default defineComponent({
         } as any)
       },
       toDelete(row: any, index: number) {
+        console.log(row,index)
         Confirm.open({
           content(close: any) {
             return (
