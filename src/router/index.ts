@@ -222,6 +222,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Sheet',
         component: () => import('../views/will/Sheet.vue'),
         meta: { title: '表格 Sheet' }
+      },
+      {
+        path: 'date-picker',
+        name: 'date-picker',
+        component: () => import('../views/will/DatePicker.vue'),
+        meta: { title: '日期选择器 DatePicker' }
       }
     ],
     meta: {
