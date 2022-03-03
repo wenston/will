@@ -34,13 +34,17 @@ export default defineComponent({
       return <Trigger />
     }
     function renderContent() {
-      return <Days date={date.value} />
+      return (
+        <div>
+          <Days date={date.value} />
+        </div>
+      )
     }
     function renderControlBar() {
       return (
         <div class="w-date-control-bar">
           <div class="w-date-control-bar-y-m">
-            {year.value}年{month.value}月
+            {year.value} 年 {month.value} 月
           </div>
           <Icon
             name="w-icon-sort-down"

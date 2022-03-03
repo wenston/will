@@ -48,7 +48,7 @@ export default defineComponent({
     function renderWeekTitleList() {
       const days: VNode[] = []
       for (const [k, v] of dayMap) {
-        days.push(<div class={['w-date-item']}>{v}</div>)
+        days.push(<b class={['w-date-item']}>{v}</b>)
       }
       return days
     }
