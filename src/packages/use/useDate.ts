@@ -15,7 +15,7 @@ import {
   parse as _parse,
   startOfMonth as _startOfMonth
 } from 'date-fns'
-type DateType = Date | number | string
+type DateType = Date | number | string | undefined
 type DateOptionType = Ref<DateType> | ComputedRef<DateType>
 
 export default function useDate(date: DateOptionType | undefined) {

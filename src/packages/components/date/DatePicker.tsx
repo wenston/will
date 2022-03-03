@@ -1,10 +1,12 @@
 import { defineComponent, ref, computed, watch } from 'vue'
+import useDate from '../../use/useDate'
 import Layer from '../layer/index'
 import Trigger from '../trigger/index'
+import Icon from '../icon/index'
 import Days from './Days'
 export default defineComponent({
   name: 'DatePicker',
-  components: { Layer, Trigger, Days },
+  components: { Layer, Trigger, Icon, Days },
   props: {
     show: { type: Boolean, default: false },
     modelValue: { type: [Number, Date, String] }
@@ -13,9 +15,8 @@ export default defineComponent({
   setup(props, { emit, slots, expose }) {
     const visible = ref(props.show)
     //当前展示的日期
-    const currentDate = ref<string | number | Date | undefined>(
-      props.modelValue
-    )
+    const date = ref<string | number | Date | undefined>(props.modelValue)
+    const { year, month } = useDate(date)
     const layerOptions = computed(() => {
       return {
         show: visible.value,
@@ -33,7 +34,22 @@ export default defineComponent({
       return <Trigger />
     }
     function renderContent() {
-      return <Days date={currentDate.value} />
+      return <Days date={date.value} />
+    }
+    function renderControlBar() {
+      return (
+        <div class="w-date-control-bar">
+          <div class="w-date-control-bar-y-m">
+            {year.value}年{month.value}月
+          </div>
+          <Icon
+            name="w-icon-sort-down"
+            class="w-date-control-bar-icon"
+            rotate={true}
+          />
+          <Icon name="w-icon-sort-down" class="w-date-control-bar-icon" />
+        </div>
+      )
     }
 
     watch(
@@ -48,7 +64,7 @@ export default defineComponent({
     return () => {
       const layerSlots = {
         trigger: renderTrigger,
-        default: renderContent
+        default: () => [renderControlBar(), renderContent()]
       }
       return <Layer {...layerOptions.value} v-slots={layerSlots} />
     }
