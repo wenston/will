@@ -11,6 +11,10 @@ export const transitionState: string[] = [
   'leave-active'
 ]
 
+export function isWindow(v: any) {
+  return v === window
+}
+
 export function isElement(v: any): v is HTMLElement {
   return v && v instanceof HTMLElement
 }

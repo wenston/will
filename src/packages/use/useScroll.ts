@@ -1,23 +1,42 @@
-import { onMounted, ref, watch } from 'vue'
+import type { Ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import useEvent from './useEvent'
-import useElement from './useElement'
+import {
+  getElement,
+  getPageScroll,
+  getWindowSize,
+  isElement,
+  isWindow
+} from '../util'
 export default function useScroll(
-  elem?: any,
+  elem?: HTMLElement | Ref<HTMLElement | undefined | null>,
   scrollCallback?: Function, //滚动时要做一些事
   immediate?: boolean //是否在挂载完之后立即触发scrollCallback
 ) {
-  const { el } = useElement(elem)
+  const el = computed(() => getElement(elem))
   const scrollTop = ref(0)
   const scrollLeft = ref(0)
   const scrollRight = ref(0)
   const scrollBottom = ref(0)
   function get() {
-    const el = elem?.value ?? null
-    if (el) {
-      scrollTop.value = el.scrollTop
-      scrollLeft.value = el.scrollLeft
-      scrollRight.value = el.scrollWidth - scrollLeft.value - el.clientWidth
-      scrollBottom.value = el.scrollHeight - scrollTop.value - el.clientHeight
+    const _el = el.value
+    if (_el) {
+      if (isElement(_el)) {
+        scrollTop.value = _el.scrollTop
+        scrollLeft.value = _el.scrollLeft
+        scrollRight.value = _el.scrollWidth - scrollLeft.value - _el.clientWidth
+        scrollBottom.value =
+          _el.scrollHeight - scrollTop.value - _el.clientHeight
+      } else if (isWindow(_el)) {
+        const s = getPageScroll()
+        const { inner } = getWindowSize()
+        scrollTop.value = s.y
+        scrollLeft.value = s.x
+        scrollBottom.value =
+          document.documentElement.scrollHeight - s.y - inner.height
+        scrollRight.value =
+          document.documentElement.scrollWidth - s.x - inner.width
+      }
     }
   }
   function doCallback() {
