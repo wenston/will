@@ -6,11 +6,16 @@ export default defineComponent({
   name: 'DatePicker',
   components: { Layer, Trigger, Days },
   props: {
-    show: { type: Boolean, default: false }
+    show: { type: Boolean, default: false },
+    modelValue: { type: [Number, Date, String] }
   },
-  emits: ['update:show'],
+  emits: ['update:show', 'update:modelValue'],
   setup(props, { emit, slots, expose }) {
     const visible = ref(props.show)
+    //当前展示的日期
+    const currentDate = ref<string | number | Date | undefined>(
+      props.modelValue
+    )
     const layerOptions = computed(() => {
       return {
         show: visible.value,
@@ -28,7 +33,7 @@ export default defineComponent({
       return <Trigger />
     }
     function renderContent() {
-      return <Days />
+      return <Days date={currentDate.value} />
     }
 
     watch(
