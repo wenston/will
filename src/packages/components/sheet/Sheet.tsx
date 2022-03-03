@@ -15,7 +15,12 @@ import Virtual from '../virtual/index'
 import type { DataListOptions } from '../virtual/Virtual'
 import useDelay from '../../use/useDelay'
 import useToggleArray from '../../use/toggle/useToggleArray'
-import { getBoundingClientRect, getElement, hasUnit } from '../../util'
+import {
+  getBoundingClientRect,
+  getElement,
+  isElement,
+  hasUnit
+} from '../../util'
 import Thead from './_thead'
 import Tbody from './_tbody'
 import Tfoot from './_tfoot'
@@ -371,7 +376,7 @@ export default defineComponent({
     onMounted(() => {
       //刷新页面时，FF浏览器会记录滚动条的位置，故在此重置为0
       //不管三七二十一，全部重置
-      if (innerElem.value) {
+      if (innerElem.value && isElement(innerElem.value)) {
         innerElem.value.scrollLeft = 0
         innerElem.value.scrollTop = 0
       }

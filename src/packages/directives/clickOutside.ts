@@ -1,5 +1,5 @@
 import { Ref, DirectiveBinding, ObjectDirective } from 'vue'
-import { getElement } from '../util'
+import { getElement, isElement } from '../util'
 import { isFunction, isObject } from '../util/'
 const NOOP = () => {}
 // import useEvent from '../use/useEvent'
@@ -21,7 +21,17 @@ function createHandler(el: HTMLElement, bindingValue: ClickOutsideBinding) {
   if (isFunction(bindingValue)) {
     handler = bindingValue
   } else if (isObject(bindingValue)) {
-    exclude.push(...bindingValue.exclude.map((el) => getElement(el)))
+    const _els: HTMLElement[] = []
+    let i = 0
+    const len = bindingValue.exclude.length
+    while (i < len) {
+      const _el = getElement(bindingValue.exclude[i])
+      if (_el && isElement(_el)) {
+        _els.push(_el)
+      }
+      i++
+    }
+    exclude.push(..._els)
     handler = bindingValue.handler
   }
   docHandlers.set(el, { exclude, handler })

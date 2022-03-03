@@ -1,9 +1,9 @@
-import { ref, onMounted, onUpdated, reactive } from 'vue'
+import { ref, onMounted, computed, reactive } from 'vue'
 import useEvent from './useEvent'
-import { getElement, getBoundingClientRect } from '../util'
+import { getElement, getBoundingClientRect, isElement } from '../util'
 
 export default function useBoundingClientRect(el: any) {
-  const elem = ref<HTMLElement>()
+  const elem = computed(() => getElement(el))
   const rect = reactive({
     height: 0,
     width: 0,
@@ -15,13 +15,10 @@ export default function useBoundingClientRect(el: any) {
     top: 0
   })
   function get() {
-    Object.assign(rect, getBoundingClientRect(elem.value).toJSON())
+    if (elem.value && isElement(elem.value))
+      Object.assign(rect, getBoundingClientRect(elem.value).toJSON())
   }
-  onMounted(() => {
-    elem.value = getElement(el)
-    // console.log('useB', elem.value)
-    get()
-  })
+  onMounted(get)
   useEvent(window, 'resize', get)
   return {
     elem,

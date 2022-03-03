@@ -1,13 +1,14 @@
-import { onMounted, onUpdated } from 'vue'
-import { getStyle, getElement, setAttr } from '../util/'
+import { computed, onMounted, onUpdated } from 'vue'
+import { getStyle, getElement, setAttr, isElement } from '../util/'
 
 export default function useTabIndex(el: any) {
+  const _ = computed(() => getElement(el))
   function setTabindex() {
-    const _ = getElement(el)
-    if (_) {
-      const t = getStyle(_, 'tabindex')
+    const _el = _.value
+    if (_el && isElement(_el)) {
+      const t = getStyle(_el, 'tabindex')
       if (t === undefined) {
-        setAttr(_, { tabindex: -1 })
+        setAttr(_el, { tabindex: -1 })
       }
     }
   }

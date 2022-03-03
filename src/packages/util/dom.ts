@@ -11,7 +11,7 @@ export const transitionState: string[] = [
   'leave-active'
 ]
 
-function isElement(v: any) {
+export function isElement(v: any): v is HTMLElement {
   return v && v instanceof HTMLElement
 }
 function isId(str: string) {
@@ -107,9 +107,9 @@ export function getPageSize() {
   }
 }
 
-export function getBoundingClientRect(elem: any) {
+export function getBoundingClientRect(elem: HTMLElement) {
   const _el = getElement(elem)
-  if (_el) {
+  if (_el && isElement(_el)) {
     return _el.getBoundingClientRect()
   }
   return {
@@ -144,25 +144,27 @@ export function getScrollbarWidth() {
 }
 
 // 获取元素
-export function getElement(elem: any): HTMLElement {
+export function getElement(
+  elem: any
+): HTMLElement | typeof window | Document | undefined {
   // const el = isRef(elem) ? elem.value : elem
   const el = unref(elem)
-  let _: any
+  let _: HTMLElement | typeof window | Document | undefined = undefined
   if (el === window) {
     _ = window
   } else if (el === document) {
     _ = document
   } else if (isElement(el)) {
-    _ = el
+    _ = el as HTMLElement
   } else if (isDocumentBody(el)) {
     _ = document.body
   } else if (isString(el)) {
     if (isId(el) || isClass(el)) {
-      _ = $(el)
+      _ = $(el) as HTMLElement
     }
   } else if (isObject(el)) {
     //控制台打印的是Proxy{...}
-    const _el = el.$el
+    const _el = el.$el as HTMLElement
     if (isElement(_el)) {
       _ = _el
     }
@@ -174,17 +176,24 @@ export function getElementPositionInPage(elem: any): RectType {
   let _el = getElement(elem)
 
   const { x: left, y: top } = getPageScroll()
-  const rect = getBoundingClientRect(_el)
-  // const marginLeft = getStyle(elem,'margin-left')
-  // const marginTop=getStyle(elem,'margin-top')
-  // console.log(marginLeft,marginTop)
+  if (_el && isElement(_el)) {
+    const rect = getBoundingClientRect(_el)
+    return {
+      left: left + rect.left,
+      top: top + rect.top,
+      right: rect.right + left,
+      bottom: rect.bottom + top,
+      width: rect.width,
+      height: rect.height
+    }
+  }
   return {
-    left: left + rect.left,
-    top: top + rect.top,
-    right: rect.right + left,
-    bottom: rect.bottom + top,
-    width: rect.width,
-    height: rect.height
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    width: 0,
+    height: 0
   }
 }
 
@@ -197,12 +206,18 @@ export function getInvisibleElementSize(
 ) {
   let width: number = 0,
     height: number = 0
-  function _clone_calc_size(_el: Element) {
+  function _clone_calc_size(_el: HTMLElement) {
     let parentNode: HTMLElement | ParentNode = doc.body
     if (nearby) {
-      parentNode = getElement(relate)?.parentNode || parentNode
+      const _relate = getElement(relate)
+      if (_relate && isElement(_relate)) {
+        const p = _relate.parentNode
+        if (p !== null) {
+          parentNode = p
+        }
+      }
     }
-    const node: any = _el.cloneNode(true)
+    const node = _el.cloneNode(true) as HTMLElement
     if (transitionName) {
       removeClass(
         node,
@@ -212,12 +227,14 @@ export function getInvisibleElementSize(
     node.style.display = 'block'
     node.style.opacity = '0'
     parentNode.appendChild(node)
-    const { width: _w, height: _h } = getBoundingClientRect(node)
-    width = _w
-    height = _h
+    ;({ width, height } = getBoundingClientRect(node))
     parentNode.removeChild(node)
   }
-  _clone_calc_size(getElement(el))
+
+  const _el = getElement(el)
+  if (_el && isElement(_el)) {
+    _clone_calc_size(_el)
+  }
   return { width, height }
 }
 
@@ -255,7 +272,7 @@ export function getParentScrollElement(el: any) {
       collectParent(_p)
     }
   }
-  if (_el) {
+  if (_el && isElement(_el)) {
     collectParent(_el)
   }
   return scrolls
@@ -266,19 +283,22 @@ export function hasClass(el: any, className: string): boolean {
   if (!className) {
     return false
   }
-  return _el.classList.contains(className)
+  if (_el && isElement(_el)) {
+    return _el?.classList.contains(className)
+  }
+  return false
 }
 
 export function addClass(el: any, className: string | string[]): void {
   const _el = getElement(el)
   const cls: string[] = isString(className) ? [className] : className
-  _el.classList.add(...cls)
+  if (_el && isElement(_el)) _el.classList.add(...cls)
 }
 
 export function removeClass(el: any, className: string | string[]): void {
   const _el = getElement(el)
   const cls: string[] = isString(className) ? [className] : className
-  _el.classList.remove(...cls)
+  if (_el && isElement(_el)) _el.classList.remove(...cls)
 }
 
 //attrs是context里的attrs
