@@ -3,16 +3,23 @@
   <p style="padding-left: 300px">
     <Btn @click="toggleLayout">移动方位切换</Btn>
   </p>
-  <Transfer :class="css.trans" :direction="dir">
-    <Transfer.item :class="[css.item, css.one]">第一</Transfer.item>
-    <Transfer.item :class="[css.item, css.two]">第二</Transfer.item>
-    <Transfer.item :class="[css.item, css.three]">第三</Transfer.item>
+  <Transfer
+    :data="dataList"
+    :class="css.trans"
+    :direction="dir"
+    @afterEnter="afterEnter"
+  >
+    <template #default="{ item, index }">
+      <div :class="css.item">
+        {{ item.key }}
+      </div>
+    </template>
     <template #use="{ prev, next }">
       <Teleport :to="ctrl" v-if="showUse">
         <p style="padding-left: 300px">
           <Tooltip placement="left">
             <template #trigger>
-              <Btn @click="prev">
+              <Btn @click="toPrev(prev)">
                 <Icon name="w-icon-sort-down" size="30px" rotate />
               </Btn>
             </template>
@@ -20,7 +27,7 @@
           </Tooltip>
           <Tooltip placement="right">
             <template #trigger>
-              <Btn @click="next">
+              <Btn @click="toNext(next)">
                 <Icon name="w-icon-sort-down" size="30px" />
               </Btn>
             </template>
@@ -41,6 +48,7 @@ import Tooltip from 'will-ui/components/tooltip/index'
 const dir = ref('x')
 const ctrl = ref<HTMLElement>()
 const showUse = ref(false)
+const dataList = ref([{ key: getRandom(), content: '哈哈' }])
 
 function toggleLayout() {
   if (dir.value === 'x') {
@@ -48,6 +56,29 @@ function toggleLayout() {
   } else {
     dir.value = 'x'
   }
+}
+
+function getRandom() {
+  return Math.floor(Math.random() * 1200)
+}
+
+function toPrev(fn: () => {}) {
+  fn()
+  dataList.value.unshift({
+    key: getRandom(),
+    content: '嘿嘿'
+  })
+}
+function toNext(fn: () => {}) {
+  fn()
+  dataList.value.push({
+    key: getRandom(),
+    content: '呵呵'
+  })
+}
+
+function afterEnter(method: 'pop' | 'shift') {
+  dataList.value[method]()
 }
 
 onMounted(() => {
