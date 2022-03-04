@@ -224,6 +224,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '表格 Sheet' }
       },
       {
+        path: 'transfer',
+        name: 'Transfer',
+        component: () => import('../views/will/Transfer.vue'),
+        meta: { title: '移动切换 Transfer' }
+      },
+      {
         path: 'date-picker',
         name: 'date-picker',
         component: () => import('../views/will/DatePicker.vue'),
