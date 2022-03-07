@@ -1,11 +1,14 @@
-import { computed, defineComponent, h, resolveComponent } from 'vue'
+import { computed, defineComponent, h } from 'vue'
 import type { VNode, PropType } from 'vue'
 import type { BtnType, BtnMode } from '../../config/types'
 
 export default defineComponent({
   name: 'Btn',
   props: {
-    tag: { type: String as PropType<keyof HTMLElementTagNameMap>, default: 'button' },
+    tag: {
+      type: String as PropType<keyof HTMLElementTagNameMap>,
+      default: 'button'
+    },
     type: { type: String as PropType<BtnType>, default: 'default' },
     mode: String as PropType<BtnMode>,
     block: Boolean,

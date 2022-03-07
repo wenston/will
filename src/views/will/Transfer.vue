@@ -40,8 +40,9 @@
   <div ref="ctrl"></div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, Teleport } from 'vue'
+import { h, onMounted, ref, Teleport, useCssModule } from 'vue'
 import Transfer from 'will-ui/components/transfer/index'
+import Notice from 'will-ui/components/notice/index'
 import Btn from 'will-ui/components/btn/index'
 import Icon from 'will-ui/components/icon/index'
 import Tooltip from 'will-ui/components/tooltip/index'
@@ -49,13 +50,24 @@ const dir = ref('x')
 const ctrl = ref<HTMLElement>()
 const showUse = ref(false)
 const dataList = ref([{ key: getRandom(), content: '哈哈' }])
-
+const css = useCssModule('css')
 function toggleLayout() {
   if (dir.value === 'x') {
     dir.value = 'y'
   } else {
     dir.value = 'x'
   }
+  Notice.open({
+    placement: 'top',
+    content:()=>{
+      return h(
+        'div', {
+          class: [css.notice]
+        },
+        `滚动方向已经切换到了 ${dir.value} 方向`
+      )
+    }
+  })
 }
 
 function getRandom() {
@@ -87,6 +99,13 @@ onMounted(() => {
 })
 </script>
 <style module="css" lang="postcss">
+.notice {
+  padding: 20px;
+  background-color: rgba(0,0,0,.65);
+  color: white;
+  font-size: 14px;
+  border-radius: var(--w-radius);
+}
 .trans {
   border-radius: var(--w-radius);
   width: 240px;
@@ -98,17 +117,8 @@ onMounted(() => {
     border-radius: var(--w-radius);
     justify-content: center;
     font-size: 50px;
-    /* flex: 0 0 calc(100% - 30px); */
     color: var(--w-color-font-4);
-    &.one {
-      background-color: lightcyan;
-    }
-    &.two {
-      background-color: lightgoldenrodyellow;
-    }
-    &.three {
-      background-color: cadetblue;
-    }
+    height: 100%;
   }
 }
 </style>
