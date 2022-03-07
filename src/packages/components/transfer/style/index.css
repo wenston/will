@@ -18,7 +18,7 @@
   display: flex;
   align-items: stretch;
   flex-wrap: nowrap;
-  overflow: hidden;
+  /* overflow: hidden; */
 
   &.w-transfer-x {
     flex-direction: row;
@@ -44,7 +44,7 @@
       }
     }
     &.w-transfer-unshift {
-      justify-content:flex-start;
+      justify-content: flex-start;
       & .w-transfer-list-enter-from {
         transform: translate(0, -100%);
       }

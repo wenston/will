@@ -35,12 +35,15 @@ const TRANSFER = defineComponent({
     }
   },
   setup(props, { slots, emit, expose, attrs }) {
-    //type是loop的情况下，只显示一条数据
-    const oneData = ref(props.data.length ? props.data.slice(0, 1) : [])
+    const loopIndex = ref(0)
+    const willChangeIndex = ref(0)
+    const copyData = ref(
+      props.data.length ? props.data.filter((item, index) => index === 0) : []
+    )
     //展示的当前数据
     const currentData = computed(() => {
       if (props.type === 'loop') {
-        return oneData.value
+        return copyData.value
       }
       return props.data
     })
@@ -60,29 +63,50 @@ const TRANSFER = defineComponent({
     })
 
     function afterTransition() {
-      // emit('afterEnter', place.value === 'unshift' ? 'pop' : 'shift')
-      emit('afterEnter', EFn[place.value])
+      if (props.type === 'dynamic') {
+        emit('afterEnter', EFn[place.value])
+      } else {
+        copyData.value[EFn[place.value]]()
+        loopIndex.value = willChangeIndex.value
+      }
     }
     function prev() {
-      place.value = 'unshift'
+      if (props.type === 'dynamic') {
+        place.value = 'unshift'
+      } else {
+        place.value = 'unshift'
+        const prevIndex = (loopIndex.value + 1) % props.data.length
+        const item = props.data.filter((el, index) => index === prevIndex)[0]
+
+        willChangeIndex.value = prevIndex
+        if (item) copyData.value.unshift(item)
+      }
     }
     function next() {
-      place.value = 'push'
+      if (props.type === 'dynamic') {
+        place.value = 'push'
+      } else {
+        place.value = 'push'
+        const nextIndex = (loopIndex.value + 1) % props.data.length
+        const item = props.data.filter((el, index) => index === nextIndex)[0]
+        willChangeIndex.value = nextIndex
+        if (item) copyData.value.push(item)
+      }
     }
     //如果出现了数据变动，则把源数据和现在展示的当前数据进行比对，
     //如果已经有了，则更新数据，如果没有或者出现了全部更新的情况，则重新赋值
     function compareData(newData: DataItemType[]) {
       if (newData.length === 0) {
-        oneData.value = []
+        copyData.value = []
       } else {
-        if (oneData.value.length === 0) {
-          oneData.value = newData.slice(0, 1)
+        if (copyData.value.length === 0) {
+          copyData.value = newData.slice(0, 1)
         } else {
-          const currentKey = oneData.value[0].key
+          const currentKey = copyData.value[0].key
           if (newData.some((item) => item.key === currentKey)) {
-            oneData.value = newData.filter((item) => item.key === currentKey)
+            copyData.value = newData.filter((item) => item.key === currentKey)
           } else {
-            oneData.value = newData.slice(0, 1)
+            copyData.value = newData.slice(0, 1)
           }
         }
       }
@@ -94,7 +118,7 @@ const TRANSFER = defineComponent({
       }
     )
     watch(place, (p) => {
-      console.log(p)
+      // console.log(p)
     })
     return () => {
       return (

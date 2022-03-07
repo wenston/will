@@ -38,6 +38,15 @@
     </template>
   </Transfer>
   <div ref="ctrl"></div>
+  <Transfer type="loop" :data="loopData" :class="css.trans">
+    <template #default="{ item, index }">
+      <div :class="css.item">{{ item.key }}</div>
+    </template>
+    <template #use="{prev,next}">
+      <Btn @click="prev">上一个</Btn>
+      <Btn @click="next">下一个</Btn>
+    </template>
+  </Transfer>
 </template>
 <script setup lang="ts">
 import { h, onMounted, ref, Teleport, useCssModule } from 'vue'
@@ -50,6 +59,7 @@ const dir = ref('x')
 const ctrl = ref<HTMLElement>()
 const showUse = ref(false)
 const dataList = ref([{ key: getRandom(), content: '哈哈' }])
+const loopData = ref([{ key: '1' }, { key: '2' }, { key: '3' }])
 const css = useCssModule('css')
 function toggleLayout() {
   if (dir.value === 'x') {
@@ -59,9 +69,10 @@ function toggleLayout() {
   }
   Notice.open({
     placement: 'top',
-    content:()=>{
+    content: () => {
       return h(
-        'div', {
+        'div',
+        {
           class: [css.notice]
         },
         `滚动方向已经切换到了 ${dir.value} 方向`
@@ -101,10 +112,11 @@ onMounted(() => {
 <style module="css" lang="postcss">
 .notice {
   padding: 20px;
-  background-color: rgba(0,0,0,.65);
+  background-color: var(--w-color-primary);
   color: white;
   font-size: 14px;
   border-radius: var(--w-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 .trans {
   border-radius: var(--w-radius);
