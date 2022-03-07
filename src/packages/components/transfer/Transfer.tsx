@@ -1,4 +1,5 @@
-import { PropType, watch } from 'vue'
+import type { SetupContext, PropType } from 'vue'
+import { watch } from 'vue'
 import { TransitionGroup } from 'vue'
 import { defineComponent, ref, mergeProps, computed, onMounted } from 'vue'
 
@@ -34,7 +35,7 @@ const TRANSFER = defineComponent({
       return true
     }
   },
-  setup(props, { slots, emit, expose, attrs }) {
+  setup(props, { slots, emit, expose, attrs }: SetupContext) {
     const loopIndex = ref(0)
     const willChangeIndex = ref(0)
     const copyData = ref(

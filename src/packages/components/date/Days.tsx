@@ -1,5 +1,5 @@
-import type { VNode } from 'vue'
-import { defineComponent, computed } from 'vue'
+import { getCurrentInstance, onMounted, VNode } from 'vue'
+import { defineComponent, computed, watch } from 'vue'
 import useDate from '../../use/useDate'
 
 export default defineComponent({
@@ -52,6 +52,10 @@ export default defineComponent({
       }
       return days
     }
+
+    onMounted(() => {
+      // console.log(getCurrentInstance())
+    })
     return () => {
       return (
         <div class="w-date-panel">

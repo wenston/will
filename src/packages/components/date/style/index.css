@@ -1,4 +1,9 @@
 .w-date-picker {
+  & .w-date-transfer {
+    height: var(--w-date-picker-panel-height);
+    overflow: hidden;
+    width: var(--w-date-picker-panel-width);
+  }
   & .w-date-control-bar {
     margin-top: var(--w-gap);
     height: var(--w-size);

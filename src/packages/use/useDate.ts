@@ -18,7 +18,7 @@ import {
 type DateType = Date | number | string | undefined
 type DateOptionType = Ref<DateType> | ComputedRef<DateType>
 
-export default function useDate(date: DateOptionType | undefined) {
+export default function useDate(date: DateOptionType) {
   const dayNum = 42
   const dayMap = readonly(
     new Map([
@@ -33,15 +33,19 @@ export default function useDate(date: DateOptionType | undefined) {
   )
   const currentDate = computed(() => parse(unref(date)))
   const year = computed(() => _getYear(currentDate.value))
-  const month = computed(() => _getMonth(currentDate.value))
+  const month = computed(() => getMonth(currentDate.value))
   const day = computed(() => _getDate(currentDate.value))
+
+  function addMonths(date?: DateType, n: number = 1) {
+    return _addMonths(parse(date), n)
+  }
   /**
    * 日期月份中总共有多少天
    * @param date Date|number
    * @returns number
    */
   function getDaysInMonth(date?: DateType) {
-    return _getDaysInMonth(parse(date))
+    return _getDaysInMonth(parse(date || currentDate.value))
   }
 
   /**
@@ -49,7 +53,7 @@ export default function useDate(date: DateOptionType | undefined) {
    * 日期月份中的1号是星期几
    */
   function getStartDayInMonth(date?: DateType) {
-    return _getDay(_startOfMonth(parse(date)))
+    return _getDay(_startOfMonth(parse(date || currentDate.value)))
   }
 
   /**
@@ -59,13 +63,14 @@ export default function useDate(date: DateOptionType | undefined) {
    * @returns
    */
   function getDaysInPanel(date?: DateType) {
-    const parse_date = parse(date)
+    const parse_date = parse(date || currentDate.value)
     const curYear = getYear(parse_date)
     const curMonth = getMonth(parse_date)
     const cur = Array.from(
       { length: getDaysInMonth(parse_date) },
       (item, index) => [curYear, curMonth, index + 1]
     )
+
     const d = getStartDayInMonth(parse_date)
     const prevDate = _addMonths(parse_date, -1)
     //有可能是上一年
@@ -83,7 +88,10 @@ export default function useDate(date: DateOptionType | undefined) {
     if (_d === -1) {
       _d = 6
     }
-    const prev = prevDays.slice(-1 * _d).map((d) => [prevYear, prevMonth, d])
+    const prev =
+      _d === 0
+        ? []
+        : prevDays.slice(-1 * _d).map((d) => [prevYear, prevMonth, d])
     const next: number[][] = Array.from(
       { length: dayNum - cur.length - prev.length },
       (item, index) => [nextYear, nextMonth, index + 1]
@@ -103,15 +111,15 @@ export default function useDate(date: DateOptionType | undefined) {
    * 返回从1开始计算的月份，注意：date-fns是从0开始计算的月份！
    */
   function getMonth(date?: DateType) {
-    return _getMonth(parse(date)) + 1
+    return _getMonth(parse(date || currentDate.value)) + 1
   }
 
   function getYear(date?: DateType) {
-    return _getYear(parse(date))
+    return _getYear(parse(date || currentDate.value))
   }
 
   function isToday(date?: DateType) {
-    return _isSameDay(parse(date), Date.now())
+    return _isSameDay(parse(date || currentDate.value), Date.now())
   }
 
   function parse(date?: DateType) {
@@ -123,6 +131,7 @@ export default function useDate(date: DateOptionType | undefined) {
     return date
   }
   return {
+    addMonths,
     day,
     dayMap,
     month,

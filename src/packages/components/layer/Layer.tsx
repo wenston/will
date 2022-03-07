@@ -90,7 +90,10 @@ export const LayerProps = {
     default: () => ({})
   },
   layerClass: { type: [String, Array, Object] },
-  layerStyle: { type: Object, default: () => ({}) }
+  layerStyle: { type: Object, default: () => ({}) },
+  //是否立即计算trigger元素和弹出框位置
+  //因为日期组件第一次下拉时，出现了从左上角过度的效果。故加入了立即计算。
+  immediate: { type: Boolean, default: false }
 }
 export default defineComponent({
   name: 'Layer',
@@ -220,8 +223,8 @@ export default defineComponent({
         toggle()
       }
     }
-    function toGetDefaultPlacement() {
-      if (visible.value) {
+    function toGetDefaultPlacement(immediate = false) {
+      if (visible.value || immediate) {
         const p = getPlacement({
           triggerRect,
           layerSize: defaultSize,
@@ -235,8 +238,8 @@ export default defineComponent({
       }
     }
     //计算trigger元素的位置大小等信息，为定位弹出层做准备
-    function calcTriggerRect() {
-      if (visible.value && triggerRoot.value) {
+    function calcTriggerRect(immediate = false) {
+      if (immediate || (visible.value && triggerRoot.value)) {
         let rect = getElementPositionInPage(triggerRoot)
         for (const k in rect) {
           triggerRect[k] = rect[k]
@@ -246,8 +249,8 @@ export default defineComponent({
       }
     }
     //获取default元素尺寸，为定位做准备
-    function getDefaultRootSize(maybeEl: any) {
-      if (visible.value) {
+    function getDefaultRootSize(maybeEl: any, immediate: boolean = false) {
+      if (immediate || visible.value) {
         const { width, height } = getInvisibleElementSize(
           maybeEl,
           props.nearby,
@@ -283,11 +286,11 @@ export default defineComponent({
        *
        */
       //计算trigger元素的位置大小等信息
-      calcTriggerRect()
+      calcTriggerRect(props.immediate)
       //计算弹出层的大小
-      getDefaultRootSize(defaultRoot.value)
+      getDefaultRootSize(defaultRoot.value, props.immediate)
       //根据以上两个方法得出的结果，对弹出层进行定位
-      toGetDefaultPlacement()
+      toGetDefaultPlacement(props.immediate)
       //如果弹出层位于某个滚动元素中，则给可滚动的父级进行事件绑定
       getScrollElementAndCalc()
     })
