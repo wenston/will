@@ -93,7 +93,17 @@ export default defineComponent({
           {...tOption}
           v-slots={{
             default: ({ item, index }: { item: any; index: number }) => {
-              return <Days date={item.key} key={Number(item.key)} />
+              return (
+                <Days
+                  date={selectedDate.value}
+                  key={Number(item.key)}
+                  displayDate={item.key}
+                  onToggle-day={(stringDate) => {
+                    selectedDate.value = stringDate
+                    visible.value = false
+                  }}
+                />
+              )
             },
             use: ({ prev, next }: { prev: () => void; next: () => void }) => {
               if (showIcon.value) {
@@ -152,8 +162,10 @@ export default defineComponent({
     )
     watch(visible, (b: boolean) => {
       if (b) {
+        //每次展示下拉框时，根据当前选中的日期进行初始化
         if (selectedDate.value) {
           displayDate.value = selectedDate.value
+          dayList.value = [{ key: format(selectedDate.value) }]
         }
       }
       emit('update:show', b)
@@ -162,7 +174,7 @@ export default defineComponent({
       () => props.modelValue,
       (d) => {
         selectedDate.value = d
-        if (!visible.value && d !== undefined) {
+        if (d !== undefined) {
           displayDate.value = d
         }
       }
