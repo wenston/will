@@ -73,6 +73,7 @@ export default defineComponent({
         block: props.block,
         clearable: props.clearable,
         text: text.value,
+        active: visible.value,
         onClear: () => {
           clear()
         }
