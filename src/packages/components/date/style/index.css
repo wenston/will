@@ -1,7 +1,6 @@
 .w-date-picker {
   & .w-date-transfer {
     height: var(--w-date-picker-panel-height);
-    overflow: hidden;
     width: var(--w-date-picker-panel-width);
   }
   & .w-date-control-bar {
@@ -69,15 +68,20 @@
     &.w-date-item-day {
       transition: var(--w-transition-time);
       cursor: pointer;
+      &:hover {
+        &:not(.w-date-item-today):not(.w-date-item-selected) {
+          background-color: var(--w-color-bg);
+          color: var(--w-color-font-1);
+        }
+      }
       &.w-date-item-today {
         border: 1px solid var(--w-color-primary);
         color: var(--w-color-primary);
       }
-      &:hover {
-        &:not(.w-date-item-today) {
-          background-color: var(--w-color-bg);
-          color: var(--w-color-font-1);
-        }
+      &.w-date-item-selected {
+        border: 1px solid var(--w-color-primary);
+        background-color: var(--w-color-primary);
+        color: white;
       }
       &:active {
         /* background-color: var(--w-color-font-4) !important; */

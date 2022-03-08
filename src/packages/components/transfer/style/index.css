@@ -18,8 +18,7 @@
   display: flex;
   align-items: stretch;
   flex-wrap: nowrap;
-  overflow: hidden;
-
+  /* overflow: hidden; */
   &.w-transfer-x {
     flex-direction: row;
     &.w-transfer-push {

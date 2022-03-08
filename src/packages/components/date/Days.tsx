@@ -6,30 +6,48 @@ export default defineComponent({
   name: 'Days',
   props: {
     //传入的日期,可以是具体的某一天，也可以是年月，如：new Date('2022','3')
-    date: { type: [Number, Date, String], default: () => new Date() }
+    date: { type: [Number, Date, String] }
   },
   setup(props, { slots }) {
-    const { dayMap, getDaysInPanel, isToday } = useDate(
-      computed(() => props.date)
-    )
+    const {
+      day,
+      dayMap,
+      format,
+      getDaysInPanel,
+      isSameDay,
+      isToday,
+      month,
+      year
+    } = useDate(computed(() => props.date))
 
     function renderDayItem(days: number[][], isCurrentMonth: boolean = false) {
       return days.map(([y, m, d]) => {
+        const itemDate = new Date(y, m - 1, d)
         //注意，js里的月份是从0开始的，所以new Date()里的月份要减1
-        const _isToday = isToday(new Date(y, m - 1, d))
+        const _isToday = isToday(itemDate)
+        const _isSelected = isSameDay(
+          itemDate,
+          new Date(year.value, month.value - 1, day.value)
+        )
+        const dOptions = {
+          title: `${y}-${m}-${d}`,
+          class: [
+            'w-date-item',
+            'w-date-item-day',
+            'w-date-item-circle',
+            {
+              'w-date-item-not-current': !isCurrentMonth,
+              'w-date-item-today': _isToday,
+              'w-date-item-selected': _isSelected
+            }
+          ],
+          onClick: (e: MouseEvent) => {
+            const ymd = format(itemDate)
+            console.log(ymd)
+          }
+        }
         return (
-          <div
-            title={`${y}-${m}-${d}`}
-            class={[
-              'w-date-item',
-              'w-date-item-day',
-              'w-date-item-circle',
-              {
-                'w-date-item-not-current': !isCurrentMonth,
-                'w-date-item-today': _isToday
-              }
-            ]}
-          >
+          <div {...dOptions}>
             {_isToday ? [<span>{d}</span>, <span>今日</span>] : d}
           </div>
         )

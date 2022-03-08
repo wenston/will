@@ -1,7 +1,8 @@
-import type { SetupContext, PropType } from 'vue'
+import { SetupContext, PropType, nextTick } from 'vue'
 import { watch } from 'vue'
 import { TransitionGroup } from 'vue'
 import { defineComponent, ref, mergeProps, computed, onMounted } from 'vue'
+import useDelay from '../../use/useDelay'
 
 type DataItemType = {
   key: string | number | symbol
@@ -36,6 +37,9 @@ const TRANSFER = defineComponent({
     }
   },
   setup(props, { slots, emit, expose, attrs }: SetupContext) {
+    const { delay } = useDelay()
+    const root = ref<HTMLElement>()
+    const isMounted = ref(false)
     const loopIndex = ref(0)
     const willChangeIndex = ref(0)
     const copyData = ref(
@@ -53,10 +57,14 @@ const TRANSFER = defineComponent({
     const options = computed(() => {
       return mergeProps(
         {
+          ref: root,
           class: [
             'w-transfer',
             `w-transfer-${props.direction}`,
-            `w-transfer-${place.value}`
+            `w-transfer-${place.value}`,
+            {
+              'w-overflow-hidden': isMounted.value
+            }
           ]
         },
         attrs
@@ -70,6 +78,7 @@ const TRANSFER = defineComponent({
         copyData.value[EFn[place.value]]()
         loopIndex.value = willChangeIndex.value
       }
+      // removeClass(root.value, 'w-overflow-hidden')
     }
     function prev() {
       if (props.type === 'dynamic') {
@@ -118,9 +127,15 @@ const TRANSFER = defineComponent({
         compareData(d)
       }
     )
-    watch(place, (p) => {
-      // console.log(p)
+
+    onMounted(async () => {
+      //为什么要这样？
+      //根元素上有overflow时，在Layer组件下，下拉会出现空白和抖动！
+      //为什么会抖动？
+      await delay()
+      isMounted.value = true
     })
+
     return () => {
       return (
         <>

@@ -39,6 +39,10 @@ export default function useDate(date: DateOptionType) {
   function addMonths(date?: DateType, n: number = 1) {
     return _addMonths(parse(date), n)
   }
+
+  function format(date?: DateType, formart: string = 'yyyy-MM-dd') {
+    return _format(parse(date || currentDate.value), formart)
+  }
   /**
    * 日期月份中总共有多少天
    * @param date Date|number
@@ -118,6 +122,10 @@ export default function useDate(date: DateOptionType) {
     return _getYear(parse(date || currentDate.value))
   }
 
+  function isSameDay(a: DateType, b: DateType) {
+    return _isSameDay(parse(a), parse(b))
+  }
+
   function isToday(date?: DateType) {
     return _isSameDay(parse(date || currentDate.value), Date.now())
   }
@@ -134,6 +142,7 @@ export default function useDate(date: DateOptionType) {
     addMonths,
     day,
     dayMap,
+    format,
     month,
     year,
 
@@ -142,7 +151,7 @@ export default function useDate(date: DateOptionType) {
     getStartDayInMonth,
     getMonth,
     getYear,
-
+    isSameDay,
     isToday,
 
     parse

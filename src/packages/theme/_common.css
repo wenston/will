@@ -25,3 +25,6 @@
 .w-text-primary {
   color: var(--w-color-primary);
 }
+.w-overflow-hidden {
+  overflow: hidden;
+}

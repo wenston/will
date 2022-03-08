@@ -10,9 +10,13 @@ export default defineComponent({
   components: { Layer, Trigger, Icon, Days, Transfer },
   props: {
     show: { type: Boolean, default: false },
+    clearable: { type: Boolean },
+    disabled: { type: Boolean },
+    block: Boolean,
+    placeholder: { type: [String, Object, Array], default: '请选择日期' },
     modelValue: {
       type: [Number, Date, String],
-      default: () => new Date(2021, 10)
+      default: undefined
     }
   },
   emits: ['update:show', 'update:modelValue'],
@@ -20,11 +24,29 @@ export default defineComponent({
     const ctrlIcon = ref<HTMLElement>()
     const visible = ref(props.show)
     const showIcon = ref(false)
-    //当前展示的日期
-    const date = ref<string | number | Date>(props.modelValue || new Date())
-    const { year, month, day, getMonth, addMonths } = useDate(date)
+    //当前选择的日期
+    const selectedDate = ref<string | number | Date | undefined>(
+      props.modelValue
+    )
+    //当前下拉框展示的日期
+    const displayDate = ref<string | number | Date>(
+      props.modelValue || new Date()
+    )
+    const {
+      year: displayYear,
+      month: displayMonth,
+      day: displayDay
+    } = useDate(displayDate)
+    const { year, month, day, getMonth, addMonths, format } =
+      useDate(displayDate)
+    const text = computed(() => {
+      if (props.modelValue === undefined) {
+        return ''
+      }
+      return format(props.modelValue)
+    })
     const dayList = ref<{ key: string | number }[]>([
-      { key: Number(date.value) }
+      { key: Number(displayDate.value) }
     ])
     const layerOptions = computed(() => {
       return {
@@ -44,7 +66,14 @@ export default defineComponent({
       } as Record<any, any>
     })
     function renderTrigger() {
-      return <Trigger />
+      const triggerOptions = {
+        placeholder: props.placeholder,
+        disabled: props.disabled,
+        block: props.block,
+        clearable: props.clearable,
+        text: text.value
+      }
+      return <Trigger {...triggerOptions} />
     }
     function renderContent() {
       const tOption = {
@@ -55,7 +84,7 @@ export default defineComponent({
           dayList.value[fn]()
           const item = dayList.value[0]
           if (item) {
-            date.value = item.key
+            displayDate.value = item.key
           }
         }
       }
@@ -97,7 +126,7 @@ export default defineComponent({
       return (
         <div class="w-date-control-bar" ref={ctrlIcon}>
           <div class="w-date-control-bar-y-m">
-            {year.value} 年 {month.value} 月
+            {displayYear.value} 年 {displayMonth.value} 月
           </div>
         </div>
       )
@@ -105,13 +134,13 @@ export default defineComponent({
 
     function toPrev(prev: () => void) {
       prev()
-      const a = addMonths(date.value, -1)
+      const a = addMonths(displayDate.value, -1)
       dayList.value.unshift({ key: Number(a) })
     }
 
     function toNext(next: () => void) {
       next()
-      const a = addMonths(date.value)
+      const a = addMonths(displayDate.value)
       dayList.value.push({ key: Number(a) })
     }
 
@@ -122,7 +151,24 @@ export default defineComponent({
       }
     )
     watch(visible, (b: boolean) => {
+      if (b) {
+        if (selectedDate.value) {
+          displayDate.value = selectedDate.value
+        }
+      }
       emit('update:show', b)
+    })
+    watch(
+      () => props.modelValue,
+      (d) => {
+        selectedDate.value = d
+        if (!visible.value && d !== undefined) {
+          displayDate.value = d
+        }
+      }
+    )
+    watch(selectedDate, (d) => {
+      emit('update:modelValue', format(d))
     })
     return () => {
       const layerSlots = {
