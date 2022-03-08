@@ -35,7 +35,8 @@ export default defineComponent({
     const {
       year: displayYear,
       month: displayMonth,
-      day: displayDay
+      day: displayDay,
+      parse
     } = useDate(displayDate)
     const { year, month, day, getMonth, addMonths, format } =
       useDate(displayDate)
@@ -71,7 +72,10 @@ export default defineComponent({
         disabled: props.disabled,
         block: props.block,
         clearable: props.clearable,
-        text: text.value
+        text: text.value,
+        onClear: () => {
+          clear()
+        }
       }
       return <Trigger {...triggerOptions} />
     }
@@ -81,10 +85,12 @@ export default defineComponent({
         direction: 'y',
         data: dayList.value,
         onAfterEnter: (fn: 'pop' | 'shift') => {
-          dayList.value[fn]()
-          const item = dayList.value[0]
-          if (item) {
-            displayDate.value = item.key
+          if (dayList.value.length > 1) {
+            dayList.value[fn]()
+            const item = dayList.value[0]
+            if (item) {
+              displayDate.value = item.key
+            }
           }
         }
       }
@@ -96,7 +102,7 @@ export default defineComponent({
               return (
                 <Days
                   date={selectedDate.value}
-                  key={Number(item.key)}
+                  key={Number(parse(item.key))}
                   displayDate={item.key}
                   onToggle-day={(stringDate) => {
                     selectedDate.value = stringDate
@@ -154,6 +160,13 @@ export default defineComponent({
       dayList.value.push({ key: Number(a) })
     }
 
+    function clear() {
+      selectedDate.value = undefined
+      displayDate.value = new Date()
+      // dayList.value = [{ key: Number(displayDate.value) }]
+      dayList.value[0].key = Number(displayDate.value)
+    }
+
     watch(
       () => props.show,
       (b: boolean) => {
@@ -180,7 +193,7 @@ export default defineComponent({
       }
     )
     watch(selectedDate, (d) => {
-      emit('update:modelValue', format(d))
+      emit('update:modelValue', d === undefined ? undefined : format(d))
     })
     return () => {
       const layerSlots = {

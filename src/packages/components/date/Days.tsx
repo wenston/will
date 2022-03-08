@@ -32,9 +32,10 @@ export default defineComponent({
         const itemDate = new Date(y, m - 1, d)
         //注意，js里的月份是从0开始的，所以new Date()里的月份要减1
         const _isToday = isToday(itemDate)
-        const _isSelected = isSameDay(itemDate, props.date)
+        const _isSelected =
+          isSameDay(itemDate, props.date) && props.date !== undefined
         const dOptions = {
-          title: `${y}-${m}-${d}`,
+          title: `${_isToday ? '今日' : ''}${y}-${m}-${d}`,
           class: [
             'w-date-item',
             'w-date-item-day',

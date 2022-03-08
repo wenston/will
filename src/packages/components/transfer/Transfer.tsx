@@ -137,21 +137,22 @@ const TRANSFER = defineComponent({
     })
 
     return () => {
+      const items = currentData.value.map((item, index) => {
+        return (
+          <div class="w-transfer-item" key={item.key}>
+            {slots.default?.({ item, index })}
+          </div>
+        )
+      })
       return (
         <>
           {slots.use?.({ prev, next })}
           <div {...options.value}>
             <TransitionGroup
-              name="w-transfer-list"
+              name={items.length <= 1 ? '' : 'w-transfer-list'}
               onAfterEnter={afterTransition}
             >
-              {currentData.value.map((item, index) => {
-                return (
-                  <div class="w-transfer-item" key={item.key}>
-                    {slots.default?.({ item, index })}
-                  </div>
-                )
-              })}
+              {items}
             </TransitionGroup>
           </div>
         </>
