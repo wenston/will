@@ -230,6 +230,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '移动切换 Transfer' }
       },
       {
+        path: 'scale',
+        name: 'Scale',
+        component: () => import('../views/will/Scale.vue'),
+        meta: { title: '缩放切换 Scale' }
+      },
+      {
         path: 'date-picker',
         name: 'date-picker',
         component: () => import('../views/will/DatePicker.vue'),

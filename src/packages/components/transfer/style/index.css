@@ -1,10 +1,8 @@
 .w-transfer-list-enter-active,
 .w-transfer-list-leave-active {
-  transition: transform var(--w-transition-time) var(--w-cubic-bezier);
+  transition: transform 33s var(--w-cubic-bezier);
 }
-.w-transfer-list-leave-active {
-  transition: transform var(--w-transition-time) var(--w-cubic-bezier);
-}
+
 /* .w-transfer-list-enter-from {
   transform: translate(-100%, 0);
 } */
@@ -12,7 +10,7 @@
   transform: scale(0, 0);
 }
 .w-transfer-list-move {
-  transition: transform var(--w-transition-time) var(--w-cubic-bezier);
+  transition: transform 33s var(--w-cubic-bezier);
 }
 .w-transfer {
   display: flex;

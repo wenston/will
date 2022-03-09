@@ -1,0 +1,63 @@
+.w-scale-list-enter-active,
+.w-scale-list-leave-active {
+  transition: all 10s var(--w-cubic-bezier-quick);
+}
+.w-scale-list-move {
+  transition: all 10s var(--w-cubic-bezier-quick);
+}
+
+.w-scale {
+  position: relative;
+  /* overflow: hidden; */
+
+  & .w-scale-item {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+  }
+  &.w-scale-push {
+    & .w-scale-list-enter-from {
+      transform: scale(0, 0);
+      opacity: 0;
+    }
+    & .w-scale-list-enter-to {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+
+    & .w-scale-list-leave-from {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    & .w-scale-list-leave-to {
+      transform: scale(2, 2);
+      opacity: 0;
+    }
+  }
+  &.w-scale-unshift {
+    & .w-scale-list-enter-from {
+      transform: scale(2, 2);
+      opacity: 0;
+    }
+    & .w-scale-list-enter-to {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    & .w-scale-list-leave-from {
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    & .w-scale-list-leave-to {
+      transform: scale(0, 0);
+      opacity: 0;
+    }
+  }
+
+  /* & .w-scale-list-enter-from {
+
+  } */
+}
