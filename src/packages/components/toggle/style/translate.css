@@ -1,0 +1,33 @@
+.w-toggle-translate-enter-active,
+.w-toggle-translate-leave-active,
+.w-toggle-translate-prev-enter-active,
+.w-toggle-translate-prev-leave-active {
+  transition: all var(--w-transition-slow-time) var(--w-cubic-bezier);
+}
+.w-toggle-translate-enter-from {
+  transform: translate(100%, 0);
+}
+
+.w-toggle-translate-leave-to {
+  transform: translate(-100%, 0);
+}
+
+.w-toggle-translate-prev-enter-from {
+  transform: translate(-100%, 0);
+}
+
+.w-toggle-translate-prev-leave-to {
+  transform: translate(100%, 0);
+}
+
+.w-toggle {
+  position: relative;
+
+  & .w-toggle-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}

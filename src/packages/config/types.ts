@@ -34,3 +34,5 @@ export type BtnType = 'primary' | 'default'
 export type BtnMode = 'text' | 'line' //line是线条形式的
 
 export type TriggerType = 'hover' | 'click' | 'focus'
+
+export type DataItemType = boolean | number | string | symbol | object

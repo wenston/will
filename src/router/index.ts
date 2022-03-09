@@ -236,6 +236,14 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '缩放切换 Scale' }
       },
       {
+        path: 'toggle',
+        name: 'Toggle',
+        component: () => import('../views/will/Toggle.vue'),
+        meta: {
+          title: '切换（动画） Toggle'
+        }
+      },
+      {
         path: 'date-picker',
         name: 'date-picker',
         component: () => import('../views/will/DatePicker.vue'),

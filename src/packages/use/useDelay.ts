@@ -9,14 +9,27 @@ export default function useDelay(msTime = 200) {
   function stop() {
     clearTimeout(timer.value)
   }
-  async function delay(handler?: Function, delayTime?: number) {
+  async function delay(handler?: Function | number, delayTime?: number) {
+    // console.log(arguments.length)
+    const len = arguments.length
+    const ms = arguments[0] as number
     stop()
-    await new Promise((res) => {
-      timer.value = setTimeout(() => {
-        handler?.()
-        res(timer.value)
-      }, delayTime ?? msTime)
-    })
+    if (len === 1 && typeof arguments[0] === 'number') {
+      await new Promise((res) => {
+        timer.value = setTimeout(() => {
+          res(timer.value)
+        }, ms ?? msTime)
+      })
+    } else {
+      await new Promise((res) => {
+        timer.value = setTimeout(() => {
+          if (handler && typeof handler === 'function') {
+            handler()
+          }
+          res(timer.value)
+        }, delayTime ?? msTime)
+      })
+    }
   }
   onUnmounted(clear)
   return { clear, delay, stop }
