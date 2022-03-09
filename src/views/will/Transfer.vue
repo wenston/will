@@ -42,7 +42,7 @@
     <template #default="{ item, index }">
       <div :class="css.item">{{ item.key }}</div>
     </template>
-    <template #use="{prev,next}">
+    <template #use="{ prev, next }">
       <Btn @click="prev">上一个</Btn>
       <Btn @click="next">下一个</Btn>
     </template>
@@ -91,6 +91,7 @@ function toPrev(fn: () => {}) {
     key: getRandom(),
     content: '嘿嘿'
   })
+  // dataList.value.pop()
 }
 function toNext(fn: () => {}) {
   fn()
@@ -98,10 +99,11 @@ function toNext(fn: () => {}) {
     key: getRandom(),
     content: '呵呵'
   })
+  dataList.value.shift()
 }
 
 function afterEnter(method: 'pop' | 'shift') {
-  dataList.value[method]()
+  // dataList.value[method]()
 }
 
 onMounted(() => {

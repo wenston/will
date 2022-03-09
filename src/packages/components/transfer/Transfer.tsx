@@ -133,7 +133,7 @@ const TRANSFER = defineComponent({
       //根元素上有overflow时，在Layer组件下，下拉会出现空白和抖动！
       //为什么会抖动？
       await delay()
-      isMounted.value = true
+      // isMounted.value = true
     })
 
     return () => {

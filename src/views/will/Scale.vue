@@ -63,6 +63,7 @@ function toPrev(fn: () => {}) {
     key: getRandom(),
     content: '嘿嘿'
   })
+  dataList.value.pop()
 }
 function toNext(fn: () => {}) {
   fn()
@@ -70,10 +71,11 @@ function toNext(fn: () => {}) {
     key: getRandom(),
     content: '呵呵'
   })
+  dataList.value.shift()
 }
 
 function afterEnter(method: 'pop' | 'shift') {
-  dataList.value[method]()
+  // dataList.value[method]()
 }
 
 onMounted(() => {

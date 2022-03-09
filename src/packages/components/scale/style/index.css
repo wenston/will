@@ -1,9 +1,9 @@
 .w-scale-list-enter-active,
 .w-scale-list-leave-active {
-  transition: all 10s var(--w-cubic-bezier-quick);
+  transition: all var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
 }
 .w-scale-list-move {
-  transition: all 10s var(--w-cubic-bezier-quick);
+  transition: all var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
 }
 
 .w-scale {
