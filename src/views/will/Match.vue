@@ -46,8 +46,9 @@ import Match from 'will-ui/components/match/index'
 import Btn from 'will-ui/components/btn/index'
 
 import supplier from '../../mock-data/supplier'
+import { isObject } from 'will-ui/util'
 const { currentRoute } = useRouter()
-const lazyData = ref<Record<string, any>>([])
+const lazyData = ref<Record<string, any>[]>([])
 const supplierId2 = ref()
 const search = reactive<{
   supplierId: number | undefined
@@ -58,17 +59,20 @@ const search = reactive<{
   supplierName: '',
   supplierId3: ''
 })
-function checkable(item: Record<string, any>, index: number) {
-  return item.Name.indexOf('北京') === -1
+function checkable(item: Record<string, any> | string | number, index: number) {
+  if (isObject(item)) {
+    return item.Name.indexOf('北京') === -1
+  }
+  return false
 }
-function getSupplier(e: any) {
+function getSupplier(): Promise<Record<string, any>[]> {
   return new Promise((res, rej) => {
     setTimeout(() => {
       res(supplier)
     }, 500)
   })
 }
-function lazyLoad() {
+function lazyLoad(): Promise<Record<string, any>[]> {
   return new Promise((res, rej) => {
     setTimeout(() => {
       lazyData.value = supplier
