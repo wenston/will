@@ -224,18 +224,6 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '表格 Sheet' }
       },
       {
-        path: 'transfer',
-        name: 'Transfer',
-        component: () => import('../views/will/Transfer.vue'),
-        meta: { title: '移动切换 Transfer' }
-      },
-      {
-        path: 'scale',
-        name: 'Scale',
-        component: () => import('../views/will/Scale.vue'),
-        meta: { title: '缩放切换 Scale' }
-      },
-      {
         path: 'toggle',
         name: 'Toggle',
         component: () => import('../views/will/Toggle.vue'),
