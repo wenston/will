@@ -1,7 +1,10 @@
 .w-date-picker {
   padding: var(--w-gap);
+  --__week-height: var(--w-size);
   --__width: calc(var(--w-date-picker-panel-width) - var(--w-gap) * 2);
-  --__height: calc(var(--w-date-picker-panel-height) - var(--w-gap) * 2);
+  --__height: calc(
+    var(--w-date-picker-panel-height) - var(--w-gap) * 2 - var(--__week-height)
+  );
   & .w-date-transfer {
     height: var(--__height);
     width: var(--__width);
@@ -44,6 +47,18 @@
     display: flex;
     width: var(--__width);
   }
+  & .w-week-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: var(--__week-height);
+    & .w-week-title-item {
+      flex: 1;
+      text-align: center;
+      color: var(--w-color-font-2);
+      user-select: none;
+    }
+  }
   & .w-days {
     display: flex;
     flex-wrap: wrap;
@@ -52,7 +67,7 @@
   & .w-date-item {
     flex: 0 0 auto;
     width: calc(100% / 7);
-    height: calc(100% / 7);
+    height: calc(100% / 6);
     display: flex;
     align-items: center;
     justify-content: center;

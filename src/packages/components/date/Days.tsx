@@ -80,12 +80,7 @@ export default defineComponent({
       // console.log(getCurrentInstance())
     })
     return () => {
-      return (
-        <div class={'w-days'}>
-          {renderWeekTitleList()}
-          {renderDaysList()}
-        </div>
-      )
+      return <div class={'w-days'}>{renderDaysList()}</div>
     }
   }
 })

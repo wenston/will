@@ -1,4 +1,5 @@
 import { defineComponent, ref, computed, watch, Teleport, nextTick } from 'vue'
+import type { VNode } from 'vue'
 import useDate from '../../use/useDate'
 import Layer from '../layer/index'
 import Trigger from '../trigger/index'
@@ -36,6 +37,7 @@ export default defineComponent({
       props.modelValue || new Date()
     )
     const {
+      dayMap,
       year: displayYear,
       month: displayMonth,
       day: displayDay,
@@ -81,6 +83,13 @@ export default defineComponent({
         }
       }
       return <Trigger {...triggerOptions} />
+    }
+    function renderWeekTitleList() {
+      const days: VNode[] = []
+      for (const [k, v] of dayMap) {
+        days.push(<b class={['w-week-title-item']}>{v}</b>)
+      }
+      return <div class="w-week-title">{days}</div>
     }
     function renderContent() {
       //如何更好的进行类型定义和应用？
@@ -209,7 +218,11 @@ export default defineComponent({
     return () => {
       const layerSlots = {
         trigger: renderTrigger,
-        default: () => [renderControlBar(), renderContent()]
+        default: () => [
+          renderControlBar(),
+          renderWeekTitleList(),
+          renderContent()
+        ]
       }
       return <Layer {...layerOptions.value} v-slots={layerSlots} />
     }
