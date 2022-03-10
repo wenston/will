@@ -1,4 +1,5 @@
 import {
+  h,
   ref,
   computed,
   defineComponent,
@@ -8,15 +9,17 @@ import {
   TransitionGroup,
   onMounted,
   getCurrentInstance,
-  Transition
+  Transition,
+  resolveComponent
 } from 'vue'
 import type { PropType, ComputedRef } from 'vue'
 import useToggleArray from '../../use/toggle/useToggleArray'
 import useDelay from '../../use/useDelay'
-import { isObject } from '../../util/index'
+import { isBoolean, isObject } from '../../util/index'
 import type { DataItemType } from '../../config/types'
 type TransformType = 'scale' | 'translate'
 export default defineComponent({
+  components: { Transition },
   inheritAttrs: false,
   name: 'Toggle',
   props: {
@@ -53,6 +56,7 @@ export default defineComponent({
     }
   },
   emits: {
+    'update:data': null,
     afterToggle: ({
       prev,
       next,
@@ -66,6 +70,8 @@ export default defineComponent({
     }
   },
   setup(props, { attrs, slots, emit }) {
+    const Comp = h(resolveComponent('Transition'))
+    console.log(Comp)
     const isMounted = ref(false)
     const { delay } = useDelay(props.duration)
     const isPrev = ref(false)
@@ -117,11 +123,17 @@ export default defineComponent({
 
     function prev() {
       isPrev.value = true
-      _prev()
+      if (props.dynamic) {
+      } else {
+        _prev()
+      }
     }
     function next() {
       isPrev.value = false
-      _next()
+      if (props.dynamic) {
+      } else {
+        _next()
+      }
     }
 
     function afterToggle() {
@@ -138,6 +150,43 @@ export default defineComponent({
     })
 
     return () => {
+      const dynamicPart = props.dynamic && (
+        <TransitionGroup name={name.value} onAfterEnter={afterToggle}>
+          {props.data.map((el, i) => {
+            const k = isObject(el)
+              ? JSON.stringify(el)
+              : isBoolean(el)
+              ? Number(el)
+              : el
+            return (
+              <div {...itemOptions.value} key={k}>
+                {slots.default?.({
+                  item: el,
+                  index: i,
+                  prev,
+                  next
+                })}
+              </div>
+            )
+          })}
+        </TransitionGroup>
+      )
+      const staticPart = props.data.map((el, i) => {
+        return (
+          <Transition name={name.value} onAfterEnter={afterToggle}>
+            {i === index.value && (
+              <div {...itemOptions.value}>
+                {slots.default?.({
+                  item: el,
+                  index: i,
+                  prev,
+                  next
+                })}
+              </div>
+            )}
+          </Transition>
+        )
+      })
       return (
         <>
           {slots.use?.({
@@ -148,22 +197,7 @@ export default defineComponent({
             index
           })}
           <div {...options.value}>
-            {props.data.map((el, i) => {
-              return (
-                <Transition name={name.value} onAfterEnter={afterToggle}>
-                  {i === index.value && (
-                    <div {...itemOptions.value}>
-                      {slots.default?.({
-                        item: el,
-                        index: i,
-                        prev,
-                        next
-                      })}
-                    </div>
-                  )}
-                </Transition>
-              )
-            })}
+            {props.dynamic ? dynamicPart : staticPart}
           </div>
         </>
       )

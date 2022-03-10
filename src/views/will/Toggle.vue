@@ -34,13 +34,20 @@
       </p>
     </template>
   </Toggle>
+  <p></p>
   <p>
-    <b>动态数据的情况下：</b>
+    <b>纯动态数据（这种情况下，需要清除原来的数据）的情况下：</b>
   </p>
   <p>
-    <Toggle :class="css.toggleBox" :transform="trans" :data="dynamicData">
+    <Toggle
+      :class="css.toggleBox"
+      :transform="trans"
+      :data="dynamicData"
+      direction="y"
+      dynamic
+    >
       <template #default="{ item, index, prev, next }">
-        <div :class="css.box2">{{ item }}</div>
+        <div :class="css.box3">{{ item }}</div>
       </template>
       <template #use="{ item, index, prev, next }">
         <p>
@@ -92,10 +99,12 @@ async function afterEnter({
 
 function toPrev(prev: () => void) {
   dynamicData.value.unshift(getRandom())
-  // prev()
+  dynamicData.value.pop()
+  prev()
 }
 function toNext(next: () => void) {
   dynamicData.value.push(getRandom())
+  dynamicData.value.shift()
   next()
 }
 </script>
@@ -119,5 +128,15 @@ function toNext(next: () => void) {
   align-items: center;
   justify-content: center;
   padding: 20px;
+}
+.box3 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 50px;
+  font-weight: bold;
 }
 </style>
