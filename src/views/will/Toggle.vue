@@ -34,6 +34,22 @@
       </p>
     </template>
   </Toggle>
+  <p>
+    <b>动态数据的情况下：</b>
+  </p>
+  <p>
+    <Toggle :class="css.toggleBox" :transform="trans" :data="dynamicData">
+      <template #default="{ item, index, prev, next }">
+        <div :class="css.box2">{{ item }}</div>
+      </template>
+      <template #use="{ item, index, prev, next }">
+        <p>
+          <Btn @click="toPrev(prev)" type="primary">上一个</Btn>
+          <Btn @click="toNext(next)" type="primary">下一个</Btn>
+        </p>
+      </template>
+    </Toggle>
+  </p>
 </template>
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
@@ -56,6 +72,11 @@ const json = ref([
     content: '往昔所造诸恶业，皆由无始贪嗔痴，从身语意之所生，一切罪障皆忏悔'
   }
 ])
+const dynamicData = ref([getRandom()])
+
+function getRandom() {
+  return Math.floor(Math.random() * 2000 + 100)
+}
 async function afterEnter({
   prev,
   next,
@@ -66,6 +87,15 @@ async function afterEnter({
   delay: (n?: number) => Promise<void>
 }) {
   await delay()
+  next()
+}
+
+function toPrev(prev: () => void) {
+  dynamicData.value.unshift(getRandom())
+  // prev()
+}
+function toNext(next: () => void) {
+  dynamicData.value.push(getRandom())
   next()
 }
 </script>

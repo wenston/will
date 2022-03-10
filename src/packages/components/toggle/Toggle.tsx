@@ -20,6 +20,7 @@ export default defineComponent({
   inheritAttrs: false,
   name: 'Toggle',
   props: {
+    dynamic: Boolean,
     data: {
       type: Array as PropType<DataItemType[]>,
       default: () => []
