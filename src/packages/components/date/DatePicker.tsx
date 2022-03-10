@@ -54,6 +54,7 @@ export default defineComponent({
       return {
         immediate: true,
         show: visible.value,
+        disabled: props.disabled,
         placement: 'bottom-start',
         gap: 2,
         hasArrow: false,

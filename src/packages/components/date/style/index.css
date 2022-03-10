@@ -1,14 +1,15 @@
 .w-date-picker {
+  padding: var(--w-gap);
+  --__width: calc(var(--w-date-picker-panel-width) - var(--w-gap) * 2);
+  --__height: calc(var(--w-date-picker-panel-height) - var(--w-gap) * 2);
   & .w-date-transfer {
-    height: var(--w-date-picker-panel-height);
-    width: var(--w-date-picker-panel-width);
+    height: var(--__height);
+    width: var(--__width);
   }
   & .w-date-control-bar {
-    margin-top: var(--w-gap);
     height: var(--w-size);
     display: flex;
     align-items: stretch;
-    padding: 0 var(--w-padding-x);
     & .w-date-control-bar-y-m,
     & .w-date-control-bar-icon {
       user-select: none;
@@ -41,18 +42,17 @@
   }
   & .w-date-panel {
     display: flex;
-    width: var(--w-date-picker-panel-width);
+    width: var(--__width);
   }
   & .w-days {
     display: flex;
-    align-items: stretch;
     flex-wrap: wrap;
-    /* width: 100%; */
+    height: 100%;
   }
   & .w-date-item {
     flex: 0 0 auto;
     width: calc(100% / 7);
-    height: calc(var(--w-date-picker-panel-height) / 7);
+    height: calc(100% / 7);
     display: flex;
     align-items: center;
     justify-content: center;

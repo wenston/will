@@ -88,6 +88,6 @@
   --w-sheet-tfoot-background-color: white;
   --w-sheet-tfoot-th-border-color: var(--w-color-font-5);
 
-  --w-date-picker-panel-width: 240px;
-  --w-date-picker-panel-height: 240px;
+  --w-date-picker-panel-width: 260px;
+  --w-date-picker-panel-height: 260px;
 }

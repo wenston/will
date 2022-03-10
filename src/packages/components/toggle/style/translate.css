@@ -39,15 +39,3 @@
 .w-toggle-translate-y-prev-leave-to {
   transform: translate(0, 100%);
 }
-
-.w-toggle {
-  position: relative;
-
-  & .w-toggle-item {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-}

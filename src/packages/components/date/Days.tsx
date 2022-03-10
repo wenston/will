@@ -81,11 +81,9 @@ export default defineComponent({
     })
     return () => {
       return (
-        <div class="w-date-panel">
-          <div class={'w-days'}>
-            {renderWeekTitleList()}
-            {renderDaysList()}
-          </div>
+        <div class={'w-days'}>
+          {renderWeekTitleList()}
+          {renderDaysList()}
         </div>
       )
     }
