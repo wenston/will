@@ -36,6 +36,11 @@ export default defineComponent({
       type: String as PropType<TransformType>,
       default: 'scale'
     },
+    //当transform时translate时，direction生效
+    direction: {
+      type: String as PropType<'x' | 'y'>,
+      default: 'x'
+    },
     carousel: {
       type: Boolean,
       default: false
@@ -43,21 +48,18 @@ export default defineComponent({
     //如果是轮播图的情况，则此参数有效
     duration: {
       type: Number,
-      default: 3000
+      default: 3600
     }
   },
   emits: {
-    afterEnter: ({
+    afterToggle: ({
       prev,
       next,
       delay
     }: {
       prev: () => void
       next: () => void
-      delay: (
-        handler?: Function | number | undefined,
-        delayTime?: number | undefined
-      ) => Promise<void>
+      delay: (handler?: Function | number, delayTime?: number) => Promise<void>
     }) => {
       return true
     }
@@ -80,10 +82,17 @@ export default defineComponent({
         }
         return 'w-toggle-scale'
       } else if (t === 'translate') {
-        if (isPrev.value) {
-          return 'w-toggle-translate-prev'
+        if (props.direction === 'y') {
+          if (isPrev.value) {
+            return 'w-toggle-translate-y-prev'
+          }
+          return 'w-toggle-translate-y'
+        } else {
+          if (isPrev.value) {
+            return 'w-toggle-translate-prev'
+          }
+          return 'w-toggle-translate'
         }
-        return 'w-toggle-translate'
       }
     })
     const klass = computed(() => {
@@ -114,16 +123,16 @@ export default defineComponent({
       _next()
     }
 
-    function afterEnter() {
+    function afterToggle() {
       // console.log(el)
-      emit('afterEnter', { prev, next, delay })
+      emit('afterToggle', { prev, next, delay })
     }
 
     onMounted(async () => {
       await delay(200)
       // isMounted.value = true
       if (props.carousel) {
-        afterEnter()
+        afterToggle()
       }
     })
 
@@ -140,7 +149,7 @@ export default defineComponent({
           <div {...options.value}>
             {props.data.map((el, i) => {
               return (
-                <Transition name={name.value} onAfterEnter={afterEnter}>
+                <Transition name={name.value} onAfterEnter={afterToggle}>
                   {i === index.value && (
                     <div {...itemOptions.value}>
                       {slots.default?.({

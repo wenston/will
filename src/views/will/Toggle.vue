@@ -7,8 +7,9 @@
     :transform="trans"
     :data="dataList"
     :class="css.toggleBox"
+    direction="y"
     carousel
-    @after-enter="afterEnter"
+    @after-toggle="afterEnter"
   >
     <template #default="{ item, index, prev, next }">
       <p :class="css.box" :style="{ backgroundColor: item }" @click="next"></p>
@@ -45,7 +46,11 @@ const { item: trans, toggle } = useToggleArray<'translate' | 'scale'>([
 ])
 const dataList = ref(['red', 'yellow', 'blue'])
 const json = ref([
-  { key: '1', content: '这是一个很好的故事，每个人都应该深刻的去反省自身' },
+  {
+    key: '1',
+    content:
+      '撒打发时光大撒旦飞洒地方撒旦发广告23526324234 大概豆腐干但是如果的发挥；离开了ujuiuioou按实际的付款了'
+  },
   {
     key: '2',
     content: '往昔所造诸恶业，皆由无始贪嗔痴，从身语意之所生，一切罪障皆忏悔'
@@ -58,7 +63,7 @@ async function afterEnter({
 }: {
   prev: () => void
   next: () => void
-  delay: (n?: number) => void
+  delay: (n?: number) => Promise<void>
 }) {
   await delay()
   next()

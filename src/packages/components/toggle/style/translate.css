@@ -1,8 +1,12 @@
 .w-toggle-translate-enter-active,
 .w-toggle-translate-leave-active,
 .w-toggle-translate-prev-enter-active,
-.w-toggle-translate-prev-leave-active {
-  transition: all var(--w-transition-slow-time) var(--w-cubic-bezier);
+.w-toggle-translate-prev-leave-active,
+.w-toggle-translate-y-enter-active,
+.w-toggle-translate-y-leave-active,
+.w-toggle-translate-y-prev-enter-active,
+.w-toggle-translate-y-prev-leave-active {
+  transition: transform var(--w-transition-slow-time) var(--w-cubic-bezier);
 }
 .w-toggle-translate-enter-from {
   transform: translate(100%, 0);
@@ -18,6 +22,22 @@
 
 .w-toggle-translate-prev-leave-to {
   transform: translate(100%, 0);
+}
+
+.w-toggle-translate-y-enter-from {
+  transform: translate(0, 100%);
+}
+
+.w-toggle-translate-y-leave-to {
+  transform: translate(0, -100%);
+}
+
+.w-toggle-translate-y-prev-enter-from {
+  transform: translate(0, -100%);
+}
+
+.w-toggle-translate-y-prev-leave-to {
+  transform: translate(0, 100%);
 }
 
 .w-toggle {

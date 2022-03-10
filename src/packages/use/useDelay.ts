@@ -10,7 +10,6 @@ export default function useDelay(msTime = 200) {
     clearTimeout(timer.value)
   }
   async function delay(handler?: Function | number, delayTime?: number) {
-    // console.log(arguments.length)
     const len = arguments.length
     const ms = arguments[0] as number
     stop()
