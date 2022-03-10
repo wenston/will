@@ -19,7 +19,6 @@ import { isBoolean, isObject } from '../../util/index'
 import type { DataItemType } from '../../config/types'
 type TransformType = 'scale' | 'translate'
 export default defineComponent({
-  components: { Transition },
   inheritAttrs: false,
   name: 'Toggle',
   props: {
@@ -70,8 +69,6 @@ export default defineComponent({
     }
   },
   setup(props, { attrs, slots, emit }) {
-    const Comp = h(resolveComponent('Transition'))
-    console.log(Comp)
     const isMounted = ref(false)
     const { delay } = useDelay(props.duration)
     const isPrev = ref(false)
@@ -143,7 +140,7 @@ export default defineComponent({
 
     onMounted(async () => {
       await delay(200)
-      // isMounted.value = true
+      isMounted.value = true
       if (props.carousel) {
         afterToggle()
       }

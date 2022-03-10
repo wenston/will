@@ -4,10 +4,13 @@ import Layer from '../layer/index'
 import Trigger from '../trigger/index'
 import Icon from '../icon/index'
 import Days from './Days'
-import Transfer from '../transfer/index'
+import Toggle from '../toggle/index'
+type DayType = string | number
+type DirectionType = 'x' | 'y'
+type TransformType = 'scale' | 'translate'
 export default defineComponent({
   name: 'DatePicker',
-  components: { Layer, Trigger, Icon, Days, Transfer },
+  components: { Layer, Trigger, Icon, Days, Toggle },
   props: {
     show: { type: Boolean, default: false },
     clearable: { type: Boolean },
@@ -46,9 +49,7 @@ export default defineComponent({
       }
       return format(props.modelValue)
     })
-    const dayList = ref<{ key: string | number }[]>([
-      { key: Number(displayDate.value) }
-    ])
+    const dayList = ref<DayType[]>([Number(displayDate.value)])
     const layerOptions = computed(() => {
       return {
         immediate: true,
@@ -81,63 +82,67 @@ export default defineComponent({
       return <Trigger {...triggerOptions} />
     }
     function renderContent() {
+      //如何更好的进行类型定义和应用？
       const tOption = {
         class: 'w-date-transfer',
-        direction: 'y',
+        dynamic: true,
+        direction: 'y' as DirectionType,
         data: dayList.value,
-        onAfterEnter: (fn: 'pop' | 'shift') => {
-          if (dayList.value.length > 1) {
-            dayList.value[fn]()
-            const item = dayList.value[0]
-            if (item) {
-              displayDate.value = item.key
-            }
+        transform: 'translate' as TransformType,
+        onAfterEnter: () => {
+          // if (dayList.value.length > 1) {
+          //   dayList.value[fn]()
+          //   const item = dayList.value[0]
+          //   if (item) {
+          //     displayDate.value = item.key
+          //   }
+          // }
+        }
+      }
+      const toggleSlots = {
+        default: ({
+          item,
+          index
+        }: {
+          item: number | string
+          index: number
+        }) => {
+          return (
+            <Days
+              date={selectedDate.value}
+              displayDate={item}
+              onToggle-day={(stringDate) => {
+                selectedDate.value = stringDate
+                visible.value = false
+              }}
+            />
+          )
+        },
+        use: ({ prev, next }: { prev: () => void; next: () => void }) => {
+          if (showIcon.value) {
+            return (
+              <Teleport to={ctrlIcon.value}>
+                <Icon
+                  name="w-icon-sort-down"
+                  class="w-date-control-bar-icon"
+                  rotate={true}
+                  onClick={() => {
+                    toPrev(prev)
+                  }}
+                />
+                <Icon
+                  name="w-icon-sort-down"
+                  class="w-date-control-bar-icon"
+                  onClick={() => {
+                    toNext(next)
+                  }}
+                />
+              </Teleport>
+            )
           }
         }
       }
-      return (
-        <Transfer
-          {...tOption}
-          v-slots={{
-            default: ({ item, index }: { item: any; index: number }) => {
-              return (
-                <Days
-                  date={selectedDate.value}
-                  key={Number(parse(item.key))}
-                  displayDate={item.key}
-                  onToggle-day={(stringDate) => {
-                    selectedDate.value = stringDate
-                    visible.value = false
-                  }}
-                />
-              )
-            },
-            use: ({ prev, next }: { prev: () => void; next: () => void }) => {
-              if (showIcon.value) {
-                return (
-                  <Teleport to={ctrlIcon.value}>
-                    <Icon
-                      name="w-icon-sort-down"
-                      class="w-date-control-bar-icon"
-                      rotate={true}
-                      onClick={() => {
-                        toPrev(prev)
-                      }}
-                    />
-                    <Icon
-                      name="w-icon-sort-down"
-                      class="w-date-control-bar-icon"
-                      onClick={() => {
-                        toNext(next)
-                      }}
-                    />
-                  </Teleport>
-                )
-              }
-            }
-          }}
-        />
-      )
+      return <Toggle {...tOption} v-slots={toggleSlots} />
     }
     function renderControlBar() {
       return (
@@ -151,21 +156,25 @@ export default defineComponent({
 
     function toPrev(prev: () => void) {
       prev()
-      const a = addMonths(displayDate.value, -1)
-      dayList.value.unshift({ key: Number(a) })
+      const a = Number(addMonths(displayDate.value, -1))
+      dayList.value.unshift(a)
+      dayList.value.pop()
+      displayDate.value = a
     }
 
     function toNext(next: () => void) {
       next()
-      const a = addMonths(displayDate.value)
-      dayList.value.push({ key: Number(a) })
+      const a = Number(addMonths(displayDate.value))
+      dayList.value.push(a)
+      dayList.value.shift()
+      displayDate.value = a
     }
 
     function clear() {
       selectedDate.value = undefined
       displayDate.value = new Date()
       // dayList.value = [{ key: Number(displayDate.value) }]
-      dayList.value[0].key = Number(displayDate.value)
+      dayList.value[0] = Number(displayDate.value)
     }
 
     watch(
@@ -179,7 +188,7 @@ export default defineComponent({
         //每次展示下拉框时，根据当前选中的日期进行初始化
         if (selectedDate.value) {
           displayDate.value = selectedDate.value
-          dayList.value = [{ key: format(selectedDate.value) }]
+          dayList.value = [format(selectedDate.value)]
         }
       }
       emit('update:show', b)
