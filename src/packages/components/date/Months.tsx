@@ -37,21 +37,16 @@ export default defineComponent({
       let ms: VNode[] = []
       for (const [k, v] of monthMap) {
         const isCur = isSameMonth(props.date, new Date(year.value, k - 1))
-        ms.push(
-          <div
-            class={['w-months-item', { 'w-months-item-current': isCur }]}
-            onClick={() => {
-              emit('toggle-month', new Date(year.value, k - 1))
-            }}
-          >
-            {v}
-          </div>
-        )
+        const p = {
+          class: ['w-months-item', { 'w-months-item-current': isCur }],
+          onClick: () => {
+            emit('toggle-month', new Date(year.value, k - 1))
+          }
+        }
+        ms.push(<div {...p}>{v}</div>)
       }
-      return ms
+      return <div class="w-months">{ms}</div>
     }
-    return () => {
-      return <div class="w-months">{renderMonthList()}</div>
-    }
+    return renderMonthList
   }
 })

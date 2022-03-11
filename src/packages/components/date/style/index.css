@@ -19,6 +19,14 @@
     height: var(--w-size);
     display: flex;
     align-items: stretch;
+    & .w-date-control-bar-y {
+      user-select: none;
+      display: flex;
+      align-items: center;
+      flex: 1;
+      font-size: 14px;
+      padding: 0 var(--w-padding-x);
+    }
     & .w-date-control-bar-y-m,
     & .w-date-control-bar-icon {
       user-select: none;

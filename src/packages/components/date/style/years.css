@@ -1,0 +1,27 @@
+.w-years {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  align-content: space-evenly;
+}
+.w-years-item {
+  width: calc(100% / 4);
+  height: calc(100% / 4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--w-color-font-2);
+  user-select: none;
+  border-radius: 100%;
+  transition: background-color var(--w-transition-time);
+  cursor: pointer;
+  &:hover {
+    &:not(.w-months-item-current) {
+      background-color: var(--w-color-bg);
+    }
+  }
+  &.w-years-item-current {
+    color: white;
+    background-color: var(--w-color-primary);
+  }
+}

@@ -9,5 +9,6 @@
     left: 0;
     right: 0;
     bottom: 0;
+    transform-origin: var(--__origin-x, center) var(--__origin-y, center);
   }
 }

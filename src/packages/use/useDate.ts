@@ -33,6 +33,7 @@ export default function useDate(date: DateOptionType) {
       [0, '日']
     ])
   )
+  const yearPanelLength = 16
   const currentDate = computed(() => parse(unref(date)))
   const year = computed(() => _getYear(currentDate.value))
   const month = computed(() => getMonth(currentDate.value))
@@ -128,6 +129,19 @@ export default function useDate(date: DateOptionType) {
     return _getYear(parse(date || currentDate.value))
   }
 
+  function getYearsInPanel(_year?: number) {
+    const num = yearPanelLength
+    const y = _year || year.value
+    const r = getRandomInt(5, 12)
+    const prev = Array.from({ length: r }, (item, index) => y - index).reverse()
+    const next = Array.from({ length: num - r }, (item, index) => y + 1 + index)
+    return {
+      years: prev.concat(next),
+      from: prev[0],
+      to: next[next.length - 1]
+    }
+  }
+
   function isSameDay(a: DateType, b: DateType) {
     return _isSameDay(parse(a), parse(b))
   }
@@ -156,9 +170,11 @@ export default function useDate(date: DateOptionType) {
     format,
     month,
     year,
+    yearPanelLength,
 
     getDaysInMonth,
     getDaysInPanel,
+    getYearsInPanel,
     getStartDayInMonth,
     getMonth,
     getYear,
@@ -168,4 +184,8 @@ export default function useDate(date: DateOptionType) {
 
     parse
   }
+}
+
+function getRandomInt(from: number, to: number) {
+  return Math.floor(Math.random() * (to - from)) + from
 }
