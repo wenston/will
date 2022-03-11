@@ -36,14 +36,24 @@ export default defineComponent({
     function renderMonthList() {
       let ms: VNode[] = []
       for (const [k, v] of monthMap) {
-        const isCur = isSameMonth(props.date, new Date(year.value, k - 1))
+        const isSelected =
+          props.date && isSameMonth(props.date, new Date(year.value, k - 1))
+        const isCur = isSameMonth(new Date(), new Date(year.value, k - 1))
         const p = {
-          class: ['w-months-item', { 'w-months-item-current': isCur }],
+          class: [
+            'w-months-item',
+            {
+              'w-months-item-selected': isSelected,
+              'w-months-item-current': isCur
+            }
+          ],
           onClick: () => {
             emit('toggle-month', new Date(year.value, k - 1))
           }
         }
-        ms.push(<div {...p}>{v}</div>)
+        ms.push(
+          <div {...p}>{isCur ? [<span>{v}</span>, <span>本月</span>] : v}</div>
+        )
       }
       return <div class="w-months">{ms}</div>
     }

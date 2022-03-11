@@ -50,15 +50,24 @@ export default defineComponent({
       let ms: VNode[] = []
       // console.log(list.value, yearList, from, to)
       for (const v of list.value.length ? list.value : yearList) {
-        const isCur =
+        const isCur = new Date().getFullYear() === v
+        const isSelected =
           props.date === undefined ? false : selectedYear.value === v
         const p = {
-          class: ['w-months-item', { 'w-months-item-current': isCur }],
+          class: [
+            'w-months-item',
+            {
+              'w-months-item-current': isCur,
+              'w-months-item-selected': isSelected
+            }
+          ],
           onClick: () => {
             emit('toggle-year', v)
           }
         }
-        ms.push(<div {...p}>{v}</div>)
+        ms.push(
+          <div {...p}>{isCur ? [<span>{v}</span>, <span>今年</span>] : v}</div>
+        )
       }
       return <div class="w-months">{ms}</div>
     }

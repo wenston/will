@@ -10,17 +10,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   color: var(--w-color-font-2);
   user-select: none;
   border-radius: 100%;
   transition: background-color var(--w-transition-time);
   cursor: pointer;
   &:hover {
-    &:not(.w-months-item-current) {
+    &:not(.w-months-item-current):not(.w-months-item-selected) {
       background-color: var(--w-color-bg);
     }
   }
   &.w-months-item-current {
+    color: var(--w-color-primary);
+    border: 1px solid var(--w-color-primary);
+    justify-content: space-evenly;
+  }
+  &.w-months-item-selected {
     color: white;
     background-color: var(--w-color-primary);
   }

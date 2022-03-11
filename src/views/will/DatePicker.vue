@@ -21,7 +21,7 @@
 import { reactive, ref } from 'vue'
 import DatePicker from 'will-ui/components/date/index'
 import Btn from 'will-ui/components/btn/index'
-const startDate = ref(new Date(2022, 3 - 1, 20))
+const startDate = ref()
 interface MyType {
   clearable?: boolean
   disabled?: boolean

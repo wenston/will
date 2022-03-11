@@ -303,12 +303,11 @@ export default defineComponent({
     }
 
     function clear() {
-      // isPrev.value = false
+      // 清空时，仍然保持在当前的显示状态
+      // displayDate.value = new Date()
+      // dataList.value = [{ datetype: 'day', val: Number(displayDate.value) }]
+      // currentView.value = 'day'
       selectedDate.value = undefined
-      displayDate.value = new Date()
-      // dayList.value = [{ key: Number(displayDate.value) }]
-      dataList.value = [{ datetype: 'day', val: Number(displayDate.value) }]
-      currentView.value = 'day'
     }
 
     watch(
