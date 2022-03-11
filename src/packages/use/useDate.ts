@@ -3,6 +3,7 @@ import { computed, ref, unref, readonly } from 'vue'
 //注意：date-fns里的月份也是从0开始的！
 import {
   addMonths as _addMonths,
+  addYears as _addYears,
   format as _format,
   getDaysInMonth as _getDaysInMonth,
   getDate as _getDate,
@@ -12,6 +13,7 @@ import {
   //date-fns里的isToday会比较时分秒！
   //   isToday as _isToday,
   isSameDay as _isSameDay,
+  isSameMonth as _isSameMonth,
   parse as _parse,
   startOfMonth as _startOfMonth
 } from 'date-fns'
@@ -38,6 +40,10 @@ export default function useDate(date: DateOptionType) {
 
   function addMonths(date?: DateType, n: number = 1) {
     return _addMonths(parse(date), n)
+  }
+
+  function addYears(date?: DateType, n: number = 1) {
+    return _addYears(parse(date), n)
   }
 
   function format(date?: DateType, formart: string = 'yyyy-MM-dd') {
@@ -126,6 +132,10 @@ export default function useDate(date: DateOptionType) {
     return _isSameDay(parse(a), parse(b))
   }
 
+  function isSameMonth(a: DateType, b: DateType) {
+    return _isSameMonth(parse(a), parse(b))
+  }
+
   function isToday(date?: DateType) {
     return _isSameDay(parse(date || currentDate.value), Date.now())
   }
@@ -140,6 +150,7 @@ export default function useDate(date: DateOptionType) {
   }
   return {
     addMonths,
+    addYears,
     day,
     dayMap,
     format,
@@ -152,6 +163,7 @@ export default function useDate(date: DateOptionType) {
     getMonth,
     getYear,
     isSameDay,
+    isSameMonth,
     isToday,
 
     parse

@@ -39,6 +39,10 @@ export default defineComponent({
       type: String as PropType<TransformType>,
       default: 'scale'
     },
+    scale: {
+      type: Object as PropType<{ from: number; to: number }>,
+      default: () => ({ from: 0, to: 2 })
+    },
     //当transform时translate时，direction生效
     direction: {
       type: String as PropType<'x' | 'y'>,
@@ -68,7 +72,7 @@ export default defineComponent({
       return true
     }
   },
-  setup(props, { attrs, slots, emit }) {
+  setup(props, { attrs, slots, emit, expose }) {
     const isMounted = ref(false)
     const { delay } = useDelay(props.duration)
     const isPrev = ref(false)
@@ -79,6 +83,9 @@ export default defineComponent({
       index
     } = useToggleArray<DataItemType>(computed(() => props.data))
     const name = computed(() => {
+      // if (props.data.length <= 1) {
+      //   return ''
+      // }
       const t = props.transform
       if (t === 'scale') {
         if (isPrev.value) {
@@ -106,7 +113,14 @@ export default defineComponent({
     const options = computed(() => {
       return mergeProps(
         {
-          class: klass.value
+          class: klass.value,
+          style:
+            props.transform === 'scale'
+              ? {
+                  '--__scale-from': props.scale.from,
+                  '--__scale-to': props.scale.to
+                }
+              : null
         },
         attrs
       )
@@ -137,6 +151,11 @@ export default defineComponent({
       // console.log(el)
       emit('afterToggle', { prev, next, delay })
     }
+
+    expose({
+      prev,
+      next
+    })
 
     onMounted(async () => {
       await delay(200)

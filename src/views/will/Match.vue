@@ -59,6 +59,8 @@ const search = reactive<{
   supplierName: '',
   supplierId3: ''
 })
+//虽然组件中已经定义了checkable的类型，但实际引用组件时，仍然需要像下边这样再次定义类型
+//有其他办法吗？
 function checkable(item: Record<string, any> | string | number, index: number) {
   if (isObject(item)) {
     return item.Name.indexOf('北京') === -1
