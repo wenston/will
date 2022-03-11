@@ -248,21 +248,8 @@ export default defineComponent({
           >
             {barText.value}
           </div>
-          <Icon
-            name="w-icon-sort-down"
-            class="w-date-control-bar-icon"
-            rotate={true}
-            onClick={() => {
-              toPrev()
-            }}
-          />
-          <Icon
-            name="w-icon-sort-down"
-            class="w-date-control-bar-icon"
-            onClick={() => {
-              toNext()
-            }}
-          />
+          {renderPrevIcon(toPrev)}
+          {renderNextIcon(toNext)}
         </div>
       )
     }
@@ -271,25 +258,22 @@ export default defineComponent({
       // isPrev.value = true
       isUpDown.value = true
       const view = currentView.value
+      toggleComponent.value?.prev()
       if (view === 'day') {
-        toggleComponent.value?.prev()
         const a = Number(addMonths(displayDate.value, -1))
-        dataList.value.unshift({ datetype: 'day', val: a })
+        dataList.value.unshift({ datetype: view, val: a })
         dataList.value.pop()
         displayDate.value = a
       } else if (view === 'month') {
-        toggleComponent.value?.prev()
         const a = Number(addYears(displayDate.value, -1))
-        dataList.value.unshift({ datetype: 'month', val: a })
+        dataList.value.unshift({ datetype: view, val: a })
         dataList.value.pop()
         displayDate.value = a
       } else {
         yearPanel.from = yearPanel.from - yearPanelLength
         yearPanel.to = yearPanel.to - yearPanelLength
 
-        toggleComponent.value?.prev()
-
-        dataList.value.unshift({ datetype: 'year', val: Number(new Date()) })
+        dataList.value.unshift({ datetype: view, val: Number(new Date()) })
         dataList.value.pop()
       }
     }
@@ -298,25 +282,22 @@ export default defineComponent({
       // isPrev.value = false
       isUpDown.value = true
       const view = currentView.value
+      toggleComponent.value?.next()
       if (view === 'day') {
-        toggleComponent.value?.next()
         const a = Number(addMonths(displayDate.value))
-        dataList.value.push({ datetype: 'day', val: a })
+        dataList.value.push({ datetype: view, val: a })
         dataList.value.shift()
         displayDate.value = a
       } else if (view === 'month') {
-        toggleComponent.value?.next()
         const a = Number(addYears(displayDate.value, 1))
-        dataList.value.push({ datetype: 'month', val: a })
+        dataList.value.push({ datetype: view, val: a })
         dataList.value.shift()
         displayDate.value = a
       } else {
         yearPanel.from = yearPanel.from + yearPanelLength
         yearPanel.to = yearPanel.to + yearPanelLength
-
-        toggleComponent.value?.next()
         //val是时间戳，以保证每次都会变化，这样动画才会生效！
-        dataList.value.push({ datetype: 'year', val: Number(new Date()) })
+        dataList.value.push({ datetype: view, val: Number(new Date()) })
         dataList.value.shift()
       }
     }
@@ -373,3 +354,24 @@ export default defineComponent({
     }
   }
 })
+
+function renderPrevIcon(handleClick: () => void) {
+  return (
+    <Icon
+      name="w-icon-sort-down"
+      class="w-date-control-bar-icon"
+      rotate={true}
+      onClick={handleClick}
+    />
+  )
+}
+
+function renderNextIcon(handleClick: () => void) {
+  return (
+    <Icon
+      name="w-icon-sort-down"
+      class="w-date-control-bar-icon"
+      onClick={handleClick}
+    />
+  )
+}
