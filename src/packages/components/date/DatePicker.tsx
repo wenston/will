@@ -1,5 +1,6 @@
 import { defineComponent, ref, computed, watch, nextTick, reactive } from 'vue'
-import type { VNode } from 'vue'
+import type { VNode, PropType } from 'vue'
+import type { ToggleTransformType, DateFormatType } from '../../config/types'
 import useDate from '../../use/useDate'
 import Layer from '../layer/index'
 import Trigger from '../trigger/index'
@@ -10,7 +11,6 @@ import Years from './Years'
 import Toggle from '../toggle/index'
 
 type DirectionType = 'x' | 'y'
-type TransformType = 'scale' | 'translate'
 type ViewsType = 'year' | 'month' | 'day'
 type DataItemType = { datetype: ViewsType; val: number | string }
 export default defineComponent({
@@ -25,7 +25,8 @@ export default defineComponent({
     modelValue: {
       type: [Number, Date, String],
       default: undefined
-    }
+    },
+    format: { type: String as PropType<DateFormatType>, default: 'yyyy-MM-dd' }
   },
   emits: ['update:show', 'update:modelValue'],
   setup(props, { emit, slots, expose }) {
@@ -120,7 +121,9 @@ export default defineComponent({
     function renderContent() {
       const bar = renderControlBar()
       const curView = currentView.value
-      const transform: TransformType = isUpDown.value ? 'translate' : 'scale'
+      const transform: ToggleTransformType = isUpDown.value
+        ? 'translate'
+        : 'scale'
       let toggleOptions = {
         ref: toggleComponent,
         class:
@@ -344,13 +347,14 @@ export default defineComponent({
     watch(selectedDate, (d) => {
       emit('update:modelValue', d === undefined ? undefined : format(d))
     })
-    return () => {
-      const layerSlots = {
-        trigger: renderTrigger,
-        default: renderContent
-      }
-      return <Layer {...layerOptions.value} v-slots={layerSlots} />
-    }
+    return () => (
+      <Layer {...layerOptions.value}>
+        {{
+          trigger: renderTrigger,
+          default: renderContent
+        }}
+      </Layer>
+    )
   }
 })
 

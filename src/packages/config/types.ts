@@ -36,3 +36,13 @@ export type BtnMode = 'text' | 'line' //line是线条形式的
 export type TriggerType = 'hover' | 'click' | 'focus'
 
 export type DataItemType = boolean | number | string | symbol | object
+
+export type ToggleTransformType = 'scale' | 'translate'
+
+export type DateFormatType =
+  | 'yyyy'
+  | 'yyyy-MM'
+  | 'yyyy-MM-dd'
+  | 'yyyy-MM-dd hh'
+  | 'yyyy-MM-dd hh:mm'
+  | 'yyyy-MM-dd hh:mm:ss'
