@@ -10,7 +10,7 @@ import Months from './Months'
 import Years from './Years'
 import Toggle from '../toggle/index'
 
-import { useDateView, useBarText } from './_use/useDateModules'
+import { useDateView, useBarText, useFormatDate } from './_use/useDateModules'
 
 type DirectionType = 'x' | 'y'
 type ViewsType = 'year' | 'month' | 'day'
@@ -75,14 +75,12 @@ export default defineComponent({
     } = useDateView(computed(() => props.format))
     const isUpDown = ref(false)
     const yearPanel = reactive({ from: 0, to: 0 })
-    //当前选择的日期
-    const selectedDate = ref<string | number | Date | undefined>(
-      props.modelValue
+    const { selectedDate, getStringDate, formatDate } = useFormatDate(
+      computed(() => props.format),
+      computed(() => props.modelValue)
     )
     //当前下拉框展示的日期
-    const displayDate = ref<string | number | Date>(
-      props.modelValue || new Date()
-    )
+    const displayDate = ref(formatDate(props.modelValue) || new Date())
     const {
       addMonths,
       addYears,
@@ -97,7 +95,7 @@ export default defineComponent({
       if (props.modelValue === undefined) {
         return ''
       }
-      return format(props.modelValue)
+      return props.modelValue
     })
     const dataList = ref<DataItemType[]>([
       { datetype: 'day', val: Number(displayDate.value) }
@@ -178,7 +176,7 @@ export default defineComponent({
                       date={selectedDate.value}
                       displayDate={item.val}
                       onToggle-day={(stringDate) => {
-                        selectedDate.value = stringDate
+                        emit('update:modelValue', stringDate)
                         visible.value = false
                       }}
                     />
@@ -200,7 +198,8 @@ export default defineComponent({
                           displayDate.value = toggleDate
                           dataList.value.shift()
                         } else if (formatIsMonth.value) {
-                          selectedDate.value = toggleDate
+                          // console.log(getStringDate(toggleDate))
+                          emit('update:modelValue', getStringDate(toggleDate))
                           visible.value = false
                         }
                       }}
@@ -285,15 +284,16 @@ export default defineComponent({
       const view = currentView.value
       toggleComponent.value?.prev()
       if (view === 'day') {
-        const a = Number(addMonths(displayDate.value, -1))
-        dataList.value.unshift({ datetype: view, val: a })
+        const am = addMonths(displayDate.value, -1)
+        dataList.value.unshift({ datetype: view, val: Number(am) })
         dataList.value.pop()
-        displayDate.value = a
+        displayDate.value = am
       } else if (view === 'month') {
-        const a = Number(addYears(displayDate.value, -1))
+        const ay = addYears(displayDate.value, -1)
+        const a = Number(ay)
         dataList.value.unshift({ datetype: view, val: a })
         dataList.value.pop()
-        displayDate.value = a
+        displayDate.value = ay
       } else {
         yearPanel.from = yearPanel.from - yearPanelLength
         yearPanel.to = yearPanel.to - yearPanelLength
@@ -309,15 +309,17 @@ export default defineComponent({
       const view = currentView.value
       toggleComponent.value?.next()
       if (view === 'day') {
-        const a = Number(addMonths(displayDate.value))
+        const am = addMonths(displayDate.value)
+        const a = Number(am)
         dataList.value.push({ datetype: view, val: a })
         dataList.value.shift()
-        displayDate.value = a
+        displayDate.value = am
       } else if (view === 'month') {
-        const a = Number(addYears(displayDate.value, 1))
+        const ay = addYears(displayDate.value, 1)
+        const a = Number(ay)
         dataList.value.push({ datetype: view, val: a })
         dataList.value.shift()
-        displayDate.value = a
+        displayDate.value = ay
       } else {
         yearPanel.from = yearPanel.from + yearPanelLength
         yearPanel.to = yearPanel.to + yearPanelLength
@@ -332,7 +334,8 @@ export default defineComponent({
       // displayDate.value = new Date()
       // dataList.value = [{ datetype: 'day', val: Number(displayDate.value) }]
       //setCurrentView('day')
-      selectedDate.value = undefined
+      // selectedDate.value = undefined
+      emit('update:modelValue', undefined)
     }
 
     watch(
@@ -360,15 +363,12 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       (d) => {
-        selectedDate.value = d
         if (d !== undefined) {
-          displayDate.value = d
+          // displayDate.value = d
+          displayDate.value = selectedDate.value!
         }
       }
     )
-    watch(selectedDate, (d) => {
-      emit('update:modelValue', d === undefined ? undefined : format(d))
-    })
 
     return () => (
       <Layer {...layerOptions.value}>

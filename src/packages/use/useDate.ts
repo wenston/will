@@ -154,13 +154,13 @@ export default function useDate(date: DateOptionType) {
     return _isSameDay(parse(date || currentDate.value), Date.now())
   }
 
-  function parse(date?: DateType) {
+  function parse(date?: DateType, formatString: string = 'yyyy-MM-dd') {
     if (typeof date === 'string') {
-      return _parse(date, 'yyyy-MM-dd', new Date())
+      return _parse(date, formatString, new Date())
     } else if (date === undefined) {
       return new Date()
     }
-    return date
+    return new Date(date)
   }
   return {
     addMonths,

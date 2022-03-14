@@ -18,7 +18,12 @@
     :block="ps.block"
   />
   <p>年月的选择</p>
-  <DatePicker v-model="ym" :clearable="ps.clearable" format="yyyy-MM" />
+  <DatePicker
+    v-model="ym"
+    :clearable="ps.clearable"
+    format="yyyy-MM"
+    placeholder="xxxx年-xx月"
+  />
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'

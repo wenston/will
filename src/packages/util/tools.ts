@@ -1,4 +1,5 @@
 import { EmptyObject } from '../config/types'
+import { isDate as _isDate } from 'date-fns'
 
 export const isBoolean = (val: unknown): val is boolean =>
   typeof val === 'boolean'
@@ -11,6 +12,9 @@ export const isFunction = (val: unknown): val is Function =>
 export const isArray = (val: unknown): val is any[] => Array.isArray(val)
 export const isSet = (val: unknown): val is Set<any> => val instanceof Set
 export const isMap = (val: unknown): val is Map<any, any> => val instanceof Map
+export const isDate = _isDate
+
+console.log(isDate(Number(new Date())))
 export const isInvalidValue = (v: any) =>
   v === '' || v === undefined || v === null
 
