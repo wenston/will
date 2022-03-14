@@ -90,7 +90,8 @@ export default defineComponent({
             }
           ],
           onClick: () => {
-            emit('toggle-month', new Date(year.value, k - 1))
+            const d = new Date(year.value, k - 1)
+            emit('toggle-month', d)
           }
         }
         ms.push(

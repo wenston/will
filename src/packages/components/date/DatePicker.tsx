@@ -189,15 +189,20 @@ export default defineComponent({
                       date={selectedDate.value}
                       displayDate={displayDate.value}
                       onToggle-month={(toggleDate) => {
-                        isUpDown.value = false
-                        toggleComponent.value?.next()
-                        dataList.value.push({
-                          datetype: 'day',
-                          val: Number(toggleDate)
-                        })
-                        setCurrentView('day')
-                        displayDate.value = toggleDate
-                        dataList.value.shift()
+                        if (formatIsDay.value) {
+                          isUpDown.value = false
+                          toggleComponent.value?.next()
+                          dataList.value.push({
+                            datetype: 'day',
+                            val: Number(toggleDate)
+                          })
+                          setCurrentView('day')
+                          displayDate.value = toggleDate
+                          dataList.value.shift()
+                        } else if (formatIsMonth.value) {
+                          selectedDate.value = toggleDate
+                          visible.value = false
+                        }
                       }}
                     />
                   )
@@ -238,12 +243,13 @@ export default defineComponent({
         <div class="w-date-control-bar" ref={ctrlIcon}>
           <div
             class={[
-              isYear.value ? 'w-date-control-bar-y' : 'w-date-control-bar-y-m'
+              isYear.value
+                ? 'w-date-control-bar-disabled'
+                : 'w-date-control-bar-y-m'
             ]}
             onClick={() => {
               if (isDay.value) {
                 isUpDown.value = false
-                // isPrev.value = true
                 toggleComponent.value?.prev()
                 dataList.value.unshift({
                   datetype: 'month',

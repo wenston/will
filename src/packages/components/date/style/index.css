@@ -19,7 +19,7 @@
     height: var(--w-size);
     display: flex;
     align-items: stretch;
-    & .w-date-control-bar-y {
+    & .w-date-control-bar-disabled {
       user-select: none;
       display: flex;
       align-items: center;
