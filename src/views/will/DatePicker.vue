@@ -24,6 +24,13 @@
     format="yyyy-MM"
     placeholder="xxxx年-xx月"
   />
+  <p>年的选择</p>
+  <DatePicker
+    v-model="y"
+    :clearable="ps.clearable"
+    format="yyyy"
+    placeholder="请选择年份"
+  />
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
@@ -31,6 +38,7 @@ import DatePicker from 'will-ui/components/date/index'
 import Btn from 'will-ui/components/btn/index'
 const startDate = ref()
 const ym = ref()
+const y = ref()
 interface MyType {
   clearable?: boolean
   disabled?: boolean

@@ -63,6 +63,32 @@ export function useBarText(
   })
 }
 
+export function useDateText(
+  format: ComputedRef<DateFormatType>,
+  date: ComputedRef<DateType>
+) {
+  const { formatDate, format: fm, year } = useDate(date)
+  return computed(() => {
+    const d = date.value
+    const f = format.value
+    if (d === undefined) {
+      return ''
+    } else {
+      const _d = formatDate(d)
+      if (_d) {
+        const y = _d.getFullYear()
+        const m = _d.getMonth() + 1
+        const d = _d.getDate()
+        if (f === 'yyyy') {
+          return y + '年'
+        } else if (f === 'yyyy-MM' || f === 'yyyy-MM-dd') {
+          return fm(_d, f)
+        }
+      }
+    }
+  })
+}
+
 /**
  *
  * @param format 日期的格式，如'yyyy-MM-dd'
@@ -73,25 +99,13 @@ export function useFormatDate(
   format: ComputedRef<DateFormatType>,
   theDate: ComputedRef<DateType> //当字符串时，默认时以短横线年月日分割的！
 ) {
-  const { parse, format: _f, year, month, day } = useDate(theDate)
+  const { parse, format: _f, formatDate } = useDate(theDate)
 
   const selectedDate = computed(() => {
     const f = format.value
     const currentDate = theDate.value
     return formatDate(currentDate)
   })
-
-  function formatDate(date: DateType) {
-    if (date !== undefined) {
-      //时间戳或者日期对象
-      if (isDate(date) || isNumber(date)) {
-        return parse(date)
-      } else if (isString(date)) {
-        const [y, m = 0, d = 1] = date.trim().split('-')
-        return parse(new Date(+y, Number(m) - 1, +d))
-      }
-    }
-  }
 
   return {
     selectedDate,

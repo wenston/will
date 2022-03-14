@@ -1,5 +1,6 @@
 import type { Ref, ComputedRef } from 'vue'
 import { computed, ref, unref, readonly } from 'vue'
+import { isString, isNumber, isDate } from '../util'
 //注意：date-fns里的月份也是从0开始的！
 import {
   addMonths as _addMonths,
@@ -49,6 +50,19 @@ export default function useDate(date: DateOptionType) {
 
   function format(date?: DateType, formart: string = 'yyyy-MM-dd') {
     return _format(parse(date || currentDate.value), formart)
+  }
+
+  function formatDate(date: DateType) {
+    if (date !== undefined) {
+      //时间戳或者日期对象
+      //注意，此处没有对数值型的时间戳进行验证到底是不是时间戳！
+      if (isDate(date) || isNumber(date)) {
+        return parse(date)
+      } else if (isString(date)) {
+        const [y, m = 1, d = 1] = date.trim().split('-')
+        return parse(new Date(+y, Number(m) - 1, +d))
+      }
+    }
   }
   /**
    * 日期月份中总共有多少天
@@ -168,6 +182,7 @@ export default function useDate(date: DateOptionType) {
     day,
     dayMap,
     format,
+    formatDate,
     month,
     year,
     yearPanelLength,

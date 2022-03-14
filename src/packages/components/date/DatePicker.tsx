@@ -10,7 +10,12 @@ import Months from './Months'
 import Years from './Years'
 import Toggle from '../toggle/index'
 
-import { useDateView, useBarText, useFormatDate } from './_use/useDateModules'
+import {
+  useDateView,
+  useBarText,
+  useDateText,
+  useFormatDate
+} from './_use/useDateModules'
 
 type DirectionType = 'x' | 'y'
 type ViewsType = 'year' | 'month' | 'day'
@@ -91,12 +96,17 @@ export default defineComponent({
       month: displayMonth
     } = useDate(displayDate)
 
-    const text = computed(() => {
-      if (props.modelValue === undefined) {
-        return ''
-      }
-      return props.modelValue
-    })
+    const text = useDateText(
+      computed(() => props.format),
+      computed(() => props.modelValue)
+    )
+
+    // const text = computed(() => {
+    //   if (props.modelValue === undefined) {
+    //     return ''
+    //   }
+    //   return props.modelValue
+    // })
     const dataList = ref<DataItemType[]>([
       { datetype: 'day', val: Number(displayDate.value) }
     ])
@@ -217,15 +227,20 @@ export default defineComponent({
                         yearPanel.to = to
                       }}
                       onToggle-year={(y) => {
-                        isUpDown.value = false
-                        toggleComponent.value?.next()
-                        dataList.value.push({
-                          datetype: 'month',
-                          val: ''
-                        })
-                        displayDate.value = new Date(y, 0)
-                        setCurrentView('month')
-                        dataList.value.shift()
+                        if (formatIsYear.value) {
+                          emit('update:modelValue', y + '')
+                          visible.value = false
+                        } else {
+                          isUpDown.value = false
+                          toggleComponent.value?.next()
+                          dataList.value.push({
+                            datetype: 'month',
+                            val: ''
+                          })
+                          displayDate.value = new Date(y, 0)
+                          setCurrentView('month')
+                          dataList.value.shift()
+                        }
                       }}
                     />
                   )
