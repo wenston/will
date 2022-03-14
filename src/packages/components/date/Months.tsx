@@ -62,9 +62,9 @@ export default defineComponent({
   name: 'Months',
   props: {
     //传入的当前日期
-    date: { type: Date as PropType<DateType> },
+    date: { type: [Date, String, Number] },
     //displayDate是展示的日期
-    displayDate: { type: Date as PropType<DateType> }
+    displayDate: { type: [Date, String, Number] }
   },
   emits: {
     'toggle-month': (yearMonth: Date) => {

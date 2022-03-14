@@ -1,5 +1,5 @@
 import { defineComponent, ref, computed, watch, nextTick, reactive } from 'vue'
-import type { VNode, PropType } from 'vue'
+import type { VNode, PropType, Ref } from 'vue'
 import type { ToggleTransformType, DateFormatType } from '../../config/types'
 import useDate from '../../use/useDate'
 import Layer from '../layer/index'
@@ -9,6 +9,8 @@ import Days from './Days'
 import Months from './Months'
 import Years from './Years'
 import Toggle from '../toggle/index'
+
+import { useDateView, useBarText } from './_use/useDateModules'
 
 type DirectionType = 'x' | 'y'
 type ViewsType = 'year' | 'month' | 'day'
@@ -38,6 +40,7 @@ const renderWeekTitleList = (dayMap: ReadonlyMap<number, string>) => {
   }
   return <div class="w-week-title">{days}</div>
 }
+
 export default defineComponent({
   name: 'DatePicker',
   components: { Layer, Trigger, Icon, Days, Months, Years, Toggle },
@@ -59,7 +62,17 @@ export default defineComponent({
     const visible = ref(props.show)
     const showIcon = ref(false)
     const toggleComponent = ref<typeof Toggle>()
-    const currentView = ref<ViewsType>('day')
+    const {
+      currentView,
+      isYear,
+      isDay,
+      isMonth,
+      formatIsDay,
+      formatIsMonth,
+      formatIsYear,
+      getFormatView,
+      setCurrentView
+    } = useDateView(computed(() => props.format))
     const isUpDown = ref(false)
     const yearPanel = reactive({ from: 0, to: 0 })
     //当前选择的日期
@@ -77,9 +90,7 @@ export default defineComponent({
       format,
       year: displayYear,
       yearPanelLength,
-      month: displayMonth,
-      day: displayDay,
-      parse
+      month: displayMonth
     } = useDate(displayDate)
 
     const text = computed(() => {
@@ -92,18 +103,8 @@ export default defineComponent({
       { datetype: 'day', val: Number(displayDate.value) }
     ])
 
-    const barText = computed(() => {
-      const y = displayYear.value + ' 年'
-      const m = displayMonth.value + ' 月'
-      const view = currentView.value
-      if (view === 'day') {
-        return y + m
-      } else if (view === 'month') {
-        return y
-      } else if (view === 'year') {
-        return `${yearPanel.from}-${yearPanel.to}`
-      }
-    })
+    const barText = useBarText(isYear, isMonth, isDay, displayDate, yearPanel)
+
     const layerOptions = computed(() => {
       return {
         immediate: true,
@@ -139,18 +140,16 @@ export default defineComponent({
 
     function renderContent() {
       const bar = renderControlBar()
-      const curView = currentView.value
       const transform: ToggleTransformType = isUpDown.value
         ? 'translate'
         : 'scale'
       let toggleOptions = {
         ref: toggleComponent,
-        class:
-          curView === 'day'
-            ? 'w-date-days'
-            : curView === 'month' || curView === 'year'
-            ? 'w-date-months'
-            : '',
+        class: isDay.value
+          ? 'w-date-days'
+          : isMonth.value || isYear.value
+          ? 'w-date-months'
+          : '',
         dynamic: true,
         data: dataList.value,
         direction: 'y' as DirectionType,
@@ -196,7 +195,7 @@ export default defineComponent({
                           datetype: 'day',
                           val: Number(toggleDate)
                         })
-                        currentView.value = 'day'
+                        setCurrentView('day')
                         displayDate.value = toggleDate
                         dataList.value.shift()
                       }}
@@ -221,14 +220,14 @@ export default defineComponent({
                           val: ''
                         })
                         displayDate.value = new Date(y, 0)
-                        currentView.value = 'month'
+                        setCurrentView('month')
                         dataList.value.shift()
                       }}
                     />
                   )
                 }
               },
-              use: () => curView === 'day' && renderWeekTitleList(dayMap)
+              use: () => isDay.value && renderWeekTitleList(dayMap)
             }}
           />
         </>
@@ -239,12 +238,10 @@ export default defineComponent({
         <div class="w-date-control-bar" ref={ctrlIcon}>
           <div
             class={[
-              currentView.value === 'year'
-                ? 'w-date-control-bar-y'
-                : 'w-date-control-bar-y-m'
+              isYear.value ? 'w-date-control-bar-y' : 'w-date-control-bar-y-m'
             ]}
             onClick={() => {
-              if (currentView.value === 'day') {
+              if (isDay.value) {
                 isUpDown.value = false
                 // isPrev.value = true
                 toggleComponent.value?.prev()
@@ -252,16 +249,16 @@ export default defineComponent({
                   datetype: 'month',
                   val: displayMonth.value
                 })
-                currentView.value = 'month'
+                setCurrentView('month')
                 dataList.value.pop()
-              } else if (currentView.value === 'month') {
+              } else if (isMonth.value) {
                 isUpDown.value = false
                 toggleComponent.value?.prev()
                 dataList.value.unshift({
                   datetype: 'year',
                   val: displayYear.value
                 })
-                currentView.value = 'year'
+                setCurrentView('year')
                 dataList.value.pop()
                 yearPanel.from = 0
                 yearPanel.to = 0
@@ -328,7 +325,7 @@ export default defineComponent({
       // 清空时，仍然保持在当前的显示状态
       // displayDate.value = new Date()
       // dataList.value = [{ datetype: 'day', val: Number(displayDate.value) }]
-      // currentView.value = 'day'
+      //setCurrentView('day')
       selectedDate.value = undefined
     }
 
@@ -340,17 +337,17 @@ export default defineComponent({
     )
     watch(visible, (b: boolean) => {
       if (b) {
+        const fv = getFormatView()
         //每次展示下拉框时，根据当前选中的日期进行初始化
         if (selectedDate.value) {
           displayDate.value = selectedDate.value
-          dataList.value = [
-            { datetype: 'day', val: format(selectedDate.value) }
-          ]
+          dataList.value = [{ datetype: fv, val: format(selectedDate.value) }]
         } else {
           displayDate.value = new Date()
-          dataList.value = [{ datetype: 'day', val: Number(new Date()) }]
+          dataList.value = [{ datetype: fv, val: Number(new Date()) }]
         }
-        currentView.value = 'day'
+        //每次显示出下拉框时就会按照format给定的值进行初始化界面
+        setCurrentView(fv)
       }
       emit('update:show', b)
     })
@@ -366,6 +363,7 @@ export default defineComponent({
     watch(selectedDate, (d) => {
       emit('update:modelValue', d === undefined ? undefined : format(d))
     })
+
     return () => (
       <Layer {...layerOptions.value}>
         {{

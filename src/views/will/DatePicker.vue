@@ -10,18 +10,22 @@
     </Btn>
     <Btn @click="toChangeProp(ps, 'block')">block</Btn>
   </p>
+  <p>年月日的选择</p>
   <DatePicker
     v-model="startDate"
     :clearable="ps.clearable"
     :disabled="ps.disabled"
     :block="ps.block"
   />
+  <p>年月的选择</p>
+  <DatePicker v-model="ym" :clearable="ps.clearable" format="yyyy-MM" />
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import DatePicker from 'will-ui/components/date/index'
 import Btn from 'will-ui/components/btn/index'
 const startDate = ref()
+const ym = ref()
 interface MyType {
   clearable?: boolean
   disabled?: boolean
