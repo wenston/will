@@ -1,5 +1,6 @@
-import type { VNode } from 'vue'
-import { defineComponent, computed, readonly } from 'vue'
+import type { VNode, PropType } from 'vue'
+import type { DateType } from '../../config/types'
+import { defineComponent, computed, readonly, FunctionalComponent } from 'vue'
 import useDate from '../../use/useDate'
 const monthMap = readonly(
   new Map([
@@ -17,12 +18,53 @@ const monthMap = readonly(
     [12, '十二月']
   ])
 )
+
+// interface Props {
+//   date: DateType
+//   displayDate: DateType
+// }
+
+// type Emit = {
+//   'toggle-month': (yearMonth: Date) => void
+// }
+
+// const Months: FunctionalComponent<Props, Emit> = (props, ctx) => {
+//   const { emit } = ctx
+//   const { isSameMonth, year } = useDate(computed(() => props.displayDate))
+//   return (() => {
+//     let ms: VNode[] = []
+//     for (const [k, v] of monthMap) {
+//       const isSelected =
+//         props.date && isSameMonth(props.date, new Date(year.value, k - 1))
+//       const isCur = isSameMonth(new Date(), new Date(year.value, k - 1))
+//       const p = {
+//         class: [
+//           'w-months-item',
+//           {
+//             'w-months-item-selected': isSelected,
+//             'w-months-item-current': isCur
+//           }
+//         ],
+//         onClick: () => {
+//           emit('toggle-month', new Date(year.value, k - 1))
+//         }
+//       }
+//       ms.push(
+//         <div {...p}>{isCur ? [<span>{v}</span>, <span>本月</span>] : v}</div>
+//       )
+//     }
+//     return <div class="w-months">{ms}</div>
+//   })()
+// }
+// Months.emits = ['toggle-month']
+// export default Months
 export default defineComponent({
+  name: 'Months',
   props: {
     //传入的当前日期
-    date: { type: [Number, Date, String] },
+    date: { type: Date as PropType<DateType> },
     //displayDate是展示的日期
-    displayDate: { type: [Number, Date, String] }
+    displayDate: { type: Date as PropType<DateType> }
   },
   emits: {
     'toggle-month': (yearMonth: Date) => {

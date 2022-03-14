@@ -13,6 +13,31 @@ import Toggle from '../toggle/index'
 type DirectionType = 'x' | 'y'
 type ViewsType = 'year' | 'month' | 'day'
 type DataItemType = { datetype: ViewsType; val: number | string }
+
+const renderPrevIcon = (handleClick: () => void) => (
+  <Icon
+    name="w-icon-sort-down"
+    class="w-date-control-bar-icon"
+    rotate={true}
+    onClick={handleClick}
+  />
+)
+
+const renderNextIcon = (handleClick: () => void) => (
+  <Icon
+    name="w-icon-sort-down"
+    class="w-date-control-bar-icon"
+    onClick={handleClick}
+  />
+)
+
+const renderWeekTitleList = (dayMap: ReadonlyMap<number, string>) => {
+  const days: VNode[] = []
+  for (const [k, v] of dayMap) {
+    days.push(<b class={['w-week-title-item']}>{v}</b>)
+  }
+  return <div class="w-week-title">{days}</div>
+}
 export default defineComponent({
   name: 'DatePicker',
   components: { Layer, Trigger, Icon, Days, Months, Years, Toggle },
@@ -111,13 +136,7 @@ export default defineComponent({
       }
       return <Trigger {...triggerOptions} />
     }
-    function renderWeekTitleList() {
-      const days: VNode[] = []
-      for (const [k, v] of dayMap) {
-        days.push(<b class={['w-week-title-item']}>{v}</b>)
-      }
-      return <div class="w-week-title">{days}</div>
-    }
+
     function renderContent() {
       const bar = renderControlBar()
       const curView = currentView.value
@@ -209,7 +228,7 @@ export default defineComponent({
                   )
                 }
               },
-              use: () => curView === 'day' && renderWeekTitleList()
+              use: () => curView === 'day' && renderWeekTitleList(dayMap)
             }}
           />
         </>
@@ -357,24 +376,3 @@ export default defineComponent({
     )
   }
 })
-
-function renderPrevIcon(handleClick: () => void) {
-  return (
-    <Icon
-      name="w-icon-sort-down"
-      class="w-date-control-bar-icon"
-      rotate={true}
-      onClick={handleClick}
-    />
-  )
-}
-
-function renderNextIcon(handleClick: () => void) {
-  return (
-    <Icon
-      name="w-icon-sort-down"
-      class="w-date-control-bar-icon"
-      onClick={handleClick}
-    />
-  )
-}

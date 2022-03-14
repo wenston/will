@@ -38,7 +38,7 @@ export type TriggerType = 'hover' | 'click' | 'focus'
 export type DataItemType = boolean | number | string | symbol | object
 
 export type ToggleTransformType = 'scale' | 'translate'
-
+export type DateType = number | string | Date | undefined
 export type DateFormatType =
   | 'yyyy'
   | 'yyyy-MM'
