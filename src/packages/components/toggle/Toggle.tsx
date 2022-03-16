@@ -8,9 +8,8 @@ import {
   mergeProps,
   TransitionGroup,
   onMounted,
-  getCurrentInstance,
   Transition,
-  resolveComponent
+  normalizeClass
 } from 'vue'
 import type { PropType, ComputedRef } from 'vue'
 import useToggleArray from '../../use/toggle/useToggleArray'
@@ -35,6 +34,7 @@ export default defineComponent({
       type: Number,
       default: 0
     },
+    itemClass: { type: [String, Array, Object] },
     transform: {
       type: String as PropType<TransformType>,
       default: 'scale'
@@ -80,7 +80,8 @@ export default defineComponent({
       prev: _prev,
       next: _next,
       item,
-      index
+      index,
+      set
     } = useToggleArray<DataItemType>(computed(() => props.data))
     const name = computed(() => {
       // if (props.data.length <= 1) {
@@ -127,9 +128,12 @@ export default defineComponent({
     })
     const itemOptions = computed(() => {
       const t = props.transform
-      return {
-        class: 'w-toggle-item'
-      }
+      return mergeProps(
+        {
+          class: 'w-toggle-item'
+        },
+        { class: normalizeClass(props.itemClass) }
+      )
     })
 
     function prev() {
@@ -156,6 +160,16 @@ export default defineComponent({
       prev,
       next
     })
+
+    watch(
+      () => props.index,
+      (i) => {
+        if (!props.dynamic) {
+          set({ index: props.index })
+        }
+      },
+      { immediate: true }
+    )
 
     onMounted(async () => {
       await delay(200)
@@ -203,6 +217,7 @@ export default defineComponent({
           </Transition>
         )
       })
+
       return (
         <>
           {slots.use?.({

@@ -90,4 +90,6 @@
 
   --w-date-picker-panel-width: 260px;
   --w-date-picker-panel-height: 260px;
+  --w-time-picker-panel-width: var(--w-form-item-width);
+  --w-time-picker-panel-height: 240px;
 }

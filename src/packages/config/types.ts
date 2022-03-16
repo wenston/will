@@ -43,3 +43,8 @@ export type DateFormatType = 'yyyy' | 'yyyy-MM' | 'yyyy-MM-dd'
 // | 'yyyy-MM-dd hh'
 // | 'yyyy-MM-dd hh:mm'
 // | 'yyyy-MM-dd hh:mm:ss'
+// | 'hh'
+// | 'hh:mm'
+// | 'hh:mm:ss'
+
+export type TimeFormatType = 'hh' | 'hh:mm' | 'hh:mm:ss'

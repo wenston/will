@@ -236,6 +236,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'date-picker',
         component: () => import('../views/will/DatePicker.vue'),
         meta: { title: '日期选择器 DatePicker' }
+      },
+      {
+        path: 'time-picker',
+        name: 'time-picker',
+        component: () => import('../views/will/TimePicker.vue'),
+        meta: { title: '时间选择器 TimePicker' }
       }
     ],
     meta: {
