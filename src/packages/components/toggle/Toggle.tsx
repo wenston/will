@@ -17,6 +17,11 @@ import useDelay from '../../use/useDelay'
 import { isBoolean, isObject } from '../../util/index'
 import type { DataItemType } from '../../config/types'
 type TransformType = 'scale' | 'translate'
+interface EmitOptions {
+  prev: () => void
+  next: () => void
+  delay: (handler?: Function | number, delayTime?: number) => Promise<void>
+}
 export default defineComponent({
   inheritAttrs: false,
   name: 'Toggle',
@@ -59,16 +64,10 @@ export default defineComponent({
     }
   },
   emits: {
-    'update:data': null,
-    afterToggle: ({
-      prev,
-      next,
-      delay
-    }: {
-      prev: () => void
-      next: () => void
-      delay: (handler?: Function | number, delayTime?: number) => Promise<void>
-    }) => {
+    afterToggle: ({ prev, next, delay }: EmitOptions) => {
+      return true
+    },
+    wheel: (options: { event: WheelEvent } & EmitOptions) => {
       return true
     }
   },
@@ -121,7 +120,10 @@ export default defineComponent({
                   '--__scale-from': props.scale.from,
                   '--__scale-to': props.scale.to
                 }
-              : null
+              : null,
+          onWheel: (e: WheelEvent) => {
+            emit('wheel', { event: e, prev, next, delay })
+          }
         },
         attrs
       )

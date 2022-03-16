@@ -12,6 +12,7 @@
         v-bind="toggleOptions"
         :data="a"
         :index="getIndex(i)"
+        @wheel="handleWheel(i, $event)"
       >
         <template #default="{ item }">
           <div
@@ -112,6 +113,26 @@ const toggleOptions = {
   class: 'w-dial-item',
   transform: 'translate' as 'translate',
   direction: 'y' as 'y'
+}
+
+//template里可以推断出组件定义的数据类型，但这里仍然要定义一遍，有其他办法重用类型吗？
+function handleWheel(
+  i: number,
+  {
+    event,
+    prev,
+    next,
+    delay
+  }: {
+    event: WheelEvent
+    [k: string]: any
+  }
+) {
+  if (event.deltaY > 0) {
+    delay(next, 100)
+  } else {
+    delay(prev, 100)
+  }
 }
 
 function handleClick(i: number, v: string) {
