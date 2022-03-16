@@ -101,12 +101,6 @@ export default defineComponent({
       computed(() => props.modelValue)
     )
 
-    // const text = computed(() => {
-    //   if (props.modelValue === undefined) {
-    //     return ''
-    //   }
-    //   return props.modelValue
-    // })
     const dataList = ref<DataItemType[]>([
       { datetype: 'day', val: Number(displayDate.value) }
     ])

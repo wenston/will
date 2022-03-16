@@ -51,8 +51,8 @@ export function useBarText(
 ) {
   const { year, month } = useDate(displayDate)
   return computed(() => {
-    const y = year.value + ' 年'
-    const m = month.value + ' 月'
+    const y = year.value + '年'
+    const m = month.value + '月'
     if (isDay.value) {
       return y + m
     } else if (isMonth.value) {
