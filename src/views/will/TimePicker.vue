@@ -21,14 +21,14 @@
   <TimePicker
     v-model="hm"
     :clearable="ps.clearable"
-    format="hh:mm"
+    format="HH:mm"
     placeholder="时：分"
   />
   <p>时的选择</p>
   <TimePicker
     v-model="h"
     :clearable="ps.clearable"
-    format="hh"
+    format="HH"
     placeholder="小时"
   />
 </template>

@@ -39,13 +39,12 @@ export default defineComponent({
     disabled: { type: Boolean },
     block: Boolean,
     placeholder: { type: [String, Object, Array], default: '请选择时间' },
-    //hh hh:mm hh:mm:ss
     modelValue: {
       type: String,
       default: undefined,
       validator: validate_hms
     },
-    format: { type: String as PropType<TimeFormatType>, default: 'hh:mm:ss' }
+    format: { type: String as PropType<TimeFormatType>, default: 'HH:mm:ss' }
   },
   emits: ['update:show', 'update:modelValue'],
   setup(props, { slots, emit }) {

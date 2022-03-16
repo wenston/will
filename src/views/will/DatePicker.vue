@@ -31,6 +31,13 @@
     format="yyyy"
     placeholder="请选择年份"
   />
+  <p>年月日时分秒的选择</p>
+  <DatePicker
+    v-model="ymdhms"
+    :clearable="ps.clearable"
+    format="yyyy-MM-dd HH:mm:ss"
+    placeholder="请选择日期和时间"
+  />
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
@@ -39,6 +46,7 @@ import Btn from 'will-ui/components/btn/index'
 const startDate = ref()
 const ym = ref()
 const y = ref()
+const ymdhms = ref()
 interface MyType {
   clearable?: boolean
   disabled?: boolean

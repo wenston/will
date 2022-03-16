@@ -39,12 +39,12 @@ export type DataItemType = boolean | number | string | symbol | object
 
 export type ToggleTransformType = 'scale' | 'translate'
 export type DateType = number | string | Date | undefined
-export type DateFormatType = 'yyyy' | 'yyyy-MM' | 'yyyy-MM-dd'
-// | 'yyyy-MM-dd hh'
-// | 'yyyy-MM-dd hh:mm'
-// | 'yyyy-MM-dd hh:mm:ss'
-// | 'hh'
-// | 'hh:mm'
-// | 'hh:mm:ss'
+export type DateFormatType =
+  | 'yyyy'
+  | 'yyyy-MM'
+  | 'yyyy-MM-dd'
+  | 'yyyy-MM-dd HH'
+  | 'yyyy-MM-dd HH:mm'
+  | 'yyyy-MM-dd HH:mm:ss'
 
-export type TimeFormatType = 'hh' | 'hh:mm' | 'hh:mm:ss'
+export type TimeFormatType = 'HH' | 'HH:mm' | 'HH:mm:ss'

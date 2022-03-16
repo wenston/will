@@ -49,6 +49,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import './style/dial.css'
 import { ref, onMounted, computed, watchEffect } from 'vue'
 import Toggle from '../toggle/index'
 import Icon from '../icon/index'
@@ -58,7 +59,7 @@ const props = withDefaults(
     format?: TimeFormatType
     value?: string
   }>(),
-  { format: 'hh:mm:ss' }
+  { format: 'HH:mm:ss' }
 )
 const emit = defineEmits<{ (e: 'change', hms?: string): void }>()
 const [h, m, s] = useHms(props)
@@ -74,8 +75,9 @@ const createNumberArray = (total: number, size: number = 6) =>
 const has = computed(() => {
   const f = props.format
   const m = f.indexOf('mm') > -1
-  const h = f.indexOf('hh') > -1
+  const h = f.indexOf('HH') > -1
   const s = f.indexOf('ss') > -1
+  console.log(f, h)
   return { m, h, s }
 })
 //能不能进行选择时分秒的操作
@@ -112,7 +114,8 @@ const arr = computed(() => {
 const toggleOptions = {
   class: 'w-dial-item',
   transform: 'translate' as 'translate',
-  direction: 'y' as 'y'
+  direction: 'y' as 'y',
+  itemClass: 'w-dial-toggle-item'
 }
 
 //template里可以推断出组件定义的数据类型，但这里仍然要定义一遍，有其他办法重用类型吗？

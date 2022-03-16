@@ -4,17 +4,22 @@ import type { ComputedRef, Ref } from 'vue'
 import type { DateFormatType, DateType } from '../../../config/types'
 import { isString, isNumber, isDate } from '../../../util'
 import useDate from '../../../use/useDate'
-type DateViewType = 'year' | 'day' | 'month'
+type DateViewType = 'year' | 'day' | 'month' | 'time'
 enum FormatViewMap {
   'yyyy' = 'year',
   'yyyy-MM' = 'month',
-  'yyyy-MM-dd' = 'day'
+  'yyyy-MM-dd' = 'day',
+  'yyyy-MM-dd HH:mm:ss' = 'time',
+  'yyyy-MM-dd HH:mm' = 'time',
+  'yyyy-MM-dd HH' = 'time'
 }
 export function useDateView(format: ComputedRef<DateFormatType>) {
   const currentView = ref<DateViewType>('day')
   const currentFormat = computed(() => FormatViewMap[format.value])
   const isYear = computed(() => currentView.value === 'year')
   const isMonth = computed(() => currentView.value === 'month')
+  const isDay = computed(() => currentView.value === 'day')
+  const isTime = computed(() => currentView.value === 'time')
   function setCurrentView(view: DateViewType) {
     currentView.value = view
   }
@@ -33,10 +38,12 @@ export function useDateView(format: ComputedRef<DateFormatType>) {
     currentView: readonly(currentView),
     isYear,
     isMonth,
-    isDay: computed(() => currentView.value === 'day'),
+    isDay,
+    isTime,
     formatIsYear: computed(() => currentFormat.value === 'year'),
     formatIsMonth: computed(() => currentFormat.value === 'month'),
     formatIsDay: computed(() => currentFormat.value === 'day'),
+    formatIsTime: computed(() => currentFormat.value === 'time'),
     getFormatView: () => currentFormat.value,
     setCurrentView
   }
@@ -46,10 +53,11 @@ export function useBarText(
   isYear: Ref<boolean>,
   isMonth: Ref<boolean>,
   isDay: Ref<boolean>,
+  isTime: Ref<boolean>,
   displayDate: Ref<string | number | Date>,
   ft: { from: number; to: number }
 ) {
-  const { year, month } = useDate(displayDate)
+  const { year, month, day } = useDate(displayDate)
   return computed(() => {
     const y = year.value + '年'
     const m = month.value + '月'
@@ -59,6 +67,8 @@ export function useBarText(
       return y
     } else if (isYear.value) {
       return `${ft.from}-${ft.to}`
+    } else if (isTime.value) {
+      return y + m + day.value + '日'
     }
   })
 }
@@ -82,6 +92,9 @@ export function useDateText(
         if (f === 'yyyy') {
           return y + '年'
         } else if (f === 'yyyy-MM' || f === 'yyyy-MM-dd') {
+          return fm(_d, f)
+        } else if (f.indexOf('HH') > -1) {
+          // console.log(f, _d)
           return fm(_d, f)
         }
       }

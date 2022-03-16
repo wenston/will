@@ -1,6 +1,10 @@
 import { defineComponent, ref, computed, watch, nextTick, reactive } from 'vue'
 import type { VNode, PropType, Ref } from 'vue'
-import type { ToggleTransformType, DateFormatType } from '../../config/types'
+import type {
+  ToggleTransformType,
+  DateFormatType,
+  TimeFormatType
+} from '../../config/types'
 import useDate from '../../use/useDate'
 import Layer from '../layer/index'
 import Trigger from '../trigger/index'
@@ -9,6 +13,7 @@ import Days from './Days'
 import Months from './Months'
 import Years from './Years'
 import Toggle from '../toggle/index'
+import Dial from '../time/Dial.vue'
 
 import {
   useDateView,
@@ -18,7 +23,7 @@ import {
 } from './_use/useDateModules'
 
 type DirectionType = 'x' | 'y'
-type ViewsType = 'year' | 'month' | 'day'
+type ViewsType = 'year' | 'month' | 'day' | 'time'
 type DataItemType = { datetype: ViewsType; val: number | string }
 
 const renderPrevIcon = (handleClick: () => void) => (
@@ -48,7 +53,7 @@ const renderWeekTitleList = (dayMap: ReadonlyMap<number, string>) => {
 
 export default defineComponent({
   name: 'DatePicker',
-  components: { Layer, Trigger, Icon, Days, Months, Years, Toggle },
+  components: { Layer, Trigger, Icon, Days, Months, Years, Toggle, Dial },
   props: {
     show: { type: Boolean, default: false },
     clearable: { type: Boolean },
@@ -59,7 +64,11 @@ export default defineComponent({
       type: [Number, Date, String],
       default: undefined
     },
-    format: { type: String as PropType<DateFormatType>, default: 'yyyy-MM-dd' }
+    format: {
+      type: String as PropType<DateFormatType>,
+      default: 'yyyy-MM-dd'
+      // required: true
+    }
   },
   emits: ['update:show', 'update:modelValue'],
   setup(props, { emit, slots, expose }) {
@@ -72,12 +81,23 @@ export default defineComponent({
       isYear,
       isDay,
       isMonth,
+      isTime,
       formatIsDay,
       formatIsMonth,
       formatIsYear,
+      formatIsTime,
       getFormatView,
       setCurrentView
     } = useDateView(computed(() => props.format))
+
+    const timeFormat = computed(() => {
+      let f: TimeFormatType = 'HH:mm:ss'
+      const _f = props.format
+      if (formatIsTime.value) {
+        f = _f.split(/\s+/)[1] as TimeFormatType
+      }
+      return f
+    })
     const isUpDown = ref(false)
     const yearPanel = reactive({ from: 0, to: 0 })
     const { selectedDate, getStringDate, formatDate } = useFormatDate(
@@ -105,7 +125,14 @@ export default defineComponent({
       { datetype: 'day', val: Number(displayDate.value) }
     ])
 
-    const barText = useBarText(isYear, isMonth, isDay, displayDate, yearPanel)
+    const barText = useBarText(
+      isYear,
+      isMonth,
+      isDay,
+      isTime,
+      displayDate,
+      yearPanel
+    )
 
     const layerOptions = computed(() => {
       return {
@@ -147,11 +174,12 @@ export default defineComponent({
         : 'scale'
       let toggleOptions = {
         ref: toggleComponent,
-        class: isDay.value
-          ? 'w-date-days'
-          : isMonth.value || isYear.value
-          ? 'w-date-months'
-          : '',
+        class:
+          isDay.value || isTime.value
+            ? 'w-date-days'
+            : isMonth.value || isYear.value
+            ? 'w-date-months'
+            : '',
         dynamic: true,
         data: dataList.value,
         direction: 'y' as DirectionType,
@@ -180,11 +208,24 @@ export default defineComponent({
                       date={selectedDate.value}
                       displayDate={item.val}
                       onToggle-day={(stringDate) => {
-                        emit('update:modelValue', stringDate)
-                        visible.value = false
+                        if (formatIsDay.value) {
+                          emit('update:modelValue', stringDate)
+                          visible.value = false
+                        } else if (formatIsTime.value) {
+                          isUpDown.value = false
+                          toggleComponent.value?.next()
+                          dataList.value.push({
+                            datetype: 'time',
+                            val: ''
+                          })
+                          dataList.value.shift()
+                          setCurrentView('time')
+                        }
                       }}
                     />
                   )
+                } else if (item.datetype === 'time') {
+                  return <Dial format={timeFormat.value} value={'00:20:30'} />
                 } else if (item.datetype === 'month') {
                   return (
                     <Months
@@ -281,8 +322,7 @@ export default defineComponent({
           >
             {barText.value}
           </div>
-          {renderPrevIcon(toPrev)}
-          {renderNextIcon(toNext)}
+          {!isTime.value && [renderPrevIcon(toPrev), renderNextIcon(toNext)]}
         </div>
       )
     }
@@ -355,17 +395,19 @@ export default defineComponent({
     )
     watch(visible, (b: boolean) => {
       if (b) {
-        const fv = getFormatView()
+        let fv = getFormatView()
+        const _fv = fv === 'time' ? 'day' : fv
         //每次展示下拉框时，根据当前选中的日期进行初始化
         if (selectedDate.value) {
           displayDate.value = selectedDate.value
-          dataList.value = [{ datetype: fv, val: format(selectedDate.value) }]
+          dataList.value = [{ datetype: _fv, val: format(selectedDate.value) }]
         } else {
           displayDate.value = new Date()
-          dataList.value = [{ datetype: fv, val: Number(new Date()) }]
+          dataList.value = [{ datetype: _fv, val: Number(new Date()) }]
         }
         //每次显示出下拉框时就会按照format给定的值进行初始化界面
-        setCurrentView(fv)
+
+        setCurrentView(_fv)
       }
       emit('update:show', b)
     })
