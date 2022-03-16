@@ -10,7 +10,7 @@
     </Btn>
     <Btn @click="toChangeProp(ps, 'block')">block</Btn>
   </p>
-  <p>年月日的选择</p>
+  <!-- <p>年月日的选择</p>
   <DatePicker
     v-model="startDate"
     :clearable="ps.clearable"
@@ -30,7 +30,7 @@
     :clearable="ps.clearable"
     format="yyyy"
     placeholder="请选择年份"
-  />
+  /> -->
   <p>年月日时分秒的选择</p>
   <DatePicker
     v-model="ymdhms"
@@ -46,7 +46,7 @@ import Btn from 'will-ui/components/btn/index'
 const startDate = ref()
 const ym = ref()
 const y = ref()
-const ymdhms = ref()
+const ymdhms = ref('2022-03-20 10:20:30')
 interface MyType {
   clearable?: boolean
   disabled?: boolean

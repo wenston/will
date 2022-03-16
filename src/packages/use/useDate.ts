@@ -1,6 +1,7 @@
 import type { Ref, ComputedRef } from 'vue'
 import { computed, ref, unref, readonly } from 'vue'
 import { isString, isNumber, isDate } from '../util'
+import type { DateFormatType } from '../config/types'
 //注意：date-fns里的月份也是从0开始的！
 import {
   addMonths as _addMonths,
@@ -21,7 +22,13 @@ import {
 type DateType = Date | number | string | undefined
 type DateOptionType = Ref<DateType> | ComputedRef<DateType>
 
-export default function useDate(date: DateOptionType) {
+export default function useDate(
+  date: DateOptionType,
+  fmt:
+    | Ref<DateFormatType>
+    | ComputedRef<DateFormatType>
+    | DateFormatType = 'yyyy-MM-dd'
+) {
   const dayNum = 42
   const dayMap = readonly(
     new Map([
@@ -48,19 +55,29 @@ export default function useDate(date: DateOptionType) {
     return _addYears(parse(date), n)
   }
 
-  function format(date?: DateType, formart: string = 'yyyy-MM-dd') {
-    return _format(parse(date || currentDate.value), formart)
+  function format(date?: DateType, formart?: DateFormatType) {
+    // console.log('useDate,format:', date, formart)
+    return _format(
+      parse(date || currentDate.value, formart),
+      formart || (unref(fmt) as string)
+    )
   }
 
-  function formatDate(date: DateType) {
+  function formatDate(date: DateType, formart?: DateFormatType) {
     if (date !== undefined) {
       //时间戳或者日期对象
       //注意，此处没有对数值型的时间戳进行验证到底是不是时间戳！
       if (isDate(date) || isNumber(date)) {
-        return parse(date)
+        console.log('是日期类型？？？？')
+        return parse(date, formart)
       } else if (isString(date)) {
-        const [y, m = 1, d = 1] = date.trim().split('-')
-        return parse(new Date(+y, Number(m) - 1, +d))
+        const arr = date.trim().split(/\s+/)
+        const [y, m = 1, d = 1] = arr[0].split('-')
+        const [hh, mm, ss] = arr[1] ? arr[1].split(':') : [0, 0, 0]
+        return parse(
+          new Date(+y, Number(m) - 1, +d, +hh || 0, +mm || 0, +ss || 0),
+          formart
+        )
       }
     }
   }
@@ -168,9 +185,10 @@ export default function useDate(date: DateOptionType) {
     return _isSameDay(parse(date || currentDate.value), Date.now())
   }
 
-  function parse(date?: DateType, formatString: string = 'yyyy-MM-dd') {
+  function parse(date?: DateType, formatString?: DateFormatType) {
+    // console.log('useDate,parse:', date, formatString)
     if (typeof date === 'string') {
-      return _parse(date, formatString, new Date())
+      return _parse(date, formatString || (unref(fmt) as string), new Date())
     } else if (date === undefined) {
       return new Date()
     }

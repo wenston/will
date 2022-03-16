@@ -1,5 +1,7 @@
 import { getCurrentInstance, onMounted, VNode } from 'vue'
 import { defineComponent, computed, watch } from 'vue'
+import type { PropType } from 'vue'
+import type { DateFormatType } from '../../config/types'
 import useDate from '../../use/useDate'
 
 export default defineComponent({
@@ -8,7 +10,12 @@ export default defineComponent({
     //传入的日期（选择的日期）,可以是具体的某一天，也可以是年月，如：new Date('2022','3')
     date: { type: [Number, Date, String] },
     //displayDate是展示的日期
-    displayDate: { type: [Number, Date, String] }
+    displayDate: { type: [Number, Date, String] },
+    format: {
+      type: String as PropType<DateFormatType>,
+      default: 'yyyy-MM-dd'
+      // required: true
+    }
   },
   emits: {
     'toggle-day': (stringDate: string, date: Date) => {
@@ -25,7 +32,10 @@ export default defineComponent({
       isToday,
       month,
       year
-    } = useDate(computed(() => props.displayDate))
+    } = useDate(
+      computed(() => props.displayDate),
+      computed(() => props.format)
+    )
 
     function renderDayItem(days: number[][], isCurrentMonth: boolean = false) {
       return days.map(([y, m, d]) => {
@@ -47,7 +57,8 @@ export default defineComponent({
             }
           ],
           onClick: (e: MouseEvent) => {
-            const ymd = format(itemDate)
+            //注意：ymd只包括年月日
+            const ymd = format(itemDate, 'yyyy-MM-dd')
             emit('toggle-day', ymd, itemDate)
           }
         }

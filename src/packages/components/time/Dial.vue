@@ -66,10 +66,11 @@ const [h, m, s] = useHms(props)
 const isMounted = ref(false)
 const bottom_btn = ref<HTMLElement>()
 const top_btn = ref<HTMLElement>()
-const padString = (n: number) => (n >= 0 && n < 10 ? '0' + n : n + '')
 const createNumberArray = (total: number, size: number = 6) =>
   Array.from({ length: total / size }, (el, i) =>
-    Array.from({ length: size }, (item, index) => padString(i * size + index))
+    Array.from({ length: size }, (item, index) =>
+      (i * size + index).toString().padStart(2, '0')
+    )
   )
 //展不展示时分秒
 const has = computed(() => {
@@ -77,7 +78,7 @@ const has = computed(() => {
   const m = f.indexOf('mm') > -1
   const h = f.indexOf('HH') > -1
   const s = f.indexOf('ss') > -1
-  console.log(f, h)
+  // console.log(f, h)
   return { m, h, s }
 })
 //能不能进行选择时分秒的操作

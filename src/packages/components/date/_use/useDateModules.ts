@@ -94,7 +94,6 @@ export function useDateText(
         } else if (f === 'yyyy-MM' || f === 'yyyy-MM-dd') {
           return fm(_d, f)
         } else if (f.indexOf('HH') > -1) {
-          // console.log(f, _d)
           return fm(_d, f)
         }
       }
@@ -112,7 +111,7 @@ export function useFormatDate(
   format: ComputedRef<DateFormatType>,
   theDate: ComputedRef<DateType> //当字符串时，默认时以短横线年月日分割的！
 ) {
-  const { parse, format: _f, formatDate } = useDate(theDate)
+  const { parse, format: _f, formatDate } = useDate(theDate, format)
 
   const selectedDate = computed(() => {
     const f = format.value
@@ -121,7 +120,7 @@ export function useFormatDate(
   })
 
   return {
-    selectedDate,
+    selectedDate, //有可能包括了时分秒
     formatDate,
     getStringDate: (date: DateType, f?: DateFormatType) => {
       if (date === undefined) {

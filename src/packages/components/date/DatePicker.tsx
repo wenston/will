@@ -90,14 +90,6 @@ export default defineComponent({
       setCurrentView
     } = useDateView(computed(() => props.format))
 
-    const timeFormat = computed(() => {
-      let f: TimeFormatType = 'HH:mm:ss'
-      const _f = props.format
-      if (formatIsTime.value) {
-        f = _f.split(/\s+/)[1] as TimeFormatType
-      }
-      return f
-    })
     const isUpDown = ref(false)
     const yearPanel = reactive({ from: 0, to: 0 })
     const { selectedDate, getStringDate, formatDate } = useFormatDate(
@@ -114,12 +106,37 @@ export default defineComponent({
       year: displayYear,
       yearPanelLength,
       month: displayMonth
-    } = useDate(displayDate)
+    } = useDate(
+      displayDate,
+      computed(() => props.format)
+    )
 
     const text = useDateText(
       computed(() => props.format),
       computed(() => props.modelValue)
     )
+    const timeFormat = computed(() => {
+      let f: TimeFormatType = 'HH:mm:ss'
+      const _f = props.format
+      if (formatIsTime.value) {
+        f = _f.split(/\s+/)[1] as TimeFormatType
+      }
+      return f
+    })
+    const timeValue = computed(() => {
+      if (isTime.value) {
+        const d = selectedDate.value
+        if (d) {
+          const h = d.getHours(),
+            m = d.getMinutes(),
+            s = d.getSeconds()
+          const hh = h.toString().padStart(2, '0')
+          const mm = m.toString().padStart(2, '0')
+          const ss = s.toString().padStart(2, '0')
+          return [hh, mm, ss]
+        }
+      }
+    })
 
     const dataList = ref<DataItemType[]>([
       { datetype: 'day', val: Number(displayDate.value) }
@@ -207,6 +224,7 @@ export default defineComponent({
                     <Days
                       date={selectedDate.value}
                       displayDate={item.val}
+                      format={props.format}
                       onToggle-day={(stringDate) => {
                         if (formatIsDay.value) {
                           emit('update:modelValue', stringDate)
@@ -220,19 +238,38 @@ export default defineComponent({
                           })
                           dataList.value.shift()
                           setCurrentView('time')
+                          const hms = createTimeByFormat()
+                          let sd = stringDate
+                          if (hms) {
+                            sd = sd + ' ' + hms
+                          }
+                          // console.log(sd)
+                          emit('update:modelValue', sd)
                         }
                       }}
                     />
                   )
                 } else if (item.datetype === 'time') {
-                  return <Dial format={timeFormat.value} value={'00:20:30'} />
+                  return (
+                    <Dial
+                      format={timeFormat.value}
+                      value={timeValue.value?.join(':')}
+                      onChange={(hms) => {
+                        const sd = selectedDate.value
+                        if (sd) {
+                          const d = format(sd, 'yyyy-MM-dd')
+                          emit('update:modelValue', d + ' ' + hms)
+                        }
+                      }}
+                    />
+                  )
                 } else if (item.datetype === 'month') {
                   return (
                     <Months
                       date={selectedDate.value}
                       displayDate={displayDate.value}
                       onToggle-month={(toggleDate) => {
-                        if (formatIsDay.value) {
+                        if (formatIsDay.value || formatIsTime.value) {
                           isUpDown.value = false
                           toggleComponent.value?.next()
                           dataList.value.push({
@@ -317,6 +354,15 @@ export default defineComponent({
                 dataList.value.pop()
                 yearPanel.from = 0
                 yearPanel.to = 0
+              } else if (isTime.value) {
+                isUpDown.value = false
+                toggleComponent.value?.prev()
+                dataList.value.unshift({
+                  datetype: 'day',
+                  val: Number(displayDate.value)
+                })
+                setCurrentView('day')
+                dataList.value.pop()
               }
             }}
           >
@@ -325,6 +371,20 @@ export default defineComponent({
           {!isTime.value && [renderPrevIcon(toPrev), renderNextIcon(toNext)]}
         </div>
       )
+    }
+
+    function createTimeByFormat() {
+      const f = timeFormat.value
+      const yms = timeValue.value
+      if (yms) {
+        if (f === 'HH') {
+          return yms[0]
+        } else if (f === 'HH:mm') {
+          return yms.slice(0, 2).join(':')
+        } else if (f === 'HH:mm:ss') {
+          return yms.join(':')
+        }
+      }
     }
 
     function toPrev() {
@@ -383,7 +443,15 @@ export default defineComponent({
       // displayDate.value = new Date()
       // dataList.value = [{ datetype: 'day', val: Number(displayDate.value) }]
       //setCurrentView('day')
-      // selectedDate.value = undefined
+      if (isTime.value) {
+        toggleComponent.value?.prev()
+        dataList.value.unshift({
+          datetype: 'day',
+          val: Number(displayDate.value)
+        })
+        dataList.value.pop()
+        setCurrentView('day')
+      }
       emit('update:modelValue', undefined)
     }
 
@@ -400,7 +468,9 @@ export default defineComponent({
         //每次展示下拉框时，根据当前选中的日期进行初始化
         if (selectedDate.value) {
           displayDate.value = selectedDate.value
-          dataList.value = [{ datetype: _fv, val: format(selectedDate.value) }]
+          dataList.value = [
+            { datetype: _fv, val: format(selectedDate.value, props.format) }
+          ]
         } else {
           displayDate.value = new Date()
           dataList.value = [{ datetype: _fv, val: Number(new Date()) }]
