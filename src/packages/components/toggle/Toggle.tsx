@@ -14,6 +14,7 @@ import {
 import type { PropType, ComputedRef } from 'vue'
 import useToggleArray from '../../use/toggle/useToggleArray'
 import useDelay from '../../use/useDelay'
+import useMousePositionInElement from '../../use/useMousePositionInElement'
 import { isBoolean, isObject } from '../../util/index'
 import type { DataItemType } from '../../config/types'
 type TransformType = 'scale' | 'translate'
@@ -72,9 +73,11 @@ export default defineComponent({
     }
   },
   setup(props, { attrs, slots, emit, expose }) {
+    const rootElement = ref<HTMLElement>()
     const isMounted = ref(false)
     const { delay } = useDelay(props.duration)
     const isPrev = ref(false)
+    const { x, y } = useMousePositionInElement(rootElement, 'click')
     const {
       prev: _prev,
       next: _next,
@@ -114,13 +117,13 @@ export default defineComponent({
       return mergeProps(
         {
           class: klass.value,
-          style:
-            props.transform === 'scale'
-              ? {
-                  '--__scale-from': props.scale.from,
-                  '--__scale-to': props.scale.to
-                }
-              : null,
+          style: {
+            '--__scale-from': props.transform === 'scale' && props.scale.from,
+            '--__scale-to': props.transform === 'scale' && props.scale.to,
+            '--__origin-x': x.value === undefined ? 'center' : `${x.value}px`,
+            '--__origin-y': y.value === undefined ? 'center' : `${y.value}px`
+          },
+
           onWheel: (e: WheelEvent) => {
             emit('wheel', { event: e, prev, next, delay })
           }
@@ -229,7 +232,7 @@ export default defineComponent({
             item: unref(item),
             index
           })}
-          <div {...options.value}>
+          <div {...options.value} ref={rootElement}>
             {props.dynamic ? dynamicPart : staticPart}
           </div>
         </>
