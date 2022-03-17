@@ -133,3 +133,8 @@ export function useFormatDate(
     }
   }
 }
+
+export function useLimitDate(props: {
+  min: Date | string | number | undefined
+  max: Date | string | number | undefined
+}) {}

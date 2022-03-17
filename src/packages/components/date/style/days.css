@@ -14,7 +14,7 @@
   color: var(--w-color-font-2);
   user-select: none;
   &.w-date-item-not-current {
-    color: var(--w-color-font-4);
+    color: var(--w-color-font-3);
   }
   &.w-date-item-circle {
     border-radius: 100%;
@@ -23,7 +23,7 @@
     transition: var(--w-transition-time);
     cursor: pointer;
     &:hover {
-      &:not(.w-date-item-today):not(.w-date-item-selected) {
+      &:not(.w-date-item-today):not(.w-date-item-selected):not(.w-date-item-disabled) {
         background-color: var(--w-color-bg);
         color: var(--w-color-font-1);
       }
@@ -39,8 +39,14 @@
 
       font-weight: bold;
     }
+    &.w-date-item-disabled {
+      color: var(--w-color-font-4);
+      cursor: not-allowed;
+    }
     &:active {
-      box-shadow: inset 0 0 50px var(--w-color-font-4);
+      &:not(.w-date-item-disabled) {
+        box-shadow: inset 0 0 50px var(--w-color-font-4);
+      }
     }
   }
 }

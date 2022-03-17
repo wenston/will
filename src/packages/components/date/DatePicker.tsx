@@ -69,7 +69,9 @@ export default defineComponent({
       type: String as PropType<DateFormatType>,
       default: 'yyyy-MM-dd'
       // required: true
-    }
+    },
+    max: { type: [Number, Date, String] },
+    min: { type: [Number, Date, String] }
   },
   emits: ['update:show', 'update:modelValue'],
   setup(props, { emit, slots, expose }) {
@@ -226,6 +228,8 @@ export default defineComponent({
                       date={selectedDate.value}
                       displayDate={item.val}
                       format={props.format}
+                      min={props.min}
+                      max={props.max}
                       onToggle-day={(stringDate) => {
                         if (formatIsDay.value) {
                           emit('update:modelValue', stringDate)
@@ -269,6 +273,8 @@ export default defineComponent({
                     <Months
                       date={selectedDate.value}
                       displayDate={displayDate.value}
+                      min={props.min}
+                      max={props.max}
                       onToggle-month={(toggleDate) => {
                         if (formatIsDay.value || formatIsTime.value) {
                           isUpDown.value = false
@@ -295,6 +301,8 @@ export default defineComponent({
                       to={yearPanel.to}
                       date={selectedDate.value}
                       displayDate={displayDate.value}
+                      min={props.min}
+                      max={props.max}
                       onGet-from-to={(from, to) => {
                         yearPanel.from = from
                         yearPanel.to = to

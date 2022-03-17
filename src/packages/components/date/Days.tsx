@@ -15,7 +15,9 @@ export default defineComponent({
       type: String as PropType<DateFormatType>,
       default: 'yyyy-MM-dd'
       // required: true
-    }
+    },
+    max: { type: [Number, Date, String] },
+    min: { type: [Number, Date, String] }
   },
   emits: {
     'toggle-day': (stringDate: string, date: Date) => {
@@ -30,16 +32,34 @@ export default defineComponent({
       getDaysInPanel,
       isSameDay,
       isToday,
-      month,
-      year
+      isMinDayThanDate,
+      isMaxDayThanDate
     } = useDate(
       computed(() => props.displayDate),
       computed(() => props.format)
     )
 
+    function compareDate(d: Date) {
+      const min = props.min,
+        max = props.max
+      if (min || max) {
+        let isMin = false,
+          isMax = false
+        if (min) {
+          isMin = isMinDayThanDate(d, min)
+        }
+        if (max) {
+          isMax = isMaxDayThanDate(d, max)
+        }
+        return isMin || isMax
+      }
+      return false
+    }
+
     function renderDayItem(days: number[][], isCurrentMonth: boolean = false) {
       return days.map(([y, m, d]) => {
         const itemDate = new Date(y, m - 1, d)
+        const isDisabled = compareDate(itemDate)
         //注意，js里的月份是从0开始的，所以new Date()里的月份要减1
         const _isToday = isToday(itemDate)
         const _isSelected =
@@ -53,10 +73,14 @@ export default defineComponent({
             {
               'w-date-item-not-current': !isCurrentMonth,
               'w-date-item-today': _isToday,
-              'w-date-item-selected': _isSelected
+              'w-date-item-selected': _isSelected,
+              'w-date-item-disabled': isDisabled
             }
           ],
           onClick: (e: MouseEvent) => {
+            if (isDisabled) {
+              return
+            }
             //注意：ymd只包括年月日
             const ymd = format(itemDate, 'yyyy-MM-dd')
             emit('toggle-day', ymd, itemDate)

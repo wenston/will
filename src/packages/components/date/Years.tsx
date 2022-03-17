@@ -10,7 +10,10 @@ export default defineComponent({
     displayDate: { type: [Number, Date, String] },
     //from和to有值的时候，date和displayDate不要有值。
     from: Number,
-    to: Number
+    to: Number,
+    //最大日期最小日期
+    max: { type: [Number, Date, String] },
+    min: { type: [Number, Date, String] }
   },
   emits: {
     'toggle-year': (year: number) => {
@@ -24,10 +27,8 @@ export default defineComponent({
   },
   setup(props, { emit, slots }) {
     const {
-      format,
-      isSameMonth,
-      month,
-      year,
+      isMinYearThanDate,
+      isMaxYearThanDate,
       getYearsInPanel,
       yearPanelLength
     } = useDate(computed(() => props.displayDate))
@@ -44,6 +45,23 @@ export default defineComponent({
       return []
     })
 
+    function compareDate(d: Date) {
+      const min = props.min,
+        max = props.max
+      if (min || max) {
+        let isMin = false,
+          isMax = false
+        if (min) {
+          isMin = isMinYearThanDate(d, min)
+        }
+        if (max) {
+          isMax = isMaxYearThanDate(d, max)
+        }
+        return isMin || isMax
+      }
+      return false
+    }
+
     function renderYearList() {
       const { years: yearList, from, to } = getYearsInPanel()
       emit('get-from-to', props.from || from, props.to || to)
@@ -53,15 +71,20 @@ export default defineComponent({
         const isCur = new Date().getFullYear() === v
         const isSelected =
           props.date === undefined ? false : selectedYear.value === v
+        const isDisabled = compareDate(new Date(v, 0))
         const p = {
           class: [
             'w-months-item',
             {
               'w-months-item-current': isCur,
-              'w-months-item-selected': isSelected
+              'w-months-item-selected': isSelected,
+              'w-months-item-disabled': isDisabled
             }
           ],
           onClick: () => {
+            if (isDisabled) {
+              return
+            }
             emit('toggle-year', v)
           }
         }

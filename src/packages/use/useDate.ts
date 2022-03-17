@@ -68,7 +68,7 @@ export default function useDate(
       //时间戳或者日期对象
       //注意，此处没有对数值型的时间戳进行验证到底是不是时间戳！
       if (isDate(date) || isNumber(date)) {
-        console.log('是日期类型？？？？')
+        // console.log('是日期类型？？？？')
         return parse(date, formart)
       } else if (isString(date)) {
         const arr = date.trim().split(/\s+/)
@@ -194,6 +194,91 @@ export default function useDate(
     }
     return new Date(date)
   }
+
+  /**
+   *
+   * @param givenDate 给定的日期
+   * @param minDate 要跟哪个日期来比较
+   * @returns 如果givenDate比minDate要小，则返回true
+   */
+  function isMinDayThanDate(givenDate: DateType, minDate: DateType) {
+    let b = false,
+      f = 'yyyy-MM-dd' as DateFormatType
+    b = Number(parse(givenDate, f)) - Number(parse(minDate, f)) < 0
+    return b
+  }
+
+  /**
+   *
+   * @param givenDate 给定的日期
+   * @param minDate 要跟哪个日期来比较
+   * @returns 如果givenDate比minDate要大，则返回true
+   */
+  function isMaxDayThanDate(givenDate: DateType, minDate: DateType) {
+    let b = false,
+      f = 'yyyy-MM-dd' as DateFormatType
+    b = Number(parse(givenDate, f)) - Number(parse(minDate, f)) > 0
+    return b
+  }
+  function isMinMonthThanDate(givenDate: DateType, minDate: DateType) {
+    let b = false,
+      f = 'yyyy-MM' as DateFormatType
+
+    const { year: givenYear, month: givenMonth } = getYearAndMonth(givenDate, f)
+    const { year: minYear, month: minMonth } = getYearAndMonth(minDate, f)
+
+    if (givenYear < minYear) {
+      b = true
+    } else {
+      if (givenMonth < minMonth) {
+        b = true
+      }
+    }
+    return b
+  }
+  function isMaxMonthThanDate(givenDate: DateType, maxDate: DateType) {
+    let b = false,
+      f = 'yyyy-MM' as DateFormatType
+
+    const { year: givenYear, month: givenMonth } = getYearAndMonth(givenDate, f)
+    const { year: maxYear, month: maxMonth } = getYearAndMonth(maxDate, f)
+
+    if (givenYear > maxYear) {
+      b = true
+    } else {
+      if (givenMonth > maxMonth) {
+        b = true
+      }
+    }
+    return b
+  }
+
+  function isMinYearThanDate(givenDate: DateType, minDate: DateType) {
+    let b = false,
+      f = 'yyyy-MM' as DateFormatType
+    const { year: givenYear } = getYearAndMonth(givenDate, f)
+    const { year: minYear } = getYearAndMonth(minDate, f)
+
+    if (givenYear < minYear) {
+      b = true
+    }
+    return b
+  }
+  function isMaxYearThanDate(givenDate: DateType, maxDate: DateType) {
+    let b = false,
+      f = 'yyyy-MM' as DateFormatType
+    const { year: givenYear } = getYearAndMonth(givenDate, f)
+    const { year: maxYear } = getYearAndMonth(maxDate, f)
+
+    if (givenYear > maxYear) {
+      b = true
+    }
+    return b
+  }
+  function getYearAndMonth(d: DateType, formart: DateFormatType) {
+    const da = parse(d, formart)
+    return { year: da.getFullYear(), month: da.getMonth() + 1 }
+  }
   return {
     addMonths,
     addYears,
@@ -214,6 +299,12 @@ export default function useDate(
     isSameDay,
     isSameMonth,
     isToday,
+    isMaxDayThanDate,
+    isMinDayThanDate,
+    isMaxMonthThanDate,
+    isMinMonthThanDate,
+    isMinYearThanDate,
+    isMaxYearThanDate,
 
     parse
   }

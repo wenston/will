@@ -17,7 +17,7 @@
   transition: background-color var(--w-transition-time);
   cursor: pointer;
   &:hover {
-    &:not(.w-months-item-current):not(.w-months-item-selected) {
+    &:not(.w-months-item-current):not(.w-months-item-selected):not(.w-months-item-disabled) {
       background-color: var(--w-color-bg);
     }
   }
@@ -31,5 +31,9 @@
     color: var(--w-color-primary);
 
     font-weight: bold;
+  }
+  &.w-months-item-disabled {
+    color: var(--w-color-font-4);
+    cursor: not-allowed;
   }
 }

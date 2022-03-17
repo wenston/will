@@ -10,12 +10,14 @@
     </Btn>
     <Btn @click="toChangeProp(ps, 'block')">block</Btn>
   </p>
-  <!-- <p>年月日的选择</p>
+  <p>年月日的选择</p>
   <DatePicker
     v-model="startDate"
     :clearable="ps.clearable"
     :disabled="ps.disabled"
     :block="ps.block"
+    :min="new Date(2022, 3 - 1, 10)"
+    :max="new Date(2022, 3 - 1, 25)"
   />
   <p>年月的选择</p>
   <DatePicker
@@ -30,7 +32,7 @@
     :clearable="ps.clearable"
     format="yyyy"
     placeholder="请选择年份"
-  /> -->
+  />
   <p>年月日时分秒的选择</p>
   <p>
     <DatePicker

@@ -64,7 +64,9 @@ export default defineComponent({
     //传入的当前日期
     date: { type: [Date, String, Number] },
     //displayDate是展示的日期
-    displayDate: { type: [Date, String, Number] }
+    displayDate: { type: [Date, String, Number] },
+    max: { type: [Number, Date, String] },
+    min: { type: [Number, Date, String] }
   },
   emits: {
     'toggle-month': (yearMonth: Date) => {
@@ -72,24 +74,44 @@ export default defineComponent({
     }
   },
   setup(props, { emit, slots }) {
-    const { format, isSameMonth, month, year } = useDate(
-      computed(() => props.displayDate)
-    )
+    const { isSameMonth, year, isMinMonthThanDate, isMaxMonthThanDate } =
+      useDate(computed(() => props.displayDate))
+    function compareDate(d: Date) {
+      const min = props.min,
+        max = props.max
+      if (min || max) {
+        let isMin = false,
+          isMax = false
+        if (min) {
+          isMin = isMinMonthThanDate(d, min)
+        }
+        if (max) {
+          isMax = isMaxMonthThanDate(d, max)
+        }
+        return isMin || isMax
+      }
+      return false
+    }
     function renderMonthList() {
       let ms: VNode[] = []
       for (const [k, v] of monthMap) {
         const isSelected =
           props.date && isSameMonth(props.date, new Date(year.value, k - 1))
         const isCur = isSameMonth(new Date(), new Date(year.value, k - 1))
+        const isDisabled = compareDate(new Date(year.value, k - 1))
         const p = {
           class: [
             'w-months-item',
             {
               'w-months-item-selected': isSelected,
-              'w-months-item-current': isCur
+              'w-months-item-current': isCur,
+              'w-months-item-disabled': isDisabled
             }
           ],
           onClick: () => {
+            if (isDisabled) {
+              return
+            }
             const d = new Date(year.value, k - 1)
             emit('toggle-month', d)
           }
