@@ -33,9 +33,11 @@
       color: var(--w-color-primary);
     }
     &.w-date-item-selected {
-      border: 1px solid var(--w-color-primary);
-      background-color: var(--w-color-primary);
-      color: white;
+      /* border: 1px solid var(--w-color-primary); */
+      background-color: var(--w-color-primary-5);
+      color: var(--w-color-primary);
+
+      font-weight: bold;
     }
     &:active {
       box-shadow: inset 0 0 50px var(--w-color-font-4);

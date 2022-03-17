@@ -64,8 +64,9 @@
           }
         }
         &.w-dial-item-selected {
-          background-color: var(--w-color-primary);
-          color: white;
+          background-color: var(--w-color-primary-5);
+          color: var(--w-color-primary);
+          font-weight: bold;
         }
       }
     }
