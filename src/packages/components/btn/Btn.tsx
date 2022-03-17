@@ -13,7 +13,8 @@ export default defineComponent({
     mode: String as PropType<BtnMode>,
     block: Boolean,
     disabled: Boolean,
-    capsule: Boolean
+    capsule: Boolean,
+    text: [String, Number, Object, Array]
   },
   setup(props, { slots, attrs }) {
     const klass = computed(() => {
@@ -43,7 +44,7 @@ export default defineComponent({
             }
           }
         },
-        slots.default?.()
+        slots.default?.() || props.text
       )
       return mainBtn
       // return (

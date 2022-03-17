@@ -1,7 +1,7 @@
 p {
   line-height: 1.5;
-  word-spacing: 5px;
-  letter-spacing: 0.2em;
+  word-spacing: 2px;
+  letter-spacing: 0.05em;
   &:not(:last-child) {
     margin-bottom: 1em;
   }

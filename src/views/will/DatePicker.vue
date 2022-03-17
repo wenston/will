@@ -32,12 +32,32 @@
     placeholder="请选择年份"
   /> -->
   <p>年月日时分秒的选择</p>
-  <DatePicker
-    v-model="ymdhms"
-    :clearable="ps.clearable"
-    format="yyyy-MM-dd HH:mm:ss"
-    placeholder="请选择日期和时间"
-  />
+  <p>
+    <DatePicker
+      v-model="ymdhms"
+      :clearable="ps.clearable"
+      format="yyyy-MM-dd HH:mm:ss"
+      placeholder="请选择日期和时间"
+    />
+  </p>
+  <p>年月日时分的选择</p>
+  <p>
+    <DatePicker
+      v-model="ymdhm"
+      :clearable="ps.clearable"
+      format="yyyy-MM-dd HH:mm"
+      placeholder="年月日时分"
+    />
+  </p>
+  <p>年月日时的选择</p>
+  <p>
+    <DatePicker
+      v-model="ymdh"
+      :clearable="ps.clearable"
+      format="yyyy-MM-dd HH"
+      placeholder="年月日时"
+    />
+  </p>
 </template>
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
@@ -47,6 +67,8 @@ const startDate = ref()
 const ym = ref()
 const y = ref()
 const ymdhms = ref('2022-03-20 10:20:30')
+const ymdhm = ref()
+const ymdh = ref()
 interface MyType {
   clearable?: boolean
   disabled?: boolean

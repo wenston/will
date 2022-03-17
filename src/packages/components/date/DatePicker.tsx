@@ -14,6 +14,7 @@ import Months from './Months'
 import Years from './Years'
 import Toggle from '../toggle/index'
 import Dial from '../time/Dial.vue'
+import Btn from '../btn/index'
 
 import {
   useDateView,
@@ -368,7 +369,17 @@ export default defineComponent({
           >
             {barText.value}
           </div>
-          {!isTime.value && [renderPrevIcon(toPrev), renderNextIcon(toNext)]}
+          {isTime.value ? (
+            <Btn
+              mode="text"
+              text="确定"
+              onClick={() => {
+                visible.value = false
+              }}
+            />
+          ) : (
+            [renderPrevIcon(toPrev), renderNextIcon(toNext)]
+          )}
         </div>
       )
     }
