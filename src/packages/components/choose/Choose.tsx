@@ -14,6 +14,7 @@ import Virtual from '../virtual/index'
 import Close from '../close/index'
 import Icon from '../icon/index'
 import Fallback from '../fallback/index'
+import Item from './ChooseItem'
 import {
   SetCurrentValueKey,
   SetCurrentLabelKey,
@@ -24,7 +25,7 @@ import {
 } from './injectionKey'
 import { RectType } from '../../config/types'
 import { isArray } from '../../util'
-import number from '../number'
+
 const props = {
   ...LayerProps,
   //v-show时，Choose.item组件已经创建好了；v-if时，Choose.item是在展开时才初始化的
@@ -44,7 +45,8 @@ const props = {
   mode: { type: String, default: 'default' },
   lazyLoad: { type: Function }
 }
-export default defineComponent({
+
+const Choose = defineComponent({
   name: 'Choose',
   inheritAttrs: false,
   components: { Layer, Virtual, Close, Icon, Fallback },
@@ -254,3 +256,5 @@ export default defineComponent({
     }
   }
 })
+Choose.item = Item
+export default Choose

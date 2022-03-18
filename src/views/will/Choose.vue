@@ -58,7 +58,7 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Choose } from 'will-ui/components/choose/index'
+import Choose from 'will-ui/components/choose/index'
 import Virtual from 'will-ui/components/virtual/Virtual'
 import Loading from 'will-ui/components/loading/index'
 import Btn from 'will-ui/components/btn/index'
