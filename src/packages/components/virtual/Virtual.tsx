@@ -27,7 +27,10 @@ export default defineComponent({
     const root = ref<HTMLElement>()
     //根元素的scrollTop
     const { scrollTop } = useScroll(root, handleScroll, true)
-    //可视范围的宽高
+    //可视范围的宽高，如果virtual组件处于一个有动画的组件中，
+    //如处于Layer组件的弹窗里时，
+    //则获取的尺寸可能会有偏差
+
     const { rect: visibleSize } = useBoundingClientRect(root)
     const sourceLength = computed(() => props.sourceData.length)
     //数据渲染起始下标

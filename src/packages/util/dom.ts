@@ -227,6 +227,7 @@ export function getInvisibleElementSize(
         node,
         transitionState.map((s) => transitionName + '-' + s)
       )
+    } else {
     }
     node.style.display = 'block'
     node.style.opacity = '0'

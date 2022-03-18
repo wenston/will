@@ -30,7 +30,7 @@
   --w-padding-x: var(--w-gap);
   --w-padding-y: 10px;
 
-  --w-radius: 6px;
+  --w-radius: 4px;
   --w-box-shadow: 0 5px 12px 0px rgba(0, 0, 0, 0.09),
     0 0px 5px rgba(0, 0, 0, 0.076);
 
