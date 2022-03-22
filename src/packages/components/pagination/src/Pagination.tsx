@@ -1,7 +1,7 @@
 import type { PropType } from 'vue'
 import { defineComponent, ref, computed, watch } from 'vue'
 import Num from '../../number'
-import { Choose } from '../../choose/index'
+import Choose from '../../choose/index'
 import Tooltip from '../../tooltip/index'
 import Btn from '../../btn'
 export default defineComponent({
@@ -232,10 +232,12 @@ export default defineComponent({
                         'w-pagination-prev',
                         { ['w-pagination--disabled']: pi.value === 1 }
                       ]}
-                      onClick={toPrev}></span>
+                      onClick={toPrev}
+                    ></span>
                   ),
                   default: () => '上一页'
-                }}></Tooltip>
+                }}
+              ></Tooltip>
             )}
             {showItem('pager') && all_pages}
             {showItem('next') && (
@@ -251,7 +253,8 @@ export default defineComponent({
                             pi.value === totalPages.value
                         }
                       ]}
-                      onClick={toNext}></span>
+                      onClick={toNext}
+                    ></span>
                   ),
                   default: () => '下一页'
                 }}

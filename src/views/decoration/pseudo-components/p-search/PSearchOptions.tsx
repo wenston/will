@@ -11,7 +11,7 @@ import props from './props'
 import css from './index.module.css'
 import Icon from 'will-ui/components/icon/index'
 import Layer from 'will-ui/components/layer/index'
-import { Choose } from 'will-ui/components/choose/index'
+import Choose from 'will-ui/components/choose/index'
 import Write from 'will-ui/components/write/index'
 export default defineComponent({
   components: { Choose, Write },
@@ -87,13 +87,15 @@ export default defineComponent({
                       onClick={(e) => {
                         updateOptions({ key: 'icon', val: icon })
                         hide()
-                      }}>
+                      }}
+                    >
                       <Icon name={icon} />
                     </span>
                   ))}
                 </div>
               )
-            }}></Layer>
+            }}
+          ></Layer>
           <p>背景色</p>
           <input {...bgOptions.value} />
           <p>搜索框的背景色</p>

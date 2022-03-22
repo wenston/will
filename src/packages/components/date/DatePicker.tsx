@@ -205,8 +205,21 @@ export default defineComponent({
         direction: 'y' as DirectionType,
         transform,
         scale: {
-          from: 0.8,
+          from: 0.75,
           to: 1.8
+        },
+        onWheel({
+          event,
+          delay
+        }: {
+          event: WheelEvent
+          delay: (fn: Function, n: number) => void
+        }) {
+          if (event.deltaY > 0) {
+            delay(toNext, 100)
+          } else {
+            delay(toPrev, 100)
+          }
         }
       }
       return (
