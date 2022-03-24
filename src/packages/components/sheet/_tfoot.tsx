@@ -3,6 +3,7 @@ import Cell from './_cell'
 import { IS_INDEX, IS_PRESET } from './_use'
 import { getAlign } from './_util'
 export default defineComponent({
+  name: 'SheetTfoot',
   components: { Cell },
   props: {
     hasSum: Boolean,

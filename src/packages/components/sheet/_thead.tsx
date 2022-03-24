@@ -13,6 +13,7 @@ import Radio from '../radio/index'
 import { IS_PRESET, IS_CHECKBOX, IS_INDEX, IS_RADIO } from './_use'
 
 export default defineComponent({
+  name: 'SheetThead',
   components: { Cell, Checkbox, Radio },
   props: {
     totalTbodyColumns: { type: Number, default: 0 },
