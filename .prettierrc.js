@@ -7,7 +7,7 @@ module.exports = {
   tabWidth: 2, // 每个缩进级别的空格数
   tabs: false, // 使用制表符 (tab) 缩进行而不是空格 (space)
   bracketSpacing: true, // 是否在对象属性添加空格
-  jsxBracketSameLine: false, // 将 > 多行 JSX 元素放在最后一行的末尾，而不是单独放在下一行（不适用于自闭元素）,默认false,这里选择>不另起一行
+  bracketSameLine: true, // 将 > 多行 JSX 元素放在最后一行的末尾，而不是单独放在下一行（不适用于自闭元素）,默认false,这里选择>不另起一行
   htmlWhitespaceSensitivity: 'ignore', // 指定 HTML 文件的全局空白区域敏感度, "ignore" - 空格被认为是不敏感的
   trailingComma: 'none', // 去除对象最末尾元素跟随的逗号
   useTabs: false, // 不使用缩进符，而使用空格

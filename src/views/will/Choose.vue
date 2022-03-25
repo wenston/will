@@ -1,34 +1,36 @@
 <template>
   <h1>{{ currentRoute.meta.title }}</h1>
   <p style="display: flex">
-    <Choose v-model="supplierId" @change="onChange" clearable>
+    <Choose
+      placeholder="请选择"
+      v-model="supplierId"
+      @change="onChange"
+      clearable>
       <Choose.item
         v-for="item in supplierData.slice(1, 6)"
         :key="item.Id"
         :label="item.Name"
         :value="item.Id"
-        :disabled="item.Name.indexOf('北京') > -1"
-      >
+        :disabled="item.Name.indexOf('北京') > -1">
         {{ item.Name }}
       </Choose.item>
     </Choose>
   </p>
   <p style="display: flex">
     <Choose
+      placeholder="请选择一下下"
       v-model="supplierId3"
       @change="onChange"
       :lazy-load="toLoad"
       bind="v-if"
-      clearable
-    >
+      clearable>
       <template #default="{ data }">
         <Choose.item
           v-for="item in data"
           :key="item.Id"
           :label="item.Name"
           :value="item.Id"
-          :disabled="item.Name.indexOf('米') > -1"
-        >
+          :disabled="item.Name.indexOf('米') > -1">
           {{ item.Name }}
         </Choose.item>
       </template>
@@ -48,8 +50,7 @@
         :key="item.Id"
         :label="item.Name"
         :value="item.Id"
-        :disabled="item.Name.indexOf('北京') > -1"
-      >
+        :disabled="item.Name.indexOf('北京') > -1">
         {{ item.Name }}
       </Choose.item>
     </Choose>

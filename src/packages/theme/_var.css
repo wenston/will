@@ -10,9 +10,9 @@
   --w-color-font-3: #999;
   --w-color-font-4: #ccc;
   --w-color-font-5: #eee;
+  --w-color-placeholder: #dcdcdc;
   --w-color-disabled: var(--w-color-font-4);
   --w-color-font: var(--w-color-font-1);
-  --w-color-font-placeholder: var(--w-color-font-4);
 
   --w-color-border: #e1e1e1;
   --w-font-size-1: 12px;

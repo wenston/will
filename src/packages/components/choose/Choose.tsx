@@ -7,7 +7,8 @@ import {
   readonly,
   renderSlot,
   reactive,
-  toRefs
+  toRefs,
+  mergeProps
 } from 'vue'
 import Layer, { LayerProps } from '../layer/index'
 import Virtual from '../virtual/index'
@@ -26,6 +27,10 @@ import {
 import { RectType } from '../../config/types'
 import { isArray } from '../../util'
 
+function Placeholder(props: { placeholder?: string }) {
+  return <span class="w-choose-placeholder">{props.placeholder}</span>
+}
+
 const props = {
   ...LayerProps,
   //v-show时，Choose.item组件已经创建好了；v-if时，Choose.item是在展开时才初始化的
@@ -37,7 +42,7 @@ const props = {
     type: LayerProps.layerClass.type,
     default: () => 'w-choose-layer'
   },
-
+  placeholder: String,
   clearable: { type: Boolean, default: false },
   block: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
@@ -140,18 +145,20 @@ const Choose = defineComponent({
       }
     })
     function renderTrigger() {
-      const triggerOptions = {
-        class: [
-          'w-choose-trigger',
-          [`w-choose-mode-${props.mode}`],
-          {
-            'w-choose-spread': visible.value,
-            'w-choose-disabled': props.disabled,
-            'w-choose-block': props.block
-          }
-        ],
-        ...ctx.attrs
-      }
+      const triggerOptions = mergeProps(
+        {
+          class: [
+            'w-choose-trigger',
+            [`w-choose-mode-${props.mode}`],
+            {
+              'w-choose-spread': visible.value,
+              'w-choose-disabled': props.disabled,
+              'w-choose-block': props.block
+            }
+          ]
+        },
+        { ...ctx.attrs }
+      )
       const closeOptions = {
         class: 'w-choose-close-btn',
         name: 'w-icon-close-fill',
@@ -174,7 +181,12 @@ const Choose = defineComponent({
       }
       return (
         <div {...triggerOptions}>
-          <span class="w-choose-text">{txt.value}</span>
+          {txt.value ? (
+            <span class="w-choose-text">{txt.value}</span>
+          ) : (
+            <Placeholder placeholder={props.placeholder} />
+          )}
+
           {showCloseBtn.value ? (
             <Close {...closeOptions} />
           ) : (

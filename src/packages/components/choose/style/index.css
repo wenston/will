@@ -18,7 +18,8 @@
   & .w-choose-arrow-btn {
     pointer-events: none;
   }
-  & .w-choose-text {
+  & .w-choose-text,
+  & .w-choose-placeholder {
     color: var(--w-color-font-2);
     flex: 1;
     width: 0;
@@ -26,6 +27,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: var(--w-font-size);
+  }
+  & .w-choose-placeholder {
+    color: var(--w-color-placeholder);
   }
   &.w-choose-mode-default {
     background-color: var(--w-choose-background);
@@ -69,8 +73,8 @@
     cursor: not-allowed;
   }
   &:hover {
-    &:not(.w-choose-item-disabled) {
-      color: var(--w-color-primary);
+    &:not(.w-choose-item-disabled):not(.w-choose-item-active) {
+      background-color: var(--w-color-bg);
     }
   }
   &.w-choose-item-active {
