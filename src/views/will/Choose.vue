@@ -1,5 +1,12 @@
 <template>
   <h1>{{ currentRoute.meta.title }}</h1>
+  <p>
+    <Choose v-model="currentArea" placeholder="请选择区域" clearable>
+      <Choose.item v-for="a in areaList" :key="a" :label="a" :value="a">
+        {{ a }}
+      </Choose.item>
+    </Choose>
+  </p>
   <p style="display: flex">
     <Choose
       placeholder="请选择"
@@ -69,6 +76,8 @@ const suppliers = ref<{ Id: number; Name: string }[]>([])
 const supplierId = ref<number | string>(791)
 const supplierId2 = ref<number | string>()
 const supplierId3 = ref<number | string>()
+const areaList = ref(['北京', '上海', '深圳', '广州'])
+const currentArea = ref('上海')
 const showChoose = ref(false)
 const showLoading = ref(false)
 function onChange({ label, value }: any) {
