@@ -1,12 +1,21 @@
-import { onMounted, ref, computed } from 'vue'
-import { getElement, getOffset, getStyle, setStyle } from '../util'
+import { type Ref, watchEffect, ref, computed, onMounted, nextTick } from 'vue'
+import { getElement, getOffset, getStyle } from '../util'
+import { getBoundingClientRect, setStyle } from '../util'
 import useEvent from './useEvent'
 import useMouse from './useMouse'
 
+interface PositionType {
+  top: number
+  left: number
+}
+
 interface DragOptions {
-  x: boolean
-  y: boolean
+  x: boolean //x方向是否可拖拽
+  y: boolean //y方向是否可拖拽
   area?: any
+  limit?:
+    | boolean
+    | (({ left, top }: { left: number; top: number }) => PositionType)
 }
 
 /**
@@ -17,7 +26,7 @@ interface DragOptions {
  */
 export default function useDrag(
   dragger: any,
-  options: DragOptions = { x: true, y: true }
+  options: DragOptions // = { x: true, y: true, limit: true }
 ) {
   const left = ref<number>()
   const top = ref<number>()
@@ -36,6 +45,47 @@ export default function useDrag(
     } else {
       return document.body
     }
+  })
+
+  //滑块的尺寸
+  const elemSize = computed(() => {
+    if (elem.value) {
+      const el = elem.value as HTMLElement
+      return getBoundingClientRect(el)
+    }
+  })
+  //父级元素的尺寸
+  const parentSize = computed(() => {
+    if (parentElem.value) {
+      return getBoundingClientRect(parentElem.value)
+    }
+  })
+
+  /**
+   * 滑块的活动范围(x方向和y方向的长度)
+   */
+  const moveSize = computed(() => {
+    if (elemSize.value && parentSize.value) {
+      return {
+        x: parentSize.value.width - elemSize.value.width,
+        y: parentSize.value.height - elemSize.value.height
+        // x: parentSize.value.width,
+        // y: parentSize.value.height
+      }
+    }
+  })
+
+  const topPercent = computed(() => {
+    if (top.value !== undefined && moveSize.value !== undefined) {
+      return top.value / moveSize.value.y
+    }
+    return 0
+  })
+  const leftPercent = computed(() => {
+    if (left.value !== undefined && moveSize.value !== undefined) {
+      return left.value / moveSize.value.x
+    }
+    return 0
   })
 
   function initPositionStyle() {
@@ -67,13 +117,46 @@ export default function useDrag(
 
   function inMousemove(e: MouseEvent) {
     if (inDragging.value) {
+      let t = client.y - dy.value,
+        l = client.x - dx.value
+
+      eventType.value = 'mousemove'
+      if (options.limit) {
+        if (typeof options.limit === 'boolean') {
+          if (options.limit) {
+            if (t < 0) {
+              t = 0
+            } else {
+              if (parentSize.value && elemSize.value) {
+                const _t = parentSize.value.height - elemSize.value.height
+                if (t > _t) {
+                  t = _t
+                }
+              }
+            }
+            if (l < 0) {
+              l = 0
+            } else {
+              if (parentSize.value && elemSize.value) {
+                const _l = parentSize.value.width - elemSize.value.width
+                if (l > _l) {
+                  l = _l
+                }
+              }
+            }
+          }
+        } else if (typeof options.limit === 'function') {
+          const { top: _t, left: _l } = options.limit({ top: t, left: l })
+          t = _t
+          l = _l
+        }
+      }
       if (options.y) {
-        top.value = client.y - dy.value
+        top.value = t
       }
       if (options.x) {
-        left.value = client.x - dx.value
+        left.value = l
       }
-      eventType.value = 'mousemove'
     }
   }
   function inMouseup(e: MouseEvent) {
@@ -81,5 +164,16 @@ export default function useDrag(
     eventType.value = 'mouseup'
   }
   useEvent(dragger, 'mousedown', startMousedown)
-  return { top, left, eventType }
+
+  function setPosition() {}
+
+  return {
+    top,
+    left,
+    topPercent,
+    leftPercent,
+    eventType,
+    dragging: inDragging,
+    setPosition
+  }
 }

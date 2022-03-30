@@ -93,7 +93,9 @@ export const LayerProps = {
   layerStyle: { type: Object, default: () => ({}) },
   //是否立即计算trigger元素和弹出框位置
   //因为日期组件第一次下拉时，出现了从左上角过度的效果。故加入了立即计算。
-  immediate: { type: Boolean, default: false }
+  immediate: { type: Boolean, default: false },
+  //是否实时计算弹出层的位置，（计算比较频繁）
+  realTime: { type: Boolean, default: false }
 }
 export default defineComponent({
   name: 'Layer',
@@ -295,10 +297,14 @@ export default defineComponent({
       getScrollElementAndCalc()
     })
     onUpdated(() => {
-      if (!justNow.value) {
+      if (props.realTime) {
         calcTriggerRect()
-        // getDefaultRootSize(defaultRoot.value)
-        // toGetDefaultPlacement()
+        getDefaultRootSize(defaultRoot.value)
+        toGetDefaultPlacement()
+      } else {
+        if (!justNow.value) {
+          calcTriggerRect()
+        }
       }
     })
 
