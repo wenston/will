@@ -1,0 +1,27 @@
+.w-slider {
+  --slider-height: var(--w-gap);
+  background: var(--w-color-bg);
+  height: var(--slider-height);
+  border-radius: calc(var(--slider-height) / 2);
+  position: relative;
+  user-select: none;
+  & .w-slider-for-tip,
+  & .w-slider-rod {
+    --rod-height: calc(4px + var(--w-gap));
+    width: calc(4px + var(--w-gap));
+    height: var(--rod-height);
+    background-color: var(--w-color-bg);
+    border-radius: 100%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1), 0 1px 3px 0px rgba(0, 0, 0, 0.3);
+    cursor: grab;
+    position: absolute;
+    left: 0;
+    top: calc((var(--rod-height) - var(--slider-height)) / -2);
+    &:active {
+      cursor: grabbing;
+    }
+  }
+  & .w-slider-for-tip {
+    pointer-events: none;
+  }
+}

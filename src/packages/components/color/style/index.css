@@ -1,0 +1,34 @@
+.w-color-picker {
+  height: 250px;
+  width: 250px;
+  /* 色相 取值范围0-359 0是红色 */
+  --hue: 0;
+  /* 饱和度 取值范围0-100 默认100 */
+  --saturation: 100%;
+  /* 亮度 取值范围0-100 默认100 */
+  --luminosity: 50%;
+  & .w-color-panel {
+    height: 150px;
+    background-image: linear-gradient(
+        90deg,
+        white,
+        hsl(var(--hue), var(--saturation), var(--luminosity))
+      ),
+      linear-gradient(180deg, white, black);
+    background-blend-mode: multiply;
+  }
+  & .w-color-hue-slider {
+    height: 15px;
+
+    background-image: linear-gradient(
+      90deg,
+      #f00,
+      #ff0,
+      #0f0,
+      #0ff,
+      #00f,
+      #f0f,
+      #f00
+    );
+  }
+}

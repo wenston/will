@@ -351,13 +351,12 @@ export default defineComponent({
           onAfterEnter={(el) => {
             justNow.value = false
             emit('after-enter', el)
-          }}
-        >
+          }}>
           {renderDefaultContent()}
         </Transition>
       )
 
-      if (props.canCloseByClickOutside) {
+      if (props.canCloseByClickOutside && !props.manual) {
         const directive: DirectiveArguments = [
           [
             click_outside!,

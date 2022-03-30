@@ -126,10 +126,29 @@ export function getBoundingClientRect(elem: HTMLElement) {
   } as DOMRect
 }
 
-export function getOffset(elem: HTMLElement) {
+export function getOffset(
+  elem: HTMLElement,
+  parent: HTMLElement | null | undefined
+) {
+  let left = elem.offsetLeft,
+    top = elem.offsetTop,
+    cur = elem.offsetParent
+  if (!parent) {
+    while (cur !== null) {
+      left += (cur as HTMLElement).offsetLeft
+      top += (cur as HTMLElement).offsetTop
+      cur = (cur as HTMLElement).offsetParent
+    }
+  } else {
+    while (cur && cur != parent) {
+      left += (cur as HTMLElement).offsetLeft
+      top += (cur as HTMLElement).offsetTop
+      cur = (cur as HTMLElement).offsetParent
+    }
+  }
   return {
-    left: elem.offsetLeft,
-    top: elem.offsetTop
+    left,
+    top
   }
 }
 

@@ -92,6 +92,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: 'slider',
+        name: 'Slider',
+        component: () => import('../views/will/Slider.vue'),
+        meta: {
+          title: '滑块 Slider'
+        }
+      },
+      {
         path: 'layer',
         name: 'Layer',
         component: () => import('../views/will/Layer.vue'),
@@ -242,6 +250,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'time-picker',
         component: () => import('../views/will/TimePicker.vue'),
         meta: { title: '时间选择器 TimePicker' }
+      },
+      {
+        path: 'color-picker',
+        name: 'color-picker',
+        component: () => import('../views/will/ColorPicker.vue'),
+        meta: { title: '拾色器 ColorPicker' }
       }
     ],
     meta: {
