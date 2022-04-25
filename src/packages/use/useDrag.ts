@@ -5,8 +5,8 @@ import useEvent from './useEvent'
 import useMouse from './useMouse'
 
 interface PositionType {
-  top: number
-  left: number
+  top?: number
+  left?: number
 }
 
 interface DragOptions {
@@ -16,6 +16,8 @@ interface DragOptions {
   limit?:
     | boolean
     | (({ left, top }: { left: number; top: number }) => PositionType)
+  //定位干预：在拖拽过程中，干预滑块的定位
+  meddle?: (meddleOptions: { left?: number; top?: number }) => PositionType
 }
 
 /**
@@ -147,8 +149,24 @@ export default function useDrag(
           }
         } else if (typeof options.limit === 'function') {
           const { top: _t, left: _l } = options.limit({ top: t, left: l })
-          t = _t
-          l = _l
+          if (_t !== undefined) {
+            t = _t
+          }
+          if (_l !== undefined) {
+            l = _l
+          }
+        }
+      }
+      if (options.meddle) {
+        const { top: m_t, left: m_l } = options.meddle({
+          top: t,
+          left: l
+        })
+        if (m_t !== undefined) {
+          t = m_t
+        }
+        if (m_l !== undefined) {
+          l = m_l
         }
       }
       if (options.y) {

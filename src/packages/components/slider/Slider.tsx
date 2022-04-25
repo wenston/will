@@ -8,11 +8,11 @@ export default defineComponent({
     Tooltip
   },
   props: {
-    modelValue: { type: Number, default: 20 },
+    modelValue: { type: Number, default: 5 },
     //步长
-    step: { type: Number, default: 10 },
-    min: { type: Number, default: 0 },
-    max: { type: Number, default: 100 },
+    step: { type: Number, default: 5 },
+    min: { type: Number, default: 1 },
+    max: { type: Number, default: 20 },
     showTooltip: { type: Boolean, default: true },
     tip: { type: Function }
   },
@@ -57,7 +57,8 @@ export default defineComponent({
     const { left, top, leftPercent, topPercent, dragging } = useDrag(rod, {
       x: true,
       y: false,
-      limit: true
+      limit: true,
+      meddle: meddlePosition
     })
     const pos = computed(() => {
       return {
@@ -88,6 +89,13 @@ export default defineComponent({
     //     console.log(Math.floor(leftPercent.value * 100))
     //   }
     // })
+
+    function meddlePosition({ left, top }: { left?: number; top?: number }) {
+      let _l = left,
+        _t = top
+
+      return { left: _l, top: _t }
+    }
 
     watch(
       () => props.modelValue,
@@ -130,9 +138,13 @@ export default defineComponent({
 })
 
 function getMatchNumber(n: number, arr: number[]): number | false {
-  const index = arr.findIndex((_n) => n <= _n)
-  if (index > -1) {
+  const index = arr.findIndex((_n) => n < _n)
+  if (index === 0) {
     return arr[index]
+  }
+  if (index > -1) {
+    console.log(arr[index - 1])
+    return arr[index - 1]
   }
   return false
 }

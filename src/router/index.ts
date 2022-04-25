@@ -263,23 +263,6 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/decoration',
-    name: 'decoration',
-    // redirect: 'decoration-default',
-    component: () => import('../views/decoration/Main.vue'),
-    // children: [
-    //   {
-    //     path: 'decoration-default',
-    //     name: 'decoration-default',
-    //     component: () => import('../views/decoration/Default.vue'),
-    //     meta: { title: '店铺装修' }
-    //   }
-    // ],
-    meta: {
-      title: '店铺装修'
-    }
-  },
-  {
     path: '/test',
     name: 'test',
     component: () => import('../views/test/Test.vue'),

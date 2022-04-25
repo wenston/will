@@ -35,14 +35,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'will-ui': '/src/packages', //绝对路径
-      'decoration-types': '/src/views/decoration/config/types.ts',
-      'decoration-symbols': '/src/views/decoration/config/symbols.ts',
-      'decoration-modules': '/src/views/decoration/modules/index.ts'
+      'will-ui': '/src/packages' //绝对路径
     }
   },
   server: {
-    port: 100,
+    port: 99,
     open: false,
     host: '0.0.0.0'
   }

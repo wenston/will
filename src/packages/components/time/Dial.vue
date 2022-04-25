@@ -12,8 +12,7 @@
         v-bind="toggleOptions"
         :data="a"
         :index="getIndex(i)"
-        @wheel="handleWheel(i, $event)"
-      >
+        @wheel="handleWheel(i, $event)">
         <template #default="{ item }">
           <div
             v-for="n in item"
@@ -30,8 +29,7 @@
                   (i === 2 && s == n)
               }
             ]"
-            @click="handleClick(i, n)"
-          >
+            @click="handleClick(i, n)">
             {{ n }}
           </div>
         </template>
