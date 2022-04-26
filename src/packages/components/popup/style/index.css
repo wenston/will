@@ -23,7 +23,6 @@
   & .w-popup-body {
     position: relative;
     padding: var(--w-padding-x);
-    overflow: auto;
     font-size: var(--w-font-size);
     flex: 1;
   }

@@ -14,13 +14,13 @@ export const calculator = {
   }
 }
 interface PlacementOptions {
-  readonly triggerRect: RectType //触发者的位置大小
-  readonly layerSize: { width: number; height: number } //弹出层的宽高
-  readonly placement?: PlacementType
-  readonly gap?: number
-  readonly offset?: { x: number; y: number }
-  readonly arrowOffset?: { x: number; y: number }
-  readonly layer?: any
+  triggerRect: RectType //触发者的位置大小
+  layerSize: { width: number; height: number } //弹出层的宽高
+  placement?: PlacementType
+  gap?: number
+  offset?: { x: number; y: number }
+  arrowOffset?: { x: number; y: number }
+  layer?: any
 }
 //双盒定位，包含了位置的自动调整功能
 export function getPlacement({
@@ -32,6 +32,7 @@ export function getPlacement({
   arrowOffset = { x: 0, y: 0 },
   layer
 }: PlacementOptions) {
+  let isAdjust = false
   const badPlacement: Set<PlacementType> = new Set()
   badPlacement.add('center').add('client-center')
 
@@ -185,18 +186,19 @@ export function getPlacement({
         if (badPlacement.size === Placements.length) {
           place.placement = 'bottom'
           _calc(place.placement)
+          isAdjust = false
         } else {
-          // const p = guessSuitablePlacement(place.placement, out.x, out.y)
-          const p = get4SizeAndGetwhichPlaceIsBigger(triggerRect)
-
+          const p = guessSuitablePlacement(place.placement, out.x, out.y)
+          console.log(p, badPlacement)
           if (!badPlacement.has(p)) {
             place.placement = p
-            _calc(place.placement)
+            _calc()
           } else {
             const otherPlacement = Placements.filter(
               (p) => !badPlacement.has(p as PlacementType)
             ) as PlacementType[]
             place.placement = otherPlacement[0]
+            // console.log(place.placement, otherPlacement, badPlacement)
             _calc(place.placement)
           }
         }
@@ -252,52 +254,6 @@ function isOutOfClient(rect: {
       bottom: rect.top + rect.height - py - inner.height //大于0则超出底部
     }
   }
-}
-
-//获取一个元素上下左右的距离，并计算那个方位的空间更大
-function get4SizeAndGetwhichPlaceIsBigger(rect: RectType) {
-  let p: PlacementType = 'left'
-  const { inner } = getWindowSize()
-
-  const left = rect.left
-  const top = rect.top
-  const right = inner.width - rect.right
-  const bottom = inner.height - rect.bottom
-  const maxDirection = Math.max(left, top, bottom, right)
-  if (maxDirection === left) {
-    if (Math.abs(top - bottom) < 150) {
-      p = 'left'
-    } else if (top > bottom) {
-      p = 'left-end'
-    } else {
-      p = 'left-start'
-    }
-  } else if (maxDirection === right) {
-    if (Math.abs(top - bottom) < 150) {
-      p = 'right'
-    } else if (top > bottom) {
-      p = 'right-end'
-    } else {
-      p = 'right-start'
-    }
-  } else if (maxDirection === top) {
-    if (Math.abs(left - right) < 150) {
-      p = 'top'
-    } else if (left > right) {
-      p = 'top-end'
-    } else {
-      p = 'top-start'
-    }
-  } else {
-    if (Math.abs(left - right) < 150) {
-      p = 'bottom'
-    } else if (left > right) {
-      p = 'bottom-end'
-    } else {
-      p = 'bottom-start'
-    }
-  }
-  return p
 }
 
 function guessSuitablePlacement(

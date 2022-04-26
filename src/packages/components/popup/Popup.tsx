@@ -35,6 +35,7 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     // const { zIndex } = useGlobalZIndex()
+    const isAfterEnter = ref(false)
     const showLoading = ref(false)
     const layerOptions = computed(() => {
       return {
@@ -48,9 +49,13 @@ export default defineComponent({
         canCloseByClickOutside: false,
         hasMask: props.hasMask,
         'onUpdate:show': (v: boolean) => {
+          if (!v) {
+            isAfterEnter.value = false
+          }
           ctx.emit('update:show', v)
         },
         'onAfter-enter': (el: HTMLElement) => {
+          // isAfterEnter.value = true
           ctx.emit('after-enter', el)
         }
       }
@@ -124,7 +129,13 @@ export default defineComponent({
               </div>
             ))
           const body = (
-            <div class="w-popup-body">{ctx.slots.default?.(options)}</div>
+            <div
+              class={[
+                'w-popup-body',
+                isAfterEnter.value ? 'w-overflow-auto' : ''
+              ]}>
+              {ctx.slots.default?.(options)}
+            </div>
           )
           const footer =
             props.hasFooter &&
