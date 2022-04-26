@@ -1,7 +1,20 @@
 :root {
   --w-color-primary: #409eff;
-  --w-color-primary-3: #80bfff;
-  --w-color-primary-5: #e6f2ff;
+  --w-color-primary-light-0: rgb(84, 170, 255);
+  --w-color-primary-light-1: rgb(102, 178, 255);
+  --w-color-primary-light-2: rgb(120, 187, 255);
+  --w-color-primary-light-3: rgb(138, 196, 255);
+  --w-color-primary-light-4: rgb(156, 205, 255);
+  --w-color-primary-light-5: rgb(173, 214, 255);
+  --w-color-primary-light-6: rgb(191, 223, 255);
+  --w-color-primary-light-7: rgb(209, 232, 255);
+  --w-color-primary-light-8: rgb(227, 241, 255);
+  --w-color-primary-light-9: rgb(245, 250, 255);
+  --w-color-primary-dark-0: rgb(48, 152, 255);
+  --w-color-primary-dark-1: rgb(31, 143, 255);
+  --w-color-primary-dark-2: rgb(13, 134, 255);
+  --w-color-primary-dark-3: rgb(0, 125, 250);
+  --w-color-primary-dark-4: rgb(0, 116, 232);
   --w-color-warning-2: #ffda54;
   --w-color-danger: rgb(255, 112, 112);
   --w-color-danger-5: rgb(255, 112, 112, 0.5);
@@ -53,7 +66,7 @@
   --w-mask-background-color: rgba(0, 0, 0, 0.45);
 
   --w-tree-item-hover-color: var(--w-color-bg);
-  --w-tree-item-current-color: var(--w-color-primary-5);
+  --w-tree-item-current-color: var(--w-color-primary-light-5);
   --w-tree-icon-color: #99b8ff;
 
   --w-popup-min-width: 420px;
@@ -66,10 +79,10 @@
   --w-form-item-width: 180px;
   --w-form-item-disabled-color: var(--w-color-font-5);
   --w-form-item-border-color: var(--w-color-border);
-  --w-form-item-border-color-focus: var(--w-color-primary-3);
+  --w-form-item-border-color-focus: var(--w-color-primary-light-3);
 
   --w-choose-background: white;
-  --w-choose-item-gackground-active: var(--w-color-primary-3);
+  --w-choose-item-gackground-active: var(--w-color-primary-light-3);
 
   --w-fade-white-background-color: rgba(255, 255, 255, 0.7);
   --w-fade-black-background-color: rgba(0, 0, 0, 0.45);
@@ -78,7 +91,7 @@
   --w-sheet-thead-background-color: var(--w-color-font-5);
   --w-sheet-tr-background-color: white;
   --w-sheet-tr-checked-background-color: #fffcda;
-  --w-sheet-tr-highlight-background-color: var(--w-color-primary-5);
+  --w-sheet-tr-highlight-background-color: var(--w-color-primary-light-5);
   --w-sheet-tr-stripe-color: #f9f9f9;
   --w-sheet-tr-hover-color: var(--w-color-primary-5);
   --w-sheet-thead-th-border-color: var(--w-color-border);
