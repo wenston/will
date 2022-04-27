@@ -42,7 +42,7 @@ export default defineConfig({
     }
   },
   server: {
-    port: 100,
+    port: 99,
     open: false,
     host: '0.0.0.0'
   }
