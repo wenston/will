@@ -1,22 +1,38 @@
 .w-slider {
   --slider-height: var(--w-gap);
-  background: var(--w-color-bg);
+  --slider-radius: calc(var(--slider-height) / 2);
+  background: var(--w-color-font-5);
   height: var(--slider-height);
-  border-radius: calc(var(--slider-height) / 2);
+  border-radius: var(--slider-radius);
   position: relative;
   user-select: none;
+  & .w-slider-progress {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: var(--w-color-primary-light-0);
+    border-radius: var(--slider-radius);
+  }
 
   & .w-slider-rod {
-    --rod-height: calc(4px + var(--w-gap));
-    width: calc(4px + var(--w-gap));
+    --rod-height: calc(6px + var(--w-gap));
+    width: calc(6px + var(--w-gap));
     height: var(--rod-height);
-    background-color: var(--w-color-font-4);
+    background-color: var(--w-color-bg);
+    background-image: linear-gradient(
+      135deg,
+      var(--w-color-font-5),
+      var(--w-color-font-4)
+    );
     border-radius: 100%;
     box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.6);
     cursor: grab;
     position: absolute;
     left: 0;
     top: calc((var(--rod-height) - var(--slider-height)) / -2);
+    transform: translateX(-50%);
     &:active {
       cursor: grabbing;
     }

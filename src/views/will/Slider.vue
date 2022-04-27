@@ -11,6 +11,6 @@ const val = 0
 </script>
 <style module="css" lang="postcss">
 .sec {
-  width: 90%;
+  width: 200px;
 }
 </style>

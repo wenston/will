@@ -1,6 +1,21 @@
-import { computed, defineComponent, ref, watch, watchEffect } from 'vue'
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+  watchEffect
+} from 'vue'
 import Tooltip from '../tooltip/index'
 import useDrag from '../../use/useDrag'
+import useMouse from '../../use/useMouse'
+import { getBoundingClientRect, getOffset } from '../../util'
+
+const getRootSize = (elem: HTMLElement) => {
+  const rect = getBoundingClientRect(elem)
+  return { width: rect.width, height: rect.height }
+}
 
 export default defineComponent({
   name: 'Slider',
@@ -8,11 +23,11 @@ export default defineComponent({
     Tooltip
   },
   props: {
-    modelValue: { type: Number, default: 5 },
+    modelValue: { type: Number, default: 0 },
     //步长
-    step: { type: Number, default: 5 },
-    min: { type: Number, default: 1 },
-    max: { type: Number, default: 20 },
+    step: { type: Number, default: 2 },
+    min: { type: Number, default: 0 },
+    max: { type: Number, default: 30 },
     showTooltip: { type: Boolean, default: true },
     tip: { type: Function }
   },
@@ -30,6 +45,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const { client } = useMouse({ mousemove: inMousemove, mouseup: inMouseup })
     const multiples = 10000
     //由于可能存在小数的情况，而小数情况下，当有加减计算时，会出现类似0.1+0.2!=0.3的情况，故
     //对step/min/max进行10000倍的放大，然后再计算
@@ -50,52 +66,40 @@ export default defineComponent({
       }
       return arr
     })
+    //计算出所有值对应的宽度区间
+    const widthRange = computed(() => {
+      const len = all_steps_big.value.length
+      const averageWidth = rootSize.width / (len - 1)
+      const ranges: number[][] = []
+      Array.from({ length: len - 1 }, (item, i) => {
+        ranges.push([
+          Math.ceil(i * averageWidth),
+          Math.ceil((i + 1) * averageWidth)
+        ])
+      })
+      console.log(ranges)
+      return ranges
+    })
+
+    const dragging = ref(false)
     const currentXValue = ref(props.modelValue)
     const currentYValue = ref(0)
     const rod = ref()
+    const root = ref<HTMLElement>()
+    const rootSize = reactive({
+      width: 0,
+      height: 0
+    })
+    const dx = ref(0)
+    const dy = ref(0)
+    const pos = reactive({ left: 0, top: 0 })
     const display = ref(false)
-    const { left, top, leftPercent, topPercent, dragging } = useDrag(rod, {
-      x: true,
-      y: false,
-      limit: true,
-      meddle: meddlePosition
-    })
-    const pos = computed(() => {
-      return {
-        left: left.value === undefined ? undefined : left.value + 'px',
-        top: top.value === undefined ? undefined : top.value + 'px'
-      }
-    })
+
     const tipContent = computed(() => {
       if (props.showTooltip) {
-        const curX = Math.floor(
-          leftPercent.value * (max_big.value - min_big.value)
-        )
-        // console.log(Math.floor(curX / multiples))
-        currentXValue.value = Math.floor(curX / multiples)
-
-        // console.log(curX)
-        // const n = getMatchNumber(curX, all_steps_big.value)
-        // console.log(n)
-        // if (n !== false) {
-        //   currentXValue.value = n / multiples
-        // }
-        return currentXValue.value
+        return currentXValue.value / multiples
       }
     })
-
-    // watchEffect(() => {
-    //   if (leftPercent.value !== undefined && dragging.value) {
-    //     console.log(Math.floor(leftPercent.value * 100))
-    //   }
-    // })
-
-    function meddlePosition({ left, top }: { left?: number; top?: number }) {
-      let _l = left,
-        _t = top
-
-      return { left: _l, top: _t }
-    }
 
     watch(
       () => props.modelValue,
@@ -107,10 +111,76 @@ export default defineComponent({
       emit('update:modelValue', v)
     })
 
+    onMounted(() => {
+      if (root.value) {
+        ;({ width: rootSize.width, height: rootSize.height } = getRootSize(
+          root.value
+        ))
+        console.log(rootSize)
+      }
+    })
+
+    function startMousedown(e: MouseEvent) {
+      if (root.value && rod.value) {
+        const { left, top } = getOffset(rod.value, root.value)
+        dx.value = client.x - left
+        dy.value = client.y - top
+      }
+      dragging.value = true
+    }
+
+    function inMousemove(e: MouseEvent) {
+      if (dragging.value) {
+        let top = client.y - dy.value
+        let left = client.x - dx.value
+
+        if (left < 0) {
+          left = 0
+        }
+        if (left > rootSize.width) {
+          left = rootSize.width
+        }
+        //对left进行拦截，只定位在区域内
+        const _left = getLeftByRange(left)
+        if (_left !== undefined) {
+          pos.left = _left.left
+          currentXValue.value = all_steps_big.value[_left.i]
+        }
+        pos.top = top
+      }
+    }
+    function inMouseup(e: MouseEvent) {
+      dragging.value = false
+    }
+
+    function getLeftByRange(left: number) {
+      if (left === rootSize.width) {
+        return { left, i: all_steps_big.value.length - 1 }
+      }
+      let i = 0
+      const len = widthRange.value.length
+      while (i < len) {
+        const [a, b] = widthRange.value[i]
+        if (left >= a && left < b) {
+          return {
+            left: a,
+            i
+          }
+        }
+        i++
+      }
+    }
+
     return () => {
       let _rod = (
-        <div class="w-slider-rod" ref={rod} style={pos.value}>
+        <div
+          class="w-slider-rod"
+          ref={rod}
+          style={{
+            left: pos.left + 'px'
+          }}>
           <Tooltip
+            arrowOffset={{ x: -2, y: 0 }}
             placement="top"
             manual={true}
             realTime
@@ -119,6 +189,7 @@ export default defineComponent({
               trigger: () => (
                 <div
                   class={'w-slider-for-tip'}
+                  onMousedown={startMousedown}
                   onMouseenter={() => {
                     display.value = true
                   }}
@@ -131,20 +202,16 @@ export default defineComponent({
           </Tooltip>
         </div>
       )
+      const progress = (
+        <div class="w-slider-progress" style={{ width: pos.left + 'px' }}></div>
+      )
 
-      return <div class="w-slider">{_rod}</div>
+      return (
+        <div ref={root} class="w-slider">
+          {progress}
+          {_rod}
+        </div>
+      )
     }
   }
 })
-
-function getMatchNumber(n: number, arr: number[]): number | false {
-  const index = arr.findIndex((_n) => n < _n)
-  if (index === 0) {
-    return arr[index]
-  }
-  if (index > -1) {
-    console.log(arr[index - 1])
-    return arr[index - 1]
-  }
-  return false
-}
