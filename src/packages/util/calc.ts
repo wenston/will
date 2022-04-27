@@ -1,10 +1,13 @@
 import { unref } from 'vue'
-import type { RectType, PlacementType } from '../config/types'
+import type {
+  AdjustmentPosition,
+  RectType,
+  PlacementType
+} from '../config/types'
 import { getBoundingClientRect } from './dom'
 import { getWindowSize, getPageScroll, getPageSize } from './dom'
 import { EnumPlacement } from '../config/dictionary'
 let Placements = Object.values(EnumPlacement)
-Placements.length = Placements.length / 2
 //简单解决计算出现的精度问题
 export const resolveAccuracy = (v: number) => Number(v.toFixed(8))
 //计算器，可以使用柯里化！待优化
@@ -16,6 +19,7 @@ export const calculator = {
 interface PlacementOptions {
   readonly triggerRect: RectType //触发者的位置大小
   readonly layerSize: { width: number; height: number } //弹出层的宽高
+  readonly adjustPosition: AdjustmentPosition
   readonly placement?: PlacementType
   readonly gap?: number
   readonly offset?: { x: number; y: number }
@@ -27,6 +31,7 @@ export function getPlacement({
   triggerRect,
   layerSize,
   placement = 'bottom',
+  adjustPosition = 'auto',
   gap = 0,
   offset = { x: 0, y: 0 },
   arrowOffset = { x: 0, y: 0 },
@@ -164,39 +169,53 @@ export function getPlacement({
     place.x += arrowOffset.x
     place.y += arrowOffset.y
 
-    //检测是否超出可视区，并返回调整后的位置信息
-    const rect = { top: place.top, left: place.left, ...l }
-    const out = isOutOfClient(rect)
-    const outOfPage = isOutOfPage(rect)
-    if (
-      out.x.left < 0 ||
-      out.y.top < 0 ||
-      out.x.right > 0 ||
-      out.y.bottom > 0
-    ) {
+    if (adjustPosition !== 'none') {
+      //检测是否超出可视区，并返回调整后的位置信息
+      const rect = { top: place.top, left: place.left, ...l }
+      const out = isOutOfClient(rect)
+      const outOfPage = isOutOfPage(rect)
       if (
-        outOfPage.x.left < 0 ||
-        outOfPage.y.top < 0 ||
-        outOfPage.x.right > 0 ||
-        outOfPage.y.bottom > 0
+        out.x.left < 0 ||
+        out.y.top < 0 ||
+        out.x.right > 0 ||
+        out.y.bottom > 0
       ) {
-        // console.log('既超出了可视区，又超出了整个页面')
-        badPlacement.add(place.placement)
-        if (badPlacement.size === Placements.length) {
-          place.placement = 'bottom'
-          _calc(place.placement)
-        } else {
-          // const p = guessSuitablePlacement(place.placement, out.x, out.y)
-          const p = get4SizeAndGetwhichPlaceIsBigger(triggerRect)
+        if (
+          outOfPage.x.left < 0 ||
+          outOfPage.y.top < 0 ||
+          outOfPage.x.right > 0 ||
+          outOfPage.y.bottom > 0
+        ) {
+          // console.log('既超出了可视区，又超出了整个页面')
+          if (adjustPosition === 'auto') {
+            badPlacement.add(place.placement)
+            if (badPlacement.size === Placements.length) {
+              place.placement = 'bottom'
+              _calc(place.placement)
+            } else {
+              // const p = guessSuitablePlacement(place.placement, out.x, out.y)
+              const p = get4SizeAndGetwhichPlaceIsBigger(triggerRect)
 
-          if (!badPlacement.has(p)) {
-            place.placement = p
-            _calc(place.placement)
+              if (!badPlacement.has(p)) {
+                place.placement = p
+                _calc(place.placement)
+              } else {
+                const otherPlacement = Placements.filter(
+                  (p) => !badPlacement.has(p as PlacementType)
+                ) as PlacementType[]
+                place.placement = otherPlacement[0]
+                _calc(place.placement)
+              }
+            }
           } else {
-            const otherPlacement = Placements.filter(
-              (p) => !badPlacement.has(p as PlacementType)
-            ) as PlacementType[]
-            place.placement = otherPlacement[0]
+            //如果是依某个方位，则计算出相对比较大的空间位置：start，end
+            const direction = getBiggerDirectionByPlace(
+              adjustPosition,
+              triggerRect
+            )
+
+            place.placement = direction
+
             _calc(place.placement)
           }
         }
@@ -254,8 +273,18 @@ function isOutOfClient(rect: {
   }
 }
 
+function getBiggerDirectionByPlace(
+  placement: 'left' | 'right' | 'bottom' | 'top',
+  rect: RectType
+): PlacementType {
+  return get4SizeAndGetwhichPlaceIsBigger(rect, placement)
+}
+
 //获取一个元素上下左右的距离，并计算那个方位的空间更大
-function get4SizeAndGetwhichPlaceIsBigger(rect: RectType) {
+function get4SizeAndGetwhichPlaceIsBigger(
+  rect: RectType,
+  direction?: 'left' | 'right' | 'top' | 'bottom'
+) {
   let p: PlacementType = 'left'
   const { inner } = getWindowSize()
 
@@ -264,24 +293,24 @@ function get4SizeAndGetwhichPlaceIsBigger(rect: RectType) {
   const right = inner.width - rect.right
   const bottom = inner.height - rect.bottom
   const maxDirection = Math.max(left, top, bottom, right)
-  if (maxDirection === left) {
-    if (Math.abs(top - bottom) < 150) {
+  if (direction === 'left' || maxDirection === left) {
+    if (Math.abs(top - bottom) < 100) {
       p = 'left'
     } else if (top > bottom) {
       p = 'left-end'
     } else {
       p = 'left-start'
     }
-  } else if (maxDirection === right) {
-    if (Math.abs(top - bottom) < 150) {
+  } else if (direction === 'right' || maxDirection === right) {
+    if (Math.abs(top - bottom) < 100) {
       p = 'right'
     } else if (top > bottom) {
       p = 'right-end'
     } else {
       p = 'right-start'
     }
-  } else if (maxDirection === top) {
-    if (Math.abs(left - right) < 150) {
+  } else if (direction === 'top' || maxDirection === top) {
+    if (Math.abs(left - right) < 100) {
       p = 'top'
     } else if (left > right) {
       p = 'top-end'
@@ -289,7 +318,7 @@ function get4SizeAndGetwhichPlaceIsBigger(rect: RectType) {
       p = 'top-start'
     }
   } else {
-    if (Math.abs(left - right) < 150) {
+    if (Math.abs(left - right) < 100) {
       p = 'bottom'
     } else if (left > right) {
       p = 'bottom-end'

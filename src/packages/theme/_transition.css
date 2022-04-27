@@ -1,11 +1,9 @@
 .w-fade-white-enter-active,
 .w-fade-white-leave-active {
   transition: var(--w-transition-time) var(--w-cubic-bezier-quick);
-  perspective: 1000px;
 }
 .w-fade-white-leave-active {
   transition: var(--w-transition-time);
-  perspective: 1000px;
 }
 
 .w-fade-white-enter-from,
@@ -21,11 +19,9 @@
 .w-scale-enter-active,
 .w-scale-leave-active {
   transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
-  perspective: 1000px;
 }
 .w-scale-leave-active {
   transition: var(--w-transition-time) var(--w-cubic-bezier);
-  perspective: 1000px;
 }
 
 .w-scale-enter-from {
@@ -39,11 +35,9 @@
 .w-slide-y-enter-active,
 .w-slide-y-leave-active {
   transition: var(--w-transition-slow-time) var(--w-cubic-bezier-quick);
-  perspective: 1000px;
 }
 .w-slide-y-leave-active {
   transition: var(--w-transition-time) var(--w-cubic-bezier);
-  perspective: 1000px;
 }
 
 .w-slide-y-enter-from,

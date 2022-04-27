@@ -24,6 +24,7 @@
     position: relative;
     padding: var(--w-padding-x);
     font-size: var(--w-font-size);
+    overflow: auto;
     flex: 1;
   }
 

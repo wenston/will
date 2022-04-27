@@ -4,9 +4,9 @@
  * 根据trigger内容当前在页面中的位置计算弹出层的位置
  *
  */
-import { Ref, PropType, DirectiveArguments, toRefs } from 'vue'
+import type { Ref, PropType, DirectiveArguments } from 'vue'
 import { Transition, Teleport } from 'vue'
-import { onMounted, onUpdated, onBeforeUnmount } from 'vue'
+import { onMounted, onUpdated, onBeforeUnmount, toRefs } from 'vue'
 import { withDirectives, resolveDirective } from 'vue'
 import {
   defineComponent,
@@ -24,6 +24,7 @@ import {
 import type {
   TriggerType,
   PlacementType,
+  AdjustmentPosition,
   RectType,
   EmptyObject
 } from '../../config/types'
@@ -52,6 +53,7 @@ interface LayerCssVarType {
   '--_layer-color'?: string
   '--_layer-transform'?: string
 }
+
 const eventEnter = 'mouseenter'
 const eventLeave = 'mouseleave'
 //renderSlot和slots[插槽名]两种方式得出的插槽内容的格式不一样！
@@ -95,7 +97,11 @@ export const LayerProps = {
   //因为日期组件第一次下拉时，出现了从左上角过度的效果。故加入了立即计算。
   immediate: { type: Boolean, default: false },
   //是否实时计算弹出层的位置，（计算比较频繁）
-  realTime: { type: Boolean, default: false }
+  realTime: { type: Boolean, default: false },
+  adjustPosition: {
+    type: String as PropType<AdjustmentPosition>,
+    default: 'auto'
+  }
 }
 export default defineComponent({
   name: 'Layer',
@@ -234,7 +240,8 @@ export default defineComponent({
           gap: props.gap,
           offset: props.offset,
           arrowOffset: props.arrowOffset,
-          layer: defaultRoot
+          layer: defaultRoot,
+          adjustPosition: props.adjustPosition
         })
         Object.assign(placementInfo, p)
       }

@@ -16,6 +16,14 @@ export type RectType = {
   [key: string]: number //注释掉之后，Layer.tsx里飘红，为什么？
 }
 export type PlacementType = keyof typeof EnumPlacement
+//位置自动调整，none是不调整
+export type AdjustmentPosition =
+  | 'none'
+  | 'auto'
+  | 'right'
+  | 'left'
+  | 'bottom'
+  | 'top'
 export type EmptyObject = { [key: string]: any }
 export type BtnType = keyof typeof EnumBtnType
 export type BtnMode = 'text' | 'line' //line是线条形式的
