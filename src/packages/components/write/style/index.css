@@ -30,7 +30,7 @@
     }
     &:focus-within {
       border-color: var(--w-form-item-border-color-focus);
-      box-shadow: 0 0 3px var(--w-color-primary-5);
+      box-shadow: 0 0 3px var(--w-color-primary-light-5);
     }
 
     &.w-write-input-block {

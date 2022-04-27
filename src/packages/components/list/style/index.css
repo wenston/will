@@ -27,7 +27,7 @@
   }
   &.w-list-item-active {
     color: var(--w-color-primary);
-    background-color: var(--w-color-primary-5);
+    background-color: var(--w-color-primary-light-9);
   }
   &:hover {
     &:not(.w-list-item-disabled) {

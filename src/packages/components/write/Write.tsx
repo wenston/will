@@ -117,8 +117,7 @@ export default defineComponent({
                     'w-write-input-disabled': props.disabled,
                     'w-write-input-simple': props.simple
                   }
-                ]}
-              >
+                ]}>
                 {ctx.slots.prepend?.()}
                 {inputEl}
                 {showCloseBtn.value && (

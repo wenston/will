@@ -91,7 +91,7 @@ ol.w-pagination {
           z-index: 1;
           font-weight: bold;
           transform: scale(1.2);
-          background-color: var(--w-color-primary-5);
+          background-color: var(--w-color-primary-light-5);
         }
       }
     }

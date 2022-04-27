@@ -8,6 +8,7 @@ import Close from '../close/index'
 import List from '../list/index'
 import useSearch from '../../use/useSearch'
 import useRequest from '../../use/useRequest'
+import useEvent from '../../use/useEvent'
 import { getItemValue, isArray, isValidValue } from '../../util'
 type DataItemType = string | number | Record<string, any>
 export default defineComponent({
@@ -260,6 +261,12 @@ export default defineComponent({
       }
       return <Write {...writeOptions} v-slots={writeSlots}></Write>
     }
+
+    /**修正点击区域外不能关闭弹出层的问题 */
+    useEvent(document, 'click', () => {
+      visible.value = false
+    })
+
     return () => {
       const layerSlots = {
         trigger: renderTrigger,

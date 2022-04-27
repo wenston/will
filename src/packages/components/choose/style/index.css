@@ -73,12 +73,12 @@
     cursor: not-allowed;
   }
   &:hover {
-    &:not(.w-choose-item-disabled):not(.w-choose-item-active) {
+    &:not(.w-choose-item-disabled) {
       background-color: var(--w-color-bg);
     }
   }
   &.w-choose-item-active {
     color: var(--w-color-primary);
-    background-color: var(--w-color-primary-5);
+    background-color: var(--w-color-primary-light-9);
   }
 }
