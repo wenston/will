@@ -272,7 +272,7 @@ export default defineComponent({
                     <Dial
                       format={timeFormat.value}
                       value={timeValue.value?.join(':')}
-                      onChange={(hms) => {
+                      onChange={(hms: string) => {
                         const sd = selectedDate.value
                         if (sd) {
                           const d = format(sd, 'yyyy-MM-dd')
@@ -386,8 +386,7 @@ export default defineComponent({
                 setCurrentView('day')
                 dataList.value.pop()
               }
-            }}
-          >
+            }}>
             {barText.value}
           </div>
           {isTime.value ? (

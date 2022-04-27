@@ -125,6 +125,7 @@ export default defineComponent({
           },
 
           onWheel: (e: WheelEvent) => {
+            e.stopPropagation()
             emit('wheel', { event: e, prev, next, delay })
           }
         },

@@ -28,3 +28,6 @@
 .w-overflow-hidden {
   overflow: hidden;
 }
+.w-overflow-auto {
+  overflow: auto;
+}

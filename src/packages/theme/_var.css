@@ -93,7 +93,7 @@
   --w-sheet-tr-checked-background-color: #fffcda;
   --w-sheet-tr-highlight-background-color: var(--w-color-primary-light-5);
   --w-sheet-tr-stripe-color: #f9f9f9;
-  --w-sheet-tr-hover-color: var(--w-color-primary-5);
+  --w-sheet-tr-hover-color: var(--w-color-primary-light-5);
   --w-sheet-thead-th-border-color: var(--w-color-border);
   --w-sheet-td-border-color: var(--w-color-font-5);
   --w-sheet-td-padding: 5px var(--w-gap);

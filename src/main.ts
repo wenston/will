@@ -13,15 +13,5 @@ import Confirm from 'will-ui/components/confirm/index'
 
 //移动端组件全局引入
 const app = createApp(App)
-//移动端组件
-app.component(
-  'm-search',
-  () => import('./views/decoration/mobile-components/m-search/MSearch')
-)
-
-//pc端伪组件,伪组件和移动端的组件是有对应关系的
-import PSearch from './views/decoration/pseudo-components/p-search/index'
-import PHeadline from './views/decoration/pseudo-components/p-headline/index'
-app.use(PSearch).use(PHeadline)
 
 app.use(router).use(Notice).use(Confirm).mount('#will')

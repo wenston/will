@@ -27,7 +27,7 @@
     justify-content: space-evenly;
   }
   &.w-months-item-selected {
-    background-color: var(--w-color-primary-5);
+    background-color: var(--w-color-primary-light-5);
     color: var(--w-color-primary);
 
     font-weight: bold;

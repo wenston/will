@@ -1,11 +1,12 @@
 <template>
   <div :class="css.container">
-    <div :class="css.item"
+    <div
+      :class="css.item"
       class="w-cursor-pointer"
       v-for="route in routes"
       :key="route.name"
       @click="navigateTo(route)">
-      {{route.meta?.title}}
+      {{ route.meta?.title }}
     </div>
   </div>
 </template>
@@ -57,8 +58,8 @@ a {
     transition: var(--w-transition-time);
     font-size: var(--w-font-size-3);
     &:hover {
-      background-color: var(--w-color-primary-5);
-      border-color: var(--w-color-primary-3);
+      background-color: var(--w-color-primary-light-5);
+      border-color: var(--w-color-primary-light-3);
       color: var(--w-color-primary);
     }
   }

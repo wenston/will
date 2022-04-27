@@ -45,7 +45,7 @@ export default defineComponent({
       return {
         ...useAttrs(),
         ...props,
-
+        trigger: props.manual ? 'click' : props.trigger,
         layerCssVar: varStyle,
         layerClass: ['w-tooltip'],
         transitionName: 'w-translate'

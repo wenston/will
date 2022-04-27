@@ -35,6 +35,6 @@
   }
   &.w-match-item-active {
     color: var(--w-color-primary);
-    background-color: var(--w-color-primary-5);
+    background-color: var(--w-color-primary-light-5);
   }
 }

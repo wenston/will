@@ -177,7 +177,7 @@
       <tr>
         <td></td>
         <td>
-          <Layer placement="bottom-start" :arrow-offset="{ x: -8, y: 0 }">
+          <Layer placement="bottom-start">
             <template #trigger>
               <Btn>底部左边对齐</Btn>
             </template>
@@ -193,7 +193,7 @@
           </Layer>
         </td>
         <td>
-          <Layer placement="bottom-end" :arrow-offset="{ x: -5, y: 0 }">
+          <Layer placement="bottom-end">
             <template #trigger>
               <Btn>底部右侧对齐</Btn>
             </template>
@@ -204,6 +204,16 @@
       </tr>
     </tbody>
   </table>
+  <Layer
+    placement="right"
+    :layer-css-var="layerCssVar"
+    adjustPosition="left"
+    real-time>
+    <template #trigger>
+      <div :class="css.long"></div>
+    </template>
+    <div :class="css.box_test">测试位置</div>
+  </Layer>
 </template>
 <script lang="ts" setup>
 import { ref, isVNode } from 'vue'
@@ -226,6 +236,11 @@ const scrollElement = ref(null)
 const { scrollTop, scrollBottom } = useScroll(scrollElement)
 const { count, add } = useCount()
 const showLayer = ref(true)
+const layerCssVar = {
+  '--_layer-border-color': 'rgba(0,0,0,.5)',
+  '--_layer-background-color': 'rgba(0,0,0,.45)',
+  '--_layer-color': 'white'
+}
 </script>
 <style module="css" lang="postcss">
 .tb {
@@ -235,5 +250,14 @@ const showLayer = ref(true)
 }
 .body {
   padding: 15px;
+}
+.long {
+  height: 200px;
+  background-color: #ccc;
+  /* width: 500px; */
+}
+.box_test {
+  padding: 30px;
+  color: white;
 }
 </style>

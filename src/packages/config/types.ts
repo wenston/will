@@ -1,3 +1,4 @@
+import { EnumPlacement, EnumBtnType } from './dictionary'
 export interface ComponentProps {
   [k: string]: {
     type: any
@@ -14,23 +15,17 @@ export type RectType = {
   height: number
   [key: string]: number //注释掉之后，Layer.tsx里飘红，为什么？
 }
-export type PlacementType =
-  | 'left'
-  | 'left-start'
-  | 'left-end'
+export type PlacementType = keyof typeof EnumPlacement
+//位置自动调整，none是不调整
+export type AdjustmentPosition =
+  | 'none'
+  | 'auto'
   | 'right'
-  | 'right-start'
-  | 'right-end'
-  | 'top'
-  | 'top-start'
-  | 'top-end'
+  | 'left'
   | 'bottom'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'center'
-  | 'client-center'
+  | 'top'
 export type EmptyObject = { [key: string]: any }
-export type BtnType = 'primary' | 'default'
+export type BtnType = keyof typeof EnumBtnType
 export type BtnMode = 'text' | 'line' //line是线条形式的
 
 export type TriggerType = 'hover' | 'click' | 'focus'
