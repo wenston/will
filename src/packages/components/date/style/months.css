@@ -23,11 +23,12 @@
   }
   &.w-months-item-current {
     color: var(--w-color-primary);
-    border: 1px solid var(--w-color-primary);
+    border: 1px solid var(--w-color-primary-light-6);
     justify-content: space-evenly;
   }
   &.w-months-item-selected {
-    background-color: var(--w-color-primary-light-5);
+    border: 1px solid var(--w-color-primary-light-6);
+    background-color: var(--w-color-primary-light-8);
     color: var(--w-color-primary);
 
     font-weight: bold;

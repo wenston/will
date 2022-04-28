@@ -49,6 +49,7 @@
         transition: var(--w-transition-time);
         border-radius: var(--w-radius);
         color: var(--w-color-font-2);
+        border: 1px solid transparent;
         /* margin: 0 var(--w-padding-x); */
         width: 30px;
         &.w-dial-item-readonly {
@@ -64,7 +65,8 @@
           }
         }
         &.w-dial-item-selected {
-          background-color: var(--w-color-primary-light-5);
+          background-color: var(--w-color-primary-light-8);
+          border: 1px solid var(--w-color-primary-light-6);
           color: var(--w-color-primary);
           font-weight: bold;
         }

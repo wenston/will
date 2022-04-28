@@ -68,16 +68,15 @@ export default defineComponent({
     })
     //计算出所有值对应的宽度区间
     const widthRange = computed(() => {
-      const len = all_steps_big.value.length
-      const averageWidth = rootSize.width / (len - 1)
+      const len = all_steps_big.value.length - 1 || 1
+      const averageWidth = rootSize.width / len
       const ranges: number[][] = []
-      Array.from({ length: len - 1 }, (item, i) => {
+      Array.from({ length: len }, (item, i) => {
         ranges.push([
           Math.ceil(i * averageWidth),
           Math.ceil((i + 1) * averageWidth)
         ])
       })
-      console.log(ranges)
       return ranges
     })
 

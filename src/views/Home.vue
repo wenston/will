@@ -57,8 +57,8 @@ a {
     transition: var(--w-transition-time);
     font-size: var(--w-font-size-3);
     &:hover {
-      background-color: var(--w-color-primary-light-5);
-      border-color: var(--w-color-primary-light-3);
+      background-color: var(--w-color-primary-light-8);
+      border-color: var(--w-color-primary-light-6);
       color: var(--w-color-primary);
     }
   }
