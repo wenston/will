@@ -11,10 +11,7 @@
   </Layer>
 
   <p style="margin-top: 20px">
-    <Slider
-      :class="css.sec2"
-      v-model="val2"
-      :direction="{ x: false, y: true }" />
+    <Slider v-model="val2" :direction="{ x: false, y: true }" />
   </p>
   <p style="margin-top: 20px">
     <Slider
@@ -31,12 +28,13 @@ import { watch, ref } from 'vue'
 import Slider from 'will-ui/components/slider/index'
 import Btn from 'will-ui/components/btn'
 import Layer from 'will-ui/components/layer'
+import Popup from 'will-ui/components/popup'
 const show = ref(false)
 const val = ref(15)
-const val2 = ref(0)
+const val2 = ref(20)
 
 watch(val, (v) => {
-  console.log(v)
+  // console.log(v)
 })
 </script>
 <style module="css" lang="postcss">

@@ -2,22 +2,24 @@
   display: flex;
   align-items: center;
   & .w-slider {
-    flex: 1;
-    margin-right: var(--w-gap);
+    &.w-slider-x {
+      flex: 1;
+      margin-right: var(--w-gap);
+    }
   }
 }
 .w-slider {
   &.w-slider-x {
     --slider-width: auto;
-    --slider-height: 10px;
+    --slider-height: 8px;
     --slider-radius: calc(var(--slider-height) / 2);
-    --slider-rod-size: calc(6px + var(--slider-height));
+    --slider-rod-size: calc(8px + var(--slider-height));
   }
   &.w-slider-y {
-    --slider-width: 10px;
+    --slider-width: 8px;
     --slider-height: 200px;
     --slider-radius: calc(var(--slider-width) / 2);
-    --slider-rod-size: calc(6px + var(--slider-width));
+    --slider-rod-size: calc(8px + var(--slider-width));
   }
   &.w-slider-xy {
     --slider-width: 200px;

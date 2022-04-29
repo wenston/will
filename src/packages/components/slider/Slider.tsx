@@ -1,4 +1,4 @@
-import { computed, mergeProps, ref, useAttrs } from 'vue'
+import { computed, getCurrentInstance, mergeProps, ref, useAttrs } from 'vue'
 import { defineComponent, onMounted, reactive, watch } from 'vue'
 import type { PropType } from 'vue'
 import type {
@@ -60,6 +60,7 @@ export default defineComponent({
     }
   },
   setup(props, { emit, slots }) {
+    const ins = getCurrentInstance()
     const { client } = useMouse({ mousemove: inMousemove, mouseup: inMouseup })
     const multiples = 10000
     //由于可能存在小数的情况，而小数情况下，当有加减计算时，会出现类似0.1+0.2!=0.3的情况，故
@@ -99,30 +100,14 @@ export default defineComponent({
 
     //计算出所有值对应的宽度区间
     const widthRange = computed(() => {
-      const len = all_steps_big.value.length - 1 || 1
-      const averageWidth = rootSize.width / len
-      const ranges: number[][] = []
-      Array.from({ length: len }, (item, i) => {
-        ranges.push([
-          Math.ceil(i * averageWidth),
-          Math.ceil((i + 1) * averageWidth)
-        ])
+      const len = all_steps_big.value.length - 1
+      const ranges = all_steps_big.value.map((v, i) => {
+        return i / len
       })
+      // console.log(ranges)
       return ranges
     })
-    //计算出所有值对应的高度区间
-    const heightRange = computed(() => {
-      const len = all_steps_big.value.length - 1 || 1
-      const averageHeight = rootSize.height / len
-      const ranges: number[][] = []
-      Array.from({ length: len }, (item, i) => {
-        ranges.push([
-          Math.ceil(i * averageHeight),
-          Math.ceil((i + 1) * averageHeight)
-        ])
-      })
-      return ranges
-    })
+
     const tipContent = computed(() => {
       if (props.showTooltip) {
         const { x, y } = props.direction
@@ -204,16 +189,15 @@ export default defineComponent({
 
     onMounted(() => {
       if (root.value) {
-        ;({ width: rootSize.width, height: rootSize.height } = getRootSize(
-          root.value
-        ))
-
         setPositionByModelValue(props.modelValue)
       }
     })
 
     function startMousedown(e: MouseEvent) {
       if (root.value && rod.value) {
+        const rect = getBoundingClientRect(root.value)
+        rootSize.width = rect.width
+        rootSize.height = rect.height
         const { left, top } = getOffset(rod.value, root.value)
         dx.value = client.x - left
         dy.value = client.y - top
@@ -223,59 +207,83 @@ export default defineComponent({
 
     function inMousemove(e: MouseEvent) {
       if (dragging.value) {
+        const { x, y } = props.direction
         let top = client.y - dy.value
         let left = client.x - dx.value
-        if (props.direction.x) {
+        if (x) {
+          let j = 0
           if (left < 0) {
             left = 0
-          }
-          if (left > rootSize.width) {
+          } else if (left > rootSize.width) {
             left = rootSize.width
           }
-          //对left进行拦截，只定位在区域内
-          const _left = getSizeByRange(left)
-          if (_left !== undefined) {
-            pos.left = _left.size
-            currentXValue.value = all_steps_big.value[_left.i]
+          const percentLeft = left / rootSize.width
+
+          if (percentLeft === 1) {
+            j = all_steps_big.value.length - 1
+          } else if (percentLeft === 0) {
+            j = 0
+          } else {
+            j = getPosByRange(percentLeft)
           }
+          pos.left = widthRange.value[j]
+
+          currentXValue.value = all_steps_big.value[j]
         }
-        if (props.direction.y) {
+        if (y) {
+          let j = 0
           if (top < 0) {
             top = 0
-          }
-          if (top > rootSize.height) {
+          } else if (top > rootSize.height) {
             top = rootSize.height
           }
-          const _top = getSizeByRange(top, 'top')
-          if (_top !== undefined) {
-            pos.top = _top.size
-            currentYValue.value = all_steps_big.value[_top.i]
+          const percentTop = top / rootSize.height
+
+          if (percentTop === 1) {
+            j = all_steps_big.value.length - 1
+          } else if (percentTop === 0) {
+            j = 0
+          } else {
+            j = getPosByRange(percentTop)
           }
+          pos.top = widthRange.value[j]
+
+          currentYValue.value = all_steps_big.value[j]
         }
+        showInvalidTip.value = false
       }
     }
     function inMouseup(e: MouseEvent) {
       dragging.value = false
     }
 
-    function getSizeByRange(size: number, which: 'left' | 'top' = 'left') {
-      const maxSize = which === 'left' ? rootSize.width : rootSize.height
-      if (size === maxSize) {
-        return { size, i: all_steps_big.value.length - 1 }
-      }
-      const allRange = which === 'left' ? widthRange.value : heightRange.value
+    function getPosByRange(per: number, which: 'left' | 'top' = 'left') {
+      const allWidthPercent = widthRange.value
+      let _j = 0
       let i = 0
-      const len = allRange.length
+      const len = allWidthPercent.length
+      if (per === 0) {
+        return 0
+      } else if (per === 1) {
+        return len - 1
+      }
       while (i < len) {
-        const [a, b] = allRange[i]
-        if (size >= a && size < b) {
-          return {
-            size: a,
-            i
-          }
+        const currentWidthPercent = allWidthPercent[i]
+        if (per === currentWidthPercent) {
+          _j = i
+          break
+        } else if (per < currentWidthPercent) {
+          _j = i - 1
+          break
         }
         i++
       }
+      if (_j < 0) {
+        _j = 0
+      } else if (_j > len - 1) {
+        _j = len - 1
+      }
+      return _j
     }
 
     function setPositionByModelValue(v: number) {
@@ -283,14 +291,10 @@ export default defineComponent({
       const allValue = all_steps_big.value.map((v) => v / multiples)
       const i = allValue.findIndex((_v) => _v === v)
       if (i > -1) {
-        if (x && y) {
-        } else if (x) {
-          if (v === props.max) {
-            pos.left = widthRange.value[widthRange.value.length - 1][1]
-          } else {
-            pos.left = widthRange.value[i][0]
-          }
+        if (x) {
+          pos.left = widthRange.value[i]
         } else if (y) {
+          pos.top = widthRange.value[i]
         }
       }
     }
@@ -305,12 +309,12 @@ export default defineComponent({
       const rodPosition: { left?: string; top?: string } = {}
       const progressSize: { width?: string; height?: string } = {}
       if (x) {
-        rodPosition.left = pos.left + 'px'
-        progressSize.width = pos.left + 'px'
+        rodPosition.left = pos.left * 100 + '%'
+        progressSize.width = pos.left * 100 + '%'
       }
       if (y) {
-        rodPosition.top = pos.top + 'px'
-        progressSize.height = pos.top + 'px'
+        rodPosition.top = pos.top * 100 + '%'
+        progressSize.height = pos.top * 100 + '%'
       }
       let _rod = (
         <div class="w-slider-rod" ref={rod} style={rodPosition}>
@@ -345,52 +349,59 @@ export default defineComponent({
           {_rod}
         </div>
       )
+      const num = () => (
+        <Num
+          has-btn={false}
+          width="45px"
+          max={props.max}
+          min={props.min}
+          step={props.step}
+          modelValue={props.modelValue}
+          onUpdate:modelValue={(v, elem) => {
+            inputValue.value = v
+          }}
+          onKeyup={(e) => {
+            const v = parseFloat(e.target.value)
+            if (!isNaN(v) && v !== undefined && e.key === 'Enter') {
+              e.target.blur()
+            }
+          }}
+          onBlur={(e) => {
+            const v = parseFloat(e.target.value)
+            if (!isNaN(v)) {
+              // inputValue.value = v
+
+              if (validateInput(v)) {
+                showInvalidTip.value = false
+                setPositionByModelValue(v)
+                emit('update:modelValue', v)
+              } else {
+                showInvalidTip.value = true
+              }
+            }
+          }}
+        />
+      )
 
       //当x和y方向都能滑动的时候，不露出input输入框
       if (props.hasInput && (!x || !y)) {
+        // return (
+        //   <div class="w-slider-has-input">
+        //     {main}
+        //     <input type="number" value={props.modelValue} />
+        //   </div>
+        // )
         return (
           <div class="w-slider-has-input">
             {main}
             <Tooltip
+              real-time
               manual
               placement="top"
               adjustPosition="bottom"
               show={showInvalidTip.value}>
               {{
-                trigger: () => (
-                  <Num
-                    has-btn={false}
-                    width="45px"
-                    max={props.max}
-                    min={props.min}
-                    step={props.step}
-                    modelValue={props.modelValue}
-                    onUpdate:modelValue={(v, elem) => {
-                      inputValue.value = v
-                    }}
-                    onKeyup={(e) => {
-                      const v = parseFloat(e.target.value)
-                      if (!isNaN(v) && v !== undefined && e.key === 'Enter') {
-                        e.target.blur()
-                      }
-                    }}
-                    onBlur={(e) => {
-                      const v = parseFloat(e.target.value)
-                      if (v !== inputValue.value) {
-                        inputValue.value = v
-                        if (!isNaN(v)) {
-                          if (validateInput(v)) {
-                            showInvalidTip.value = false
-                            setPositionByModelValue(v)
-                            emit('update:modelValue', v)
-                          } else {
-                            showInvalidTip.value = true
-                          }
-                        }
-                      }
-                    }}
-                  />
-                ),
+                trigger: num,
                 default: () => props.invalidateTip
               }}
             </Tooltip>

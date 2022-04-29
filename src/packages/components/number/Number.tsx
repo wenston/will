@@ -1,4 +1,12 @@
-import { defineComponent, ref, computed, readonly, watch } from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  readonly,
+  watch,
+  onMounted,
+  onUnmounted
+} from 'vue'
 import Write from '../write/index'
 import Tooltip from '../layer/index'
 import Icon from '../icon/index'
@@ -25,6 +33,12 @@ export default defineComponent({
     hasBtn: { type: Boolean, default: true }
   },
   setup(props, ctx) {
+    onMounted(() => {
+      console.log('num 挂载')
+    })
+    onUnmounted(() => {
+      console.log('num 卸载')
+    })
     const { add, count, set } = useCount({
       init: computed(() => Number(props.modelValue) ?? 0)
     })
@@ -133,7 +147,9 @@ export default defineComponent({
         } else {
           set(Number(v))
         }
-      }
+        console.log(v)
+      },
+      { immediate: true }
     )
 
     return () => {
