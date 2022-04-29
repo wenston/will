@@ -372,15 +372,6 @@ export default defineComponent({
                       const v = parseFloat(e.target.value)
                       if (!isNaN(v) && v !== undefined && e.key === 'Enter') {
                         e.target.blur()
-                        // console.log(elem)
-                        //对输入的值进行验证，如果值没有在范围内，则无效
-
-                        // inputValue.value = v
-                        // if (validateInput(v)) {
-                        //   setPositionByModelValue(v)
-                        //   emit('update:modelValue', v)
-                        // } else {
-                        // }
                       }
                     }}
                     onBlur={(e) => {

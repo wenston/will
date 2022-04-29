@@ -23,7 +23,7 @@
     --slider-width: 200px;
     --slider-height: 200px;
     --slider-radius: 0;
-    --slider-rod-size: 5px;
+    --slider-rod-size: 7px;
   }
 
   background: var(--w-color-font-5);
@@ -65,6 +65,14 @@
       &.rod-in-dragging {
         transform: scale(1.2, 1.2);
         box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.6);
+      }
+    }
+  }
+  &.w-slider-xy {
+    & .w-slider-rod {
+      & .w-slider-for-tip {
+        background-color: transparent;
+        border: 2px solid var(--w-color-font-4);
       }
     }
   }
