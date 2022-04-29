@@ -132,7 +132,8 @@ export default defineComponent({
                   />
                 )}
                 {ctx.slots.default?.({
-                  focus
+                  focus,
+                  inputElement: input.value
                 })}
               </div>
             ),
