@@ -43,3 +43,5 @@ export type DateFormatType =
   | 'yyyy-MM-dd HH:mm:ss'
 
 export type TimeFormatType = 'HH' | 'HH:mm' | 'HH:mm:ss'
+
+export type DragDirection = { x: boolean; y: boolean }

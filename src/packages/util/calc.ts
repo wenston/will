@@ -293,39 +293,76 @@ function get4SizeAndGetwhichPlaceIsBigger(
   const right = inner.width - rect.right
   const bottom = inner.height - rect.bottom
   const maxDirection = Math.max(left, top, bottom, right)
-  if (direction === 'left' || maxDirection === left) {
-    if (Math.abs(top - bottom) < 100) {
-      p = 'left'
-    } else if (top > bottom) {
-      p = 'left-end'
+  if (direction) {
+    if (direction === 'left') {
+      if (Math.abs(top - bottom) < 100) {
+        p = 'left'
+      } else if (top > bottom) {
+        p = 'left-end'
+      } else {
+        p = 'left-start'
+      }
+    } else if (direction === 'right') {
+      if (Math.abs(top - bottom) < 100) {
+        p = 'right'
+      } else if (top > bottom) {
+        p = 'right-end'
+      } else {
+        p = 'right-start'
+      }
+    } else if (direction === 'top') {
+      if (Math.abs(left - right) < 100) {
+        p = 'top'
+      } else if (left > right) {
+        p = 'top-end'
+      } else {
+        p = 'top-start'
+      }
     } else {
-      p = 'left-start'
-    }
-  } else if (direction === 'right' || maxDirection === right) {
-    if (Math.abs(top - bottom) < 100) {
-      p = 'right'
-    } else if (top > bottom) {
-      p = 'right-end'
-    } else {
-      p = 'right-start'
-    }
-  } else if (direction === 'top' || maxDirection === top) {
-    if (Math.abs(left - right) < 100) {
-      p = 'top'
-    } else if (left > right) {
-      p = 'top-end'
-    } else {
-      p = 'top-start'
+      if (Math.abs(left - right) < 100) {
+        p = 'bottom'
+      } else if (left > right) {
+        p = 'bottom-end'
+      } else {
+        p = 'bottom-start'
+      }
     }
   } else {
-    if (Math.abs(left - right) < 100) {
-      p = 'bottom'
-    } else if (left > right) {
-      p = 'bottom-end'
+    if (maxDirection === left) {
+      if (Math.abs(top - bottom) < 100) {
+        p = 'left'
+      } else if (top > bottom) {
+        p = 'left-end'
+      } else {
+        p = 'left-start'
+      }
+    } else if (maxDirection === right) {
+      if (Math.abs(top - bottom) < 100) {
+        p = 'right'
+      } else if (top > bottom) {
+        p = 'right-end'
+      } else {
+        p = 'right-start'
+      }
+    } else if (maxDirection === top) {
+      if (Math.abs(left - right) < 100) {
+        p = 'top'
+      } else if (left > right) {
+        p = 'top-end'
+      } else {
+        p = 'top-start'
+      }
     } else {
-      p = 'bottom-start'
+      if (Math.abs(left - right) < 100) {
+        p = 'bottom'
+      } else if (left > right) {
+        p = 'bottom-end'
+      } else {
+        p = 'bottom-start'
+      }
     }
   }
+
   return p
 }
 

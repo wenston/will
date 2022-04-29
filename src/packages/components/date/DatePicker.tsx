@@ -272,11 +272,13 @@ export default defineComponent({
                     <Dial
                       format={timeFormat.value}
                       value={timeValue.value?.join(':')}
-                      onChange={(hms: string) => {
+                      onChange={(hms?: string) => {
                         const sd = selectedDate.value
                         if (sd) {
                           const d = format(sd, 'yyyy-MM-dd')
-                          emit('update:modelValue', d + ' ' + hms)
+                          if (hms) {
+                            emit('update:modelValue', d + ' ' + hms)
+                          }
                         }
                       }}
                     />

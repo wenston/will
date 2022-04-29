@@ -29,12 +29,12 @@
       }
     }
     &.w-date-item-today {
-      border: 1px solid var(--w-color-primary);
+      border: 1px solid var(--w-color-primary-light-6);
       color: var(--w-color-primary);
     }
     &.w-date-item-selected {
-      /* border: 1px solid var(--w-color-primary); */
-      background-color: var(--w-color-primary-light-5);
+      border: 1px solid var(--w-color-primary-light-6);
+      background-color: var(--w-color-primary-light-8);
       color: var(--w-color-primary);
 
       font-weight: bold;

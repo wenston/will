@@ -93,6 +93,7 @@ const Choose = defineComponent({
         layerClass: [props.layerClass],
         layerStyle: layerContentStyle.value,
         show: visible.value,
+        adjustPosition: 'top',
         'onUpdate:show': (v: boolean) => {
           visible.value = v
         },

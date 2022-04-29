@@ -1,4 +1,12 @@
-import { defineComponent, ref, computed, readonly, watch } from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  readonly,
+  watch,
+  onMounted,
+  onUnmounted
+} from 'vue'
 import Write from '../write/index'
 import Tooltip from '../layer/index'
 import Icon from '../icon/index'
@@ -9,7 +17,8 @@ export default defineComponent({
   inheritAttrs: false,
   components: { Write, Tooltip, Icon },
   emits: {
-    'update:modelValue': null
+    'update:modelValue': null,
+    change: (e: Event) => true
   },
   props: {
     modelValue: { type: [Number, String] },
@@ -20,7 +29,8 @@ export default defineComponent({
     width: String,
     max: Number,
     min: Number,
-    step: { type: Number, default: 1 }
+    step: { type: Number, default: 1 },
+    hasBtn: { type: Boolean, default: true }
   },
   setup(props, ctx) {
     const { add, count, set } = useCount({
@@ -39,11 +49,13 @@ export default defineComponent({
           v: number | string | undefined,
           elem: HTMLInputElement
         ) => {
-          // console.log(elem)
-          setTimeout(() => {
-            toValidate(elem)
-          })
+          emitValue(v, elem)
         },
+        // onChange: (e: Event) => {
+        //   const target = e.target as HTMLInputElement
+        //   const v = toValidate(target)
+        //   ctx.emit('change', e)
+        // },
         onCompositionstart: (e: CompositionEvent) => {
           isZH.value = true
         },
@@ -56,7 +68,6 @@ export default defineComponent({
         },
         onKeypress: (e: KeyboardEvent) => {
           const val = (e.target as HTMLInputElement).value
-          // console.log(val, { key: e.key, code: e.keyCode })
           if (!validOnKeypress(val, e.keyCode)) {
             e.preventDefault()
           }
@@ -71,8 +82,11 @@ export default defineComponent({
       }
     })
 
-    function emitValue(v: number | string | undefined) {
-      ctx.emit('update:modelValue', v)
+    function emitValue(
+      v: number | string | undefined,
+      inputElement: HTMLInputElement
+    ) {
+      ctx.emit('update:modelValue', v, inputElement)
     }
 
     function toValidate(elem: HTMLInputElement) {
@@ -89,22 +103,23 @@ export default defineComponent({
         }
       }
       if (v === '') {
-        emitValue(undefined)
+        emitValue(undefined, elem)
         elem.value = ''
       } else {
         const _v = isOutofRange(Number(v))
-        emitValue(_v)
+        emitValue(_v, elem)
         elem.value = _v + ''
       }
+      return elem.value
     }
-    function toAdd() {
+    function toAdd(elem: HTMLInputElement) {
       add(props.step)
-      emitValue(isOutofRange(count.value))
+      emitValue(isOutofRange(count.value), elem)
     }
-    function toMinus() {
+    function toMinus(elem: HTMLInputElement) {
       add(props.step * -1)
 
-      emitValue(isOutofRange(count.value))
+      emitValue(isOutofRange(count.value), elem)
     }
     function isOutofRange(v: number) {
       if (props.max !== undefined && v > props.max) {
@@ -126,35 +141,48 @@ export default defineComponent({
         } else {
           set(Number(v))
         }
-      }
+        console.log(v)
+      },
+      { immediate: true }
     )
 
     return () => {
-      const writeSlots = {
-        default: () => {
-          const disabledClass = { 'w-number-btn-disabled': props.disabled }
+      if (props.hasBtn) {
+        const writeSlots = {
+          default: ({
+            inputElement
+          }: {
+            inputElement: HTMLInputElement | undefined
+          }) => {
+            const disabledClass = { 'w-number-btn-disabled': props.disabled }
 
-          const addBtnOptions: Record<string, any> = {
-            class: ['w-number-btn w-number-btn-rotate', disabledClass],
-            name: 'w-icon-sort-down'
+            const addBtnOptions: Record<string, any> = {
+              class: ['w-number-btn w-number-btn-rotate', disabledClass],
+              name: 'w-icon-sort-down'
+            }
+            const minusBtnOptions: Record<string, any> = {
+              class: ['w-number-btn', disabledClass],
+              name: 'w-icon-sort-down'
+            }
+            if (!props.disabled) {
+              addBtnOptions.onClick = () => {
+                toAdd(inputElement!)
+              }
+              minusBtnOptions.onClick = () => {
+                toMinus(inputElement!)
+              }
+            }
+            return (
+              <div class="w-number-btn-wrapper">
+                <Icon {...addBtnOptions} />
+                <Icon {...minusBtnOptions} />
+              </div>
+            )
           }
-          const minusBtnOptions: Record<string, any> = {
-            class: ['w-number-btn', disabledClass],
-            name: 'w-icon-sort-down'
-          }
-          if (!props.disabled) {
-            addBtnOptions.onClick = toAdd
-            minusBtnOptions.onClick = toMinus
-          }
-          return (
-            <div class="w-number-btn-wrapper">
-              <Icon {...addBtnOptions} />
-              <Icon {...minusBtnOptions} />
-            </div>
-          )
         }
+        return <Write {...numberOptions.value} v-slots={writeSlots}></Write>
       }
-      return <Write {...numberOptions.value} v-slots={writeSlots}></Write>
+      return <Write {...numberOptions.value} />
     }
   }
 })

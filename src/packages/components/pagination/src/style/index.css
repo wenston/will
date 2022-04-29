@@ -76,13 +76,9 @@ ol.w-pagination {
         }
         &:hover {
           z-index: 2;
-          &:not(.w-pagination--disabled),
-          &:not(.w-pagination--active) {
+          &:not(.w-pagination--disabled):not(.w-pagination--active) {
             background-color: var(--w-color-bg);
             font-weight: bold;
-            transform: scale(1.2);
-            box-shadow: inset 0 0 0 1px var(--w-color-border),
-              var(--w-box-shadow);
           }
         }
         &.w-pagination--active {
@@ -90,8 +86,7 @@ ol.w-pagination {
           position: relative;
           z-index: 1;
           font-weight: bold;
-          transform: scale(1.2);
-          background-color: var(--w-color-primary-light-5);
+          background-color: var(--w-color-primary-light-8);
         }
       }
     }
