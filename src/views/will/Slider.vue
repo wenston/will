@@ -1,12 +1,12 @@
 <template>
   <h1>滑块</h1>
-  <Layer placement="right-start">
-    <template #trigger>
+  <Layer v-model:show="show">
+    <template #trigger="{ toggle }">
       <Btn>显示/隐藏</Btn>
     </template>
 
     <section :class="css.sec">
-      <p><Slider v-model="val" :min="5" :max="50" :step="5" has-input /></p>
+      <Slider v-model="val" :min="5" :max="50" :step="5" has-input />
     </section>
   </Layer>
 
@@ -29,6 +29,8 @@ import Slider from 'will-ui/components/slider/index'
 import Btn from 'will-ui/components/btn'
 import Layer from 'will-ui/components/layer'
 import Popup from 'will-ui/components/popup'
+import Tooltip from 'will-ui/components/tooltip'
+import Drawer from 'will-ui/components/drawer'
 const show = ref(false)
 const val = ref(15)
 const val2 = ref(20)

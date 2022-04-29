@@ -33,12 +33,6 @@ export default defineComponent({
     hasBtn: { type: Boolean, default: true }
   },
   setup(props, ctx) {
-    onMounted(() => {
-      console.log('num 挂载')
-    })
-    onUnmounted(() => {
-      console.log('num 卸载')
-    })
     const { add, count, set } = useCount({
       init: computed(() => Number(props.modelValue) ?? 0)
     })

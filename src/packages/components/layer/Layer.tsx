@@ -114,6 +114,7 @@ export default defineComponent({
     const Win = window
     let scrollElements: HTMLElement[] = []
     const click_outside = resolveDirective('clickOutside')
+    const visible = ref(props.show)
     const { delay, stop } = useDelay()
     const { zIndex, add: addZIndex } = useGlobalZIndex()
     const triggerRoot = ref(null)
@@ -138,13 +139,7 @@ export default defineComponent({
       //这里的placement同时包括了自动调整后的位置
       placement: props.placement
     })
-    const {
-      toggle,
-      set,
-      item: visible
-    } = useToggleArray([false, true], {
-      item: props.show
-    })
+
     const vnode_trigger = useSlot(
       computed(() => renderSlot(slots, 'trigger', { toggle, hide, show })),
       true
@@ -203,10 +198,13 @@ export default defineComponent({
     useEvent(Win, 'scroll', handleParentScroll)
     useEvent(Win, 'resize', handleParentScroll)
     function hide() {
-      set({ item: false })
+      visible.value = false
     }
     function show() {
-      set({ item: true })
+      visible.value = true
+    }
+    function toggle() {
+      visible.value = !visible.value
     }
 
     function handleTriggerEvent(e: MouseEvent) {
@@ -330,7 +328,7 @@ export default defineComponent({
     watch(
       () => props.show,
       (v) => {
-        set({ item: v })
+        visible.value = v
       }
     )
 
