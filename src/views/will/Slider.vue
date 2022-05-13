@@ -10,7 +10,7 @@
     </template>
 
     <section :class="css.sec">
-      <Slider v-model="val" :min="5" :max="50" :step="5" has-input />
+      <Slider v-model="val" :min="5" :max="50" :step="5" :tip="myTip" />
     </section>
   </Layer>
 
@@ -44,6 +44,10 @@ function onLayerMounted(e: any) {
 }
 function onLayerUnmounted(e: any) {
   // console.log('Layer卸载了，', e)
+}
+
+function myTip({ x, y }: { x: number; y: number }) {
+  return '当前是' + x
 }
 
 watch(val, (v) => {
