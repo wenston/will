@@ -141,7 +141,7 @@ export default defineComponent({
         } else {
           set(Number(v))
         }
-        console.log(v)
+        // console.log(v)
       },
       { immediate: true }
     )

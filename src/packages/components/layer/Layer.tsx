@@ -333,15 +333,16 @@ export default defineComponent({
     )
 
     function renderDefaultContent() {
+      const _default = slots.default?.({ toggle, hide, show })
       if (props.bind === 'v-show') {
         return (
           <div v-show={visible.value} {...defaultOptions.value}>
-            {vnode_default.value}
+            {_default}
           </div>
         )
       } else {
         return visible.value ? (
-          <div {...defaultOptions.value}>{vnode_default.value}</div>
+          <div {...defaultOptions.value}>{_default}</div>
         ) : null
       }
     }

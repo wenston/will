@@ -1,6 +1,10 @@
 <template>
   <h1>滑块</h1>
-  <Layer v-model:show="show">
+  <Layer
+    v-model:show="show"
+    placement="right"
+    @vnode-mounted="onLayerMounted"
+    @vnode-unmounted="onLayerUnmounted">
     <template #trigger="{ toggle }">
       <Btn>显示/隐藏</Btn>
     </template>
@@ -11,7 +15,7 @@
   </Layer>
 
   <p style="margin-top: 20px">
-    <Slider v-model="val2" :direction="{ x: false, y: true }" />
+    <Slider v-model="val2" :direction="{ x: false, y: true }" has-input />
   </p>
   <p style="margin-top: 20px">
     <Slider
@@ -34,6 +38,13 @@ import Drawer from 'will-ui/components/drawer'
 const show = ref(false)
 const val = ref(15)
 const val2 = ref(20)
+
+function onLayerMounted(e: any) {
+  // console.log('Layer挂载了，', e)
+}
+function onLayerUnmounted(e: any) {
+  // console.log('Layer卸载了，', e)
+}
 
 watch(val, (v) => {
   // console.log(v)

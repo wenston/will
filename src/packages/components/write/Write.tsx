@@ -102,41 +102,42 @@ export default defineComponent({
     })
     return () => {
       const inputEl = <input {...inputOptions.value} />
+      const mainInput = (
+        <div
+          style={{ width: props.width }}
+          class={[
+            'w-write-wrapper',
+            normalizeClass(props.inputClass),
+            {
+              'w-write-input-block': props.block,
+              'w-write-input-disabled': props.disabled,
+              'w-write-input-simple': props.simple
+            }
+          ]}>
+          {ctx.slots.prepend?.()}
+          {inputEl}
+          {showCloseBtn.value && (
+            <Close
+              name="w-icon-close-fill"
+              onClick={(e: MouseEvent) => {
+                const options = { input: input.value }
+                ctx.emit('update:modelValue', undefined, input.value)
+                ctx.emit('clear', options)
+                e.stopPropagation()
+              }}
+            />
+          )}
+          {ctx.slots.default?.({
+            focus,
+            inputElement: input.value
+          })}
+        </div>
+      )
       const inputWithLayer = (
         <Layer
           {...layerOptions.value}
           v-slots={{
-            trigger: () => (
-              <div
-                style={{ width: props.width }}
-                class={[
-                  'w-write-wrapper',
-                  normalizeClass(props.inputClass),
-                  {
-                    'w-write-input-block': props.block,
-                    'w-write-input-disabled': props.disabled,
-                    'w-write-input-simple': props.simple
-                  }
-                ]}>
-                {ctx.slots.prepend?.()}
-                {inputEl}
-                {showCloseBtn.value && (
-                  <Close
-                    name="w-icon-close-fill"
-                    onClick={(e: MouseEvent) => {
-                      const options = { input: input.value }
-                      ctx.emit('update:modelValue', undefined, input.value)
-                      ctx.emit('clear', options)
-                      e.stopPropagation()
-                    }}
-                  />
-                )}
-                {ctx.slots.default?.({
-                  focus,
-                  inputElement: input.value
-                })}
-              </div>
-            ),
+            trigger: () => mainInput,
             default: () => '输入无效'
           }}
         />
@@ -144,7 +145,7 @@ export default defineComponent({
       return (
         <div {...outerOptions.value}>
           {ctx.slots.before?.()}
-          {inputWithLayer}
+          {mainInput}
           {ctx.slots.after?.()}
         </div>
       )
