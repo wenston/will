@@ -4,7 +4,6 @@
   align-items: center;
   & .w-checkbox-icon {
     color: var(--w-color-font-3);
-    margin-right: calc(var(--w-gap) / 2);
     &:hover {
       &:not(.w-checkbox-icon-disabled) {
         color: var(--w-color-primary);

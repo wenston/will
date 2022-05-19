@@ -1,8 +1,9 @@
 import { defineComponent, computed } from 'vue'
 import Layer from '../layer/index'
 import Trigger from '../trigger/index'
+import Slider from '../slider/index'
 export default defineComponent({
-  components: { Layer, Trigger },
+  components: { Layer, Trigger, Slider },
   props: {
     modelValue: String,
     placeholder: { type: String, default: '取色' },
@@ -34,7 +35,12 @@ export default defineComponent({
               return (
                 <div class="w-color-picker">
                   <div class="w-color-panel"></div>
-                  <div class="w-color-hue-slider"></div>
+                  <Slider
+                    class="w-color-hue-slider"
+                    fill={false}
+                    show-tooltip={false}
+                    min={0}
+                    max={359}></Slider>
                 </div>
               )
             }

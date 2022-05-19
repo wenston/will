@@ -2,10 +2,14 @@
   <h1>Sheet 表格</h1>
   <div style="padding: 15px 0">
     <div style="margin-bottom: 10px">
-      <Checkbox v-model="isAuto" :value="[false, true]">宽度自动</Checkbox>
-      <Checkbox v-model="hasIndex" :value="[false, true]">带序号</Checkbox>
+      <Checkbox v-model="isAuto" :value="[false, true]">
+        &#8194;宽度自动
+      </Checkbox>
+      <Checkbox v-model="hasIndex" :value="[false, true]">
+        &#8194;带序号
+      </Checkbox>
       <Checkbox v-model="hasAction" :value="[false, true]">
-        有添加和删除行
+        &#8194;有添加和删除行
       </Checkbox>
       <Checkbox v-model="stripe" :value="[false, true]">隔行变色</Checkbox>
       <span style="padding-left: 30px; padding-right: 30px">
@@ -22,7 +26,7 @@
       highlightKey="BillCode"
       v-model:highlight="hValue" -->
     <Sheet
-      :data="D.slice(0)"
+      :data="D.slice(0, 10)"
       :columns="columns"
       :autoWidth="isAuto"
       :stripe="stripe"
@@ -35,13 +39,11 @@
       :hasRadio="ck === 'radio'"
       :hasAction="hasAction"
       leftFixed="2"
-      rightFixed="1"
       @after-checked="afterChecked"
       @add="toAdd"
       @delete="toDelete"
       @sort="toSort"
-      height="calc(100vh - 120px)"
-    >
+      height="calc(100vh - 120px)">
       <template #status="{ row }">
         <template v-if="row.Status === 11">状态11</template>
         <template v-else-if="row.Status === 3">已完成</template>
@@ -59,8 +61,7 @@
         highlightKey="BillCode"
         v-model:highlight="hValue"
         hasAction
-        height="calc(35vh - 50px)"
-      >
+        height="calc(35vh - 50px)">
         <template #action="{ row, index }">
           <Layer placement="top" toBody>
             <template #trigger>
@@ -77,8 +78,7 @@
               <div style="float: right; margin-top: 12px">
                 <span
                   style="color: var(--k-color-5); cursor: pointer"
-                  @click="hide"
-                >
+                  @click="hide">
                   取消
                 </span>
                 <span
@@ -86,8 +86,7 @@
                     color: var(--k-color-primary);
                     cursor: pointer;
                     margin-left: 10px;
-                  "
-                >
+                  ">
                   确定
                 </span>
               </div>
@@ -164,18 +163,18 @@ export default defineComponent({
           //是否锁定该列的宽度，只在autoWidth为true时有用，虽然锁定，但仍然可以通过拖拽调整宽度！
           lockWidth: true
         },
-        {
-          name: '状态',
-          field: 'Status',
-          style: { width: 70 },
-          slot: 'status',
-          lockWidth: true
-        },
-        {
-          name: '供应商',
-          field: 'SupplierName',
-          style: { width: 250 }
-        },
+        // {
+        //   name: '状态',
+        //   field: 'Status',
+        //   style: { width: 70 },
+        //   slot: 'status',
+        //   lockWidth: true
+        // },
+        // {
+        //   name: '供应商',
+        //   field: 'SupplierName',
+        //   style: { width: 250 }
+        // },
         {
           name: '数量',
           field: 'ProCount',
@@ -253,14 +252,14 @@ export default defineComponent({
         //   name: "经手人",
         //   field: "Handler",
         // },
-        {
-          name: '制单人',
-          field: 'CreatedUserName'
-        },
-        {
-          name: '制单时间',
-          field: 'BillDate'
-        },
+        // {
+        //   name: '制单人',
+        //   field: 'CreatedUserName'
+        // },
+        // {
+        //   name: '制单时间',
+        //   field: 'BillDate'
+        // },
         {
           name: '备注',
           field: 'Description',
@@ -309,7 +308,7 @@ export default defineComponent({
         } as any)
       },
       toDelete(row: any, index: number) {
-        console.log(row,index)
+        console.log(row, index)
         Confirm.open({
           content(close: any) {
             return (

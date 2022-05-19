@@ -98,7 +98,7 @@ export default defineComponent({
     const pos = reactive({ left: 0, top: 0 })
     const display = ref(false)
 
-    //计算出所有值对应的宽度区间
+    //计算出所有值对应的宽度区间,返回的宽度是百分比的宽
     const widthRange = computed(() => {
       const len = all_steps_big.value.length - 1
       const ranges = all_steps_big.value.map((v, i) => {
@@ -155,7 +155,7 @@ export default defineComponent({
         adjustPosition: (x ? 'bottom' : 'right') as AdjustmentPosition,
         manual: true,
         realTime: true,
-        show: dragging.value || display.value
+        show: (dragging.value || display.value) && props.showTooltip
       }
     })
     const showInvalidTip = ref(false)
@@ -385,12 +385,6 @@ export default defineComponent({
 
       //当x和y方向都能滑动的时候，不露出input输入框
       if (props.hasInput && (!x || !y)) {
-        // return (
-        //   <div class="w-slider-has-input">
-        //     {main}
-        //     <input type="number" value={props.modelValue} />
-        //   </div>
-        // )
         return (
           <div class="w-slider-has-input">
             {main}
