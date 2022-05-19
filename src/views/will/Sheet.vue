@@ -138,7 +138,7 @@ export default defineComponent({
     const D = ref<any[]>(Data)
     const isAuto = ref(true)
     const hasIndex = ref(true)
-    const stripe = ref(false)
+    const stripe = ref(true)
     const hasAction = ref(true)
     const h = ref(true)
     const ck = ref('radio')

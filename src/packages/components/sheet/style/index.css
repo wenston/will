@@ -1,6 +1,4 @@
 .w-sheet-container {
-  border: 1px solid var(--w-sheet-container-border-color);
-  border-radius: var(--w-radius);
   overflow: hidden;
   position: relative;
   & .w-sheet-inner-container {
@@ -14,8 +12,8 @@
 
     & .w-cell {
       padding: var(--w-sheet-td-padding);
-      height: var(--w-size);
-      border: 1px solid var(--w-sheet-td-border-color);
+      height: 35px;
+
       color: var(--w-color-font-2);
       text-align: left;
       position: relative;
@@ -363,6 +361,34 @@
       rgba(0, 0, 0, 0.07) 5%,
       transparent 70%
     );
+  }
+
+  &.w-sheet-bordered {
+    border: 1px solid var(--w-sheet-container-border-color);
+    border-radius: var(--w-radius);
+    & .w-sheet-inner-container {
+      & .w-cell {
+        border: 1px solid var(--w-sheet-td-border-color);
+      }
+    }
+  }
+
+  &.w-sheet-tr-bordered {
+    & .w-sheet-inner-container {
+      &.w-sheet--stripe {
+        & .w-sheet-tbody {
+          & .w-sheet {
+            & tr {
+              & td {
+                &.w-cell {
+                  border-bottom: 1px solid var(--w-sheet-td-border-color);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 

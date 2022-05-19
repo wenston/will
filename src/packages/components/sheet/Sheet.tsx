@@ -428,13 +428,20 @@ export default defineComponent({
       )
 
       const table = (content: any) => (
-        <div class="w-sheet-container" ref={tableRoot}>
+        <div
+          class={[
+            'w-sheet-container',
+            {
+              'w-sheet-bordered': props.bordered,
+              'w-sheet-tr-bordered': props.trBordered
+            }
+          ]}
+          ref={tableRoot}>
           {content}
           <div
             class="w-sheet-resize-line"
             v-show={resizing.value}
-            style={{ left: resizeLineLeft.value + 'px' }}
-          ></div>
+            style={{ left: resizeLineLeft.value + 'px' }}></div>
           <div
             class="w-sheet-left-fixed-shadow-line"
             v-show={!!props.leftFixed && showLeftShadow.value}

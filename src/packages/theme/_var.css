@@ -88,14 +88,15 @@
   --w-fade-black-background-color: rgba(0, 0, 0, 0.45);
 
   --w-sheet-container-border-color: var(--w-color-border);
-  --w-sheet-thead-background-color: var(--w-color-font-5);
+  --w-sheet-thead-background-color: #e7ebf4;
   --w-sheet-tr-background-color: white;
   --w-sheet-tr-checked-background-color: #fffcda;
   --w-sheet-tr-highlight-background-color: var(--w-color-primary-light-5);
-  --w-sheet-tr-stripe-color: #f9f9f9;
+
+  --w-sheet-tr-stripe-color: #fbfcfd;
   --w-sheet-tr-hover-color: var(--w-color-primary-light-8);
   --w-sheet-thead-th-border-color: var(--w-color-border);
-  --w-sheet-td-border-color: var(--w-color-font-5);
+  --w-sheet-td-border-color: #f0f2f8;
   --w-sheet-td-padding: 5px var(--w-gap);
   --w-sheet-td-narrow-padding: 3px;
   --w-sheet-tfoot-background-color: white;

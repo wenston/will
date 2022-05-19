@@ -5,6 +5,8 @@ export default {
   hover: { type: Boolean, default: true },
   nowrap: { type: Boolean, default: true },
   height: String,
+  bordered: { type: Boolean, default: false },
+  trBordered: { type: Boolean, default: false },
   maxHeight: String,
   autoWidth: Boolean,
   hasCheckbox: Boolean,
