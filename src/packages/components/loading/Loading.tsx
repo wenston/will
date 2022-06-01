@@ -10,6 +10,7 @@ import {
 import Icon from '../icon/index'
 // import type { LoadingComponentProps } from './type'
 export default defineComponent({
+  name: 'Loading',
   props: {
     ...Icon.props,
     size: {

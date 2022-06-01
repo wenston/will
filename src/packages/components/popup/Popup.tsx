@@ -1,10 +1,12 @@
-import type { PropType } from 'vue'
+import { PropType, watch } from 'vue'
 import { ref, defineComponent, computed } from 'vue'
 import Layer from '../layer/index'
 import Close from '../close/index'
 import Btn from '../btn/index'
 import Loading from '../loading/index'
+import useGlobalZIndex from '../../use/useGlobalZIndex'
 import type { LoadingComponentProps } from '../loading/type'
+import type { PlacementType, TriggerType } from '../../config/types'
 // import useGlobalZIndex from '../../use/useGlobalZIndex'
 export interface PopupStateMethods {
   toggle?: () => void
@@ -30,13 +32,13 @@ export default defineComponent({
     hasMask: { type: Boolean, default: true },
     loading: {
       type: Object as PropType<LoadingComponentProps>,
-      default: () => ({})
+      default: () => ({ show: false })
     }
   },
   setup: (props, ctx) => {
-    // const { zIndex } = useGlobalZIndex()
+    const { zIndex, add } = useGlobalZIndex()
     const isAfterEnter = ref(false)
-    const showLoading = ref(false)
+    const showLoading = ref(props.loading.show ?? false)
     const layerOptions = computed(() => {
       return {
         layerClass: 'w-popup',
@@ -44,17 +46,19 @@ export default defineComponent({
           width: props.width
         },
         show: props.show,
-        placement: 'client-center',
-        trigger: 'click',
+        placement: 'client-center' as PlacementType,
+        trigger: 'click' as TriggerType,
         canCloseByClickOutside: false,
         hasMask: props.hasMask,
         'onUpdate:show': (v: boolean) => {
           if (!v) {
             isAfterEnter.value = false
+          } else {
+            add()
           }
           ctx.emit('update:show', v)
         },
-        'onAfter-enter': (el: HTMLElement) => {
+        'onAfter-enter': (el: Element) => {
           // isAfterEnter.value = true
           ctx.emit('after-enter', el)
         }
@@ -106,10 +110,20 @@ export default defineComponent({
         ...props.loading,
         show: showLoading.value,
         transitionName: 'w-fade-white',
-        class: 'w-popup-loading'
+        class: 'w-popup-loading',
+        style: {
+          'z-index': zIndex.value
+        }
       }
       return <Loading {...loadingOptions} />
     }
+
+    watch(
+      () => props.loading.show,
+      (v) => {
+        showLoading.value = v ?? false
+      }
+    )
 
     return () => {
       const layerSlots = {
@@ -152,8 +166,7 @@ export default defineComponent({
         }
       }
 
-      const lo = layerOptions.value as Record<any, any>
-      return <Layer {...lo} v-slots={layerSlots} />
+      return <Layer {...layerOptions.value} v-slots={layerSlots} />
     }
   }
 })

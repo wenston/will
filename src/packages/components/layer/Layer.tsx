@@ -31,14 +31,12 @@ import type {
 import useTabIndex from '../../use/useTabIndex'
 import useSlot from '../../use/useSlot'
 import useGlobalZIndex from '../../use/useGlobalZIndex'
-import useToggleArray from '../../use/toggle/useToggleArray'
 import useEvent from '../../use/useEvent'
 import useDelay from '../../use/useDelay'
 import clickOutside from '../../directives/clickOutside'
 import Mask from '../mask/'
 import {
   isArray,
-  getBoundingClientRect,
   getElementPositionInPage,
   getInvisibleElementSize,
   getParentScrollElement
@@ -108,7 +106,14 @@ export default defineComponent({
   inheritAttrs: false,
   components: { Mask },
   props: LayerProps,
-  emits: ['update:show', 'get-trigger-rect', 'get-layer-size', 'after-enter'],
+  // emits: ['update:show', 'get-trigger-rect', 'get-layer-size', 'after-enter'],
+  emits: {
+    'update:show': (v: boolean) => true,
+    'get-trigger-rect': (rect: RectType) => true,
+    'get-layer-size': (size: { width: number; height: number }) => true,
+    'get-layer-element': (elem: HTMLElement) => true,
+    'after-enter': (elem: Element) => true
+  },
   directives: { clickOutside },
   setup(props, { slots, emit }) {
     const Win = window
@@ -143,15 +148,6 @@ export default defineComponent({
     const vnode_trigger = useSlot(
       computed(() => renderSlot(slots, 'trigger', { toggle, hide, show })),
       true
-    )
-    const vnode_default = useSlot(
-      computed(() =>
-        renderSlot(slots, 'default', {
-          toggle,
-          hide,
-          show
-        })
-      )
     )
     const defaultOptions = computed(() => {
       const triggerType = props.trigger
@@ -331,6 +327,12 @@ export default defineComponent({
         visible.value = v
       }
     )
+    const stopWatchLayerElement = watch(defaultRoot, (el) => {
+      if (el) {
+        emit('get-layer-element', el)
+        stopWatchLayerElement()
+      }
+    })
 
     function renderDefaultContent() {
       const _default = slots.default?.({ toggle, hide, show })
@@ -360,7 +362,7 @@ export default defineComponent({
             getDefaultRootSize(el)
             toGetDefaultPlacement()
           }}
-          onAfterEnter={(el) => {
+          onAfterEnter={(el: Element) => {
             justNow.value = false
             emit('after-enter', el)
           }}>
