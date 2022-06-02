@@ -2,12 +2,7 @@ import type { Ref, DirectiveBinding, ObjectDirective } from 'vue'
 import { getElement, isElement } from '../util'
 import { isFunction, isObject } from '../util'
 const NOOP = () => {}
-
 // import useEvent from '../use/useEvent'
-// declare interface HTMLElement {
-//   IS_OUT_MOUSEDOWN: boolean
-//   IS_OUT_MOUSEUP:boolean
-// }
 
 type ClickOutsideHandler = (event: Event) => void
 interface ClickOutsideOptions {
@@ -17,16 +12,10 @@ interface ClickOutsideOptions {
 interface DocumentHandlerOptions {
   exclude: HTMLElement[]
   handler: ClickOutsideHandler
-  isOut: {
-    mousedown: boolean
-    mouseup: boolean
-  }
 }
 export type ClickOutsideBinding = ClickOutsideOptions | ClickOutsideHandler
 const docHandlers = new Map<HTMLElement, DocumentHandlerOptions>()
 function createHandler(el: HTMLElement, bindingValue: ClickOutsideBinding) {
-  // el.IS_OUT_MOUSEDOWN = false
-  // el.IS_OUT_MOUSEUP = false
   const exclude = [el]
   let handler: ClickOutsideHandler = NOOP
   if (isFunction(bindingValue)) {
@@ -45,14 +34,7 @@ function createHandler(el: HTMLElement, bindingValue: ClickOutsideBinding) {
     exclude.push(..._els)
     handler = bindingValue.handler
   }
-  docHandlers.set(el, {
-    exclude,
-    handler,
-    isOut: {
-      mousedown: false,
-      mouseup: false
-    }
-  })
+  docHandlers.set(el, { exclude, handler })
 }
 const clickout = () => {
   const clickOutside: ObjectDirective = {
@@ -75,33 +57,20 @@ const clickout = () => {
 
 const docListener: EventListener = (e) => {
   const tar = e.target as Node
-  docHandlers.forEach(({ exclude, handler, isOut }, el) => {
+  docHandlers.forEach(({ exclude, handler }, el) => {
     // console.log(exclude)
-
     const isSelf = tar === el
     const isContain = el.contains(tar)
     const isExclude =
       exclude.length &&
       exclude.some((_el) => _el && (_el === tar || _el.contains(tar)))
     if (isSelf || isContain || isExclude) {
-      if (e.type === 'mousedown' || e.type === 'mouseup') {
-        isOut[e.type] = false
-      }
-
       return
-    } else {
-      if (e.type === 'mousedown' || e.type === 'mouseup') {
-        isOut[e.type] = true
-      }
     }
-
-    if (isOut.mousedown && isOut.mouseup) {
-      handler(e)
-    }
+    handler(e)
   })
 }
 
-document.addEventListener('mousedown', docListener)
-document.addEventListener('mouseup', docListener)
+document.addEventListener('click', docListener)
 
 export default clickout()
