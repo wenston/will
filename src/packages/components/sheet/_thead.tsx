@@ -137,7 +137,7 @@ export default defineComponent({
             if (IS_CHECKBOX(col.field)) {
               const checkboxProps = {
                 iconSize: '16px',
-                iconColor: 'var(--w-color-font-3)',
+                // iconColor: 'var(--w-color-font-3)',
                 modelValue: isCheckedAll.value,
                 'onUpdate:modelValue': (v: number) => {
                   setCheckAll(v)
